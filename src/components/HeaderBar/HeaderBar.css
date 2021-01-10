@@ -1,0 +1,52 @@
+.header_container{
+    display: inline-block; 
+    width: 100%;
+}
+.platform_name{
+    color: #007FEB;
+    font-weight: bold;
+    font-size: 20px;
+}
+.float_right{
+    float: right !important;
+}
+.float_left{
+    float: left !important;
+}
+.item{
+    border-radius: 10%;
+    -webkit-box-shadow: 10px 10px 23px -6px rgba(191,187,187,1);
+-moz-box-shadow: 10px 10px 23px -6px rgba(191,187,187,1);
+box-shadow: 10px 10px 23px -6px rgba(191,187,187,1);
+}
+.avatar{
+    vertical-align: middle;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+}
+.small_text{
+    padding-right: 7px;
+    font-size: 12px;
+}
+.spacing{
+    margin-right: 20px;
+}
+.bell{
+    padding-left: 1.5px;
+}
+.FlagIcon{
+    padding-left: 3px;
+}
+.relative{
+    position: relative;
+}
+.button_badge{
+    position: absolute;
+    top: 0.1px;
+    right: 1px;
+    background-color: transparent;
+    color: red;
+    padding: 0px 4px;
+    font-size: 11px;
+}

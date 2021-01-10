@@ -1,0 +1,28 @@
+.text{
+    color: #133C59
+}
+.rightarrow{
+    position: absolute;
+    right: 10px;
+    top: 170px;
+    color: #007FEB;
+    font-size: 22px;
+}
+.rightarrow:hover{
+    cursor: pointer;
+    color: #4f9ee4;
+}
+.leftarrow{
+    position: absolute;
+    left: 10px;
+    top: 170px;
+    color: #007FEB;
+    font-size: 22px;
+}
+.leftarrow:hover{
+    cursor: pointer;
+    color: #4f9ee4;
+}
+.pr_2{
+    padding-right: 5px!important;
+}

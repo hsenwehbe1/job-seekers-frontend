@@ -1,0 +1,15 @@
+.parent{
+    background-color: #dadadaad;
+    border-radius: 20px;
+    display: inline-table;
+    margin-top: 10px;
+    margin-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    cursor: pointer;
+}
+.text{
+    color: #133c59;
+}

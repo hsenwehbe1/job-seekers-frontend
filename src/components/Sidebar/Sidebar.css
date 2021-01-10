@@ -1,0 +1,43 @@
+.sidebar{
+    height: 500px;
+    width: 90px;
+    border-radius: 10px;
+    font-size: 14px;
+}
+.toggler{
+    cursor: pointer;
+    font-size: 18px;
+    margin-right: 5px;
+}
+@media(max-width: 576px){
+    .sidebar{
+        position: absolute;
+        height: 500px;
+        width: 60px;
+        border-radius: 10px;
+        font-size: 12px;
+    }
+    .toggler{
+        position: absolute;
+        left: 3px;
+    }
+}
+.appear{
+    display: block;
+    margin-right: 5px;
+}
+.disappear{
+    opacity: 0.5;
+    display: none;
+}
+.small_text{
+    font-size: 11px;
+    color: #133C59;
+    font-weight: 100;
+    margin-top: 50px
+}
+.link{
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+}

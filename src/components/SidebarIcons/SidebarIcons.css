@@ -1,0 +1,14 @@
+.selected{
+    color: #0074FF;
+    border-left: 3px solid #0074FF;
+}
+.pointer{
+    cursor: pointer;
+}
+.links{
+    text-decoration: none;
+    color: #4f4f4f;
+}
+.links:hover{
+    color: #4f4f4f;
+}

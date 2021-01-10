@@ -1,0 +1,43 @@
+.red{
+    background-color: #F37168;
+    text-transform: unset!important;
+}
+.red:hover{
+    background-color: #b83e35;
+}
+.line_through{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    justify-content:space-around;
+}
+.line{
+    width:20%;
+    border: 1px solid #9999BE29;
+    border-radius: 3px;
+}
+.account{
+    color:#133C59;
+    padding-top: 10px;
+}
+.signup{
+    color: white;
+    text-decoration: none;
+}
+.signup:hover{
+    color: white;
+}
+.login{
+    color: #F37168;
+}
+.login:hover{
+    color: #f55347;
+    font-size: 16px;
+}
+.bottom{
+    font-size: 11px;
+    font-weight: 100;
+    word-spacing: 20px;
+    padding-top: 10px;
+}

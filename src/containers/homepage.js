@@ -19,10 +19,15 @@ class homepage extends Component {
             })
         })
     }
+    logoutHandler = ()=>{
+        localStorage.removeItem('token')
+        this.props.history.push('/')
+    }
     render() {
         return (
-            <div>
-                {this.state.fname}
+            <div className='container'>
+                Welcome {this.state.fname}
+                <button className="btn btn-outline-primary" onClick={this.logoutHandler}>Logout</button>
             </div>
         );
     }

@@ -5,11 +5,12 @@ import registerServiceWorker from './registerServiceWorker'
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
 import { Provider } from 'react-redux'
 import authReducer from './redux/reducers/auth'
+import alertReducer from './redux/reducers/alert'
 import thunk from 'redux-thunk'
 const rootReducer = combineReducers({
-    authState: authReducer
+    authState : authReducer,
+    alertState : alertReducer
 })
-// Adding a middleware function:
 const loggerMiddleware = (store)=>{
     return next => {
         return action => {

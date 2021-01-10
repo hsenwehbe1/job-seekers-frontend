@@ -1,1 +1,2 @@
 export const SAVEEMAIL = 'SAVEEMAIL'
+export const TRIGGERALERT = 'TRIGGERALERT'

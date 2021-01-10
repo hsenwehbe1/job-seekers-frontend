@@ -1,0 +1,19 @@
+.card{
+    border-radius: 10px;
+    text-align: center;
+    /* height: 150px; */
+    margin: auto
+}
+.text_blue{
+    color: #007FEB;
+    font-size: 30px;
+    font-weight: bold;
+}
+@media(max-width: 767px){
+    .card{
+        border-radius: 10px;
+        text-align: center;
+        max-width: 300px;
+        margin-bottom: 15px;
+    }
+}
