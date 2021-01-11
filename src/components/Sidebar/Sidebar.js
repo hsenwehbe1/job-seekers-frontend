@@ -43,7 +43,6 @@ class Sidebar extends Component {
         }
         if(this.state.isShown){
             content = <i onClick={this.togglerHandler} className={`fa fa-times ${classes.toggler}`}></i>
-            // content = <img src="https://i.ibb.co/rt3HybH/close.png" alt="img" className={classes.toggler}/>
             cssClass = classes.appear
         }else{
             content = <i onClick={this.togglerHandler} className={`fas fa-bars ${classes.toggler}`}></i>
@@ -57,6 +56,8 @@ class Sidebar extends Component {
             pages.about.color = '#007FEB'
         }else if(this.props.page==='faq'){
             pages.faq.color = '#007FEB'
+        }else if(this.props.page==='terms&conditions'){
+            pages.terms.color = '#007FEB'
         }
         return (
             <React.Fragment>
@@ -71,7 +72,7 @@ class Sidebar extends Component {
                         <SidebarIcons text='Quick tips' icon={<QuickTips color='#133c59'/>}/>
                         <SidebarIcons text='About' selected={pages.about.active} icon={<About color={pages.about.color}/>}/>
                         <div className={`${classes.small_text} text-center`}>
-                            <Link to='/terms' className={classes.link} style={{color: `${pages.terms.color}`}}>
+                            <Link to='/terms&conditions' className={classes.link} style={{color: `${pages.terms.color}`}}>
                                 T&Q
                             </Link>
                             &nbsp;&nbsp;&nbsp;

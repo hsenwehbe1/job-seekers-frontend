@@ -5,6 +5,7 @@ import HeaderBar from '../../components/HeaderBar/HeaderBar'
 import Question from '../../components/Question/Question'
 import Result from '../../components/Result/Result'
 import Hobby from '../../components/Hobby/Hobby'
+import Answer from '../../components/Answer/Answer'
 export default class Home extends Component {
     state = ({
         first:{
@@ -80,6 +81,9 @@ export default class Home extends Component {
     }
     questionHandler = (result, id)=>{
         console.log(result, id)
+    }
+    answerHandler = (answer, id)=>{
+        console.log(answer, id)
     }
     leftHandler = ()=>{
         console.log('left')
@@ -194,6 +198,7 @@ export default class Home extends Component {
                                 </div>
                                 <div className={classes.trial}>
                                     {content}
+                                    <Answer selected={true} handler={this.answerHandler} question='Ane belaab fabol?'/>
                                 </div>
                             </div>
                         </div>

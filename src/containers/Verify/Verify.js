@@ -1,15 +1,17 @@
 import React, { Component } from 'react'
-import axios from '../axios'
+import axios from '../../axios'
 import {connect} from 'react-redux'
-import * as alertActions from '../redux/actions/alert'
-import Alert from '../components/Alert/Alert'
-import Spinner from '../components/Spinner/Spinner'
+import * as alertActions from '../../redux/actions/alert'
+import Alert from '../../components/Alert/Alert'
+import Spinner from '../../components/Spinner/Spinner'
 class Verify extends Component {
     componentDidMount(){
         axios.post('/students/verify', {token : this.props.match.params.token}).then((response)=>{
+            localStorage.removeItem('token')
             this.props.triggerAlert(true, 'success', 'Account successfully verified', 10000)
             this.props.history.push('/login')
         }).catch((err)=>{
+            localStorage.removeItem('token')
             this.props.triggerAlert(true, 'error', 'Something went wrong', 10000)
             this.props.history.push('/')
         })

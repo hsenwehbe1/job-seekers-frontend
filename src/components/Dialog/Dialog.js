@@ -64,7 +64,6 @@ export default function AlertDialog(props) {
         }) 
     }
   }
-  let content = ''
   let pic = ''
   let text = ''
   if(radio.radio1){
