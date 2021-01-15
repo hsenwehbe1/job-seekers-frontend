@@ -6,6 +6,7 @@ const initState = {
 const reducer = (state=initState, action)=>{
     if(action.type === variables.SAVEEMAIL){
         return {
+            ...state,
             email: action.email
         }
     }

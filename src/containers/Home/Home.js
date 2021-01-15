@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import classes from './Home.css'
+import {connect} from 'react-redux'
+import * as alertActions from '../../redux/actions/alert'
+import * as authActions from '../../redux/actions/auth'
 import axios from '../../axios'
 import Dialog from '../../components/Dialog/Dialog'
 import Box from '../../components/Box/Box'
@@ -7,7 +10,7 @@ import BulletPoints from '../../components/BulletPoints/BulletPoints'
 import Sidebar from '../../components/Sidebar/Sidebar'
 import HeaderBar from '../../components/HeaderBar/HeaderBar'
 import { withRouter } from 'react-router-dom'
-
+import Alert from '../../components/Alert/Alert'
 class Home extends Component {
     state = ({
         fname: '',
@@ -20,6 +23,7 @@ class Home extends Component {
                 'Authorization' : `Bearer ${localStorage.getItem('token')}`
             }
         }
+        // check if user did the test
         axios.get('/students/info', config).then((response)=>{
             this.setState({
                 fname: response.data.fname,
@@ -105,8 +109,14 @@ class Home extends Component {
                 <div className={classes.hidden}>
                     <Dialog isShown={true}/>
                 </div>
+                <Alert/>
             </React.Fragment>
         )
     }
 }
-export default withRouter(Home)
+const mapDispatchToProps = dispatch => {
+    return {
+        triggerAlert: (alertOpen, alertType, alertMessage, alertDuration) => dispatch(alertActions.triggerAlert(alertOpen, alertType, alertMessage, alertDuration))
+    };
+};
+export default withRouter(connect(null, mapDispatchToProps)(Home))

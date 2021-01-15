@@ -1,23 +1,94 @@
-import React from 'react'
+import React, { Component } from 'react'
 import classes from './HeaderBar.css'
 import Bell from '../../assets/icons/bell.svg'
-export default function HeaderBar(props) {
-    return (
-        <div className={`${classes.header_container} px-3`}>
-            <div className={`d-inline-block ${classes.platform_name} ${classes.float_left}`}>LinkedEd</div>
-            <div className={`d-inline-block ${classes.float_right} px-2 py-1 bg-white ${classes.item}`}>
-                <span className={`${classes.small_text}`}>
-                    ME
-                </span>
-                <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Avatar" className={`${classes.avatar}`}/>
-            </div>
-            <div className={`d-inline-block ${classes.float_right} ${classes.spacing} px-2 py-1 bg-white ${classes.item}`}>
-                <i className={`united states flag ${classes.FlagIcon}`}></i>
-            </div>
-            <div className={`d-inline-block ${classes.float_right} ${classes.spacing} px-2 py-1 bg-white ${classes.item} ${classes.relative}`}>
-                <img src={Bell} alt="bell" className="img-fluid"/>
-                <span className={classes.button_badge}>4</span>
-            </div>
-        </div>
-    )
+import axios from '../../axios'
+import Media from './Media/Media'
+import { withRouter } from 'react-router-dom'
+class HeaderBar extends Component {
+    state = ({
+        isShownProfile : false,
+        imageSource : 'https://use.fontawesome.com/releases/v5.0.8/svgs/solid/user.svg'
+    })
+    componentDidMount = ()=>{
+        let config = {
+            headers:{
+                'Authorization' : `Bearer ${localStorage.getItem('token')}`
+            }
+        }
+        axios.get('students/photo', config).then((response)=>{
+            console.log(response)
+            this.setState({
+                imageSource : `data:image/png;base64,${response.data.image}`
+            })
+        }).catch((err)=>{
+            console.log(err)
+        })
+    }
+    closeHandler = ()=>{
+        this.setState({
+            isShownProfile : false
+        })
+    }
+    openHandler = ()=>{
+        this.setState({
+            isShownProfile : true
+        })
+    }
+    logoutHandler = ()=>{
+        localStorage.removeItem('token')
+        this.props.history.push('/')
+    }
+    render() {
+        let imageSrc = this.state.imageSource
+        if(this.props.image){
+            imageSrc = this.props.image
+        }
+        let content = classes.hide
+        if(this.state.isShownProfile){
+            content = classes.show
+        }
+        return (
+            <React.Fragment>
+                <div className={`${classes.header_container} px-3`}>
+                    <div className={`d-inline-block ${classes.platform_name} ${classes.float_left}`}>LinkedEd</div>
+                    <div className={`d-inline-block ${classes.float_right} px-2 py-1 bg-white ${classes.item} ${classes.pointer}`} onClick={this.openHandler}>
+                        <span className={`${classes.small_text}`}>
+                            ME 
+                        </span>
+                        <img style={{'borderRadius':'50%'}} src={imageSrc} alt="" width='20' height='20'/>
+                    </div>
+                    <div className={`d-inline-block ${classes.float_right} ${classes.spacing} px-2 py-1 bg-white ${classes.item}`}>
+                        <i className={`united states flag ${classes.FlagIcon}`}></i>
+                    </div>
+                    <div className={`d-inline-block ${classes.float_right} ${classes.spacing} px-2 py-1 bg-white ${classes.item} ${classes.relative}`}>
+                        <img src={Bell} alt="bell" className="img-fluid"/>
+                        <span className={classes.button_badge}>4</span>
+                    </div>
+                </div>
+                <div className={`p-4 ${classes.slidebar} ${content}`}>
+                    <div>
+                        <i className={`fa fa-times ${classes.cross}`} aria-hidden="true" onClick={this.closeHandler}></i>
+                    </div><br></br><br></br>
+                    <div className=''>
+                        <div className="d-flex">
+                            <img src={imageSrc} alt="John Doe"
+                                className="flex-shrink-0" style={{"width":"75px", "height":"75px", "borderRadius":"10px"}}/>
+                            <div>
+                                <span className={classes.name}>Mohamed Safieddine</span><br></br>
+                                <button onClick={()=>{this.props.history.push('/profile')}} className={`${classes.profileBtn} btn btn-sm`}>Edit Profile</button>
+                            </div>
+                        </div>
+                        <hr/>
+                        <Media/><br></br>
+                        <Media/><br></br>
+                        <Media/>
+                    </div>
+                    <div className={classes.footer}>
+                        <button onClick={this.logoutHandler} className={`btn btn-outline-danger btn-sm ${classes.logout}`}>Logout</button>
+                    </div>
+                </div>
+            </React.Fragment>
+        )
+    }
 }
+export default withRouter(HeaderBar)

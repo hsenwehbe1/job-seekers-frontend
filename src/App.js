@@ -6,6 +6,7 @@ import StartTest from './containers/StartTest/StartTest'
 import UserTest from './containers/UserTest/UserTest'
 import Verify from './containers/Verify/Verify'
 import Faq from './containers/FAQ/Faq'
+import Profile from './containers/Profile/Profile'
 import NotFound from './components/UnknownPage/UnknownPage'
 import Landing from './containers/LandingPage/LandingPage'
 import TermsAndConditions from './containers/TermsAndConditions/TermsAndConditions'
@@ -17,6 +18,7 @@ class App extends Component {
           <Switch>
             <Route path='/verify/:token' exact component={Verify}/>
             <Route path='/home' component={Home}/>
+            <Route path='/profile' component={Profile}/>
             <Route path='/test' exact component={UserTest}/>
             <Route path='/test/start' component={StartTest}/>
             <Route path='/about' component={AboutUs}/>
