@@ -16,7 +16,10 @@ class Profile extends Component {
         timestamp : 0,
         fname : '',
         lname : '',
-        edit: true
+        edit: true,
+        oldPass: '',
+        newPass: '',
+        confirmPass: ''
     })
     componentDidMount(){
         console.log('here')
@@ -116,6 +119,48 @@ class Profile extends Component {
             })
         }
     }
+    oldPassHandler = (event)=>{
+        this.setState({
+            ...this.state,
+            oldPass : event.target.value
+        })
+    }
+    newPassHandler = (event)=>{
+        this.setState({
+            ...this.state,
+            newPass : event.target.value
+        })
+    }
+    confirmPassHandler = (event)=>{
+        this.setState({
+            ...this.state,
+            confirmPass : event.target.value
+        })
+    }
+    changePassHandler = ()=>{
+        if(this.state.newPass==='' || this.state.confirmPass==='' || this.state.oldPass===''){
+            this.props.triggerAlert(true, 'error', 'Empty field(s)', 5000)
+        }else if(this.state.newPass.length<8 || this.state.confirmPass.length<8){
+            this.props.triggerAlert(true, 'error', 'New password should contain 8 minimum characters', 5000)
+        }else if(this.state.newPass!==this.state.confirmPass){
+            this.props.triggerAlert(true, 'error', "New password doesn't match", 5000)
+        }else{
+            let config = {
+                headers:{
+                    'Authorization' : `Bearer ${localStorage.getItem('token')}`
+                }
+            }
+            axios.patch('students/changepassword', {oldPass:this.state.oldPass, newPass:this.state.newPass}, config).then((response)=>{
+                if (response.data==='no match') {
+                    this.props.triggerAlert(true, 'error', 'Wrong password', 5000)
+                } else if(response.data==='match') {
+                    this.props.triggerAlert(true, 'success', 'Password updated', 5000)
+                }
+            }).catch((err)=>{
+                console.log(err)
+            })
+        }
+    }
     render() {
         let imageSrc = this.state.image
         let pointer = classes.allowed
@@ -177,19 +222,22 @@ class Profile extends Component {
                                                 <Accordion>
                                                     <div className="row ">
                                                         <div className="col-sm-12 col-md-4">
-                                                        <div className="input-group border-bottom">
-                                                            <input type="text" placeholder='Current password' className={`form-control ${classes.border} ${classes.input}`}/></div>
+                                                            <div className="input-group border-bottom">
+                                                                <input onChange={this.oldPassHandler} type="password" placeholder='Current password' className={`form-control ${classes.border} ${classes.input}`}/>
+                                                            </div>
                                                         </div>
                                                         <div className="col-sm-12 col-md-4 mt-3 mt-md-0">
-                                                        <div className="input-group border-bottom">
-                                                            <input type="text" placeholder='New password' className={`form-control ${classes.border} ${classes.input}`}/></div>
+                                                            <div className="input-group border-bottom">
+                                                                <input onChange={this.newPassHandler} type="password" placeholder='New password' className={`form-control ${classes.border} ${classes.input}`}/>
+                                                            </div>
                                                         </div> 
                                                         <div className="col-sm-12 col-md-4 mt-3 mt-md-0">
-                                                        <div className="input-group border-bottom">
-                                                            <input type="text" placeholder='Confirm new password' className={`form-control ${classes.border} ${classes.input}`}/></div>
+                                                            <div className="input-group border-bottom">
+                                                                <input onChange={this.confirmPassHandler} type="password" placeholder='Confirm new password' className={`form-control ${classes.border} ${classes.input}`}/>
+                                                            </div>
                                                         </div>  
                                                     </div>
-                                                    <button className="mt-4 btn btn-dark btn-sm w-100">Save</button>
+                                                    <button onClick={this.changePassHandler} className="mt-4 btn btn-dark btn-sm w-100">Save</button>
                                                 </Accordion>
                                             </div>
                                         </div>

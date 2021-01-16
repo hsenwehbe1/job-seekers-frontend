@@ -14,7 +14,7 @@ export default function Welcome() {
                     <div className={classes.line}></div>
                 </div>
                 <p className='pt-4'><Link to='/login' className={classes.login}>Login</Link></p>
-                <p className={classes.bottom}>FAQs Terms&Conditions Privacy</p>
+                <p className={classes.bottom}><Link to='/faq'>FAQs</Link> <Link to='/terms&conditions'>Terms&Conditions</Link></p>
             </div>
         </WhiteSquare>
     )
