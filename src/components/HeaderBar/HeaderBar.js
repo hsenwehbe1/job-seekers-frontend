@@ -2,12 +2,15 @@ import React, { Component } from 'react'
 import classes from './HeaderBar.css'
 import Bell from '../../assets/icons/bell.svg'
 import axios from '../../axios'
-import Media from './Media/Media'
 import { withRouter } from 'react-router-dom'
+import ItemsBell from '../ItemsBell/ItemsBell'
+import ProfileBar from '../ProfileBar/ProfileBar'
+
 class HeaderBar extends Component {
     state = ({
         isShownProfile : false,
-        imageSource : 'https://use.fontawesome.com/releases/v5.0.8/svgs/solid/user.svg'
+        imageSource : 'https://use.fontawesome.com/releases/v5.0.8/svgs/solid/user.svg',
+        isVis:false
     })
     componentDidMount = ()=>{
         let config = {
@@ -38,6 +41,17 @@ class HeaderBar extends Component {
         localStorage.removeItem('token')
         this.props.history.push('/')
     }
+    VisChange = () =>{
+        this.setState({
+            isVis: !this.state.isVis
+        })
+    }
+    pushInterest = () =>{
+        this.props.history.push('/interests')
+    }
+    pushProfile = () =>{
+        this.props.history.push('/profile')
+    }
     render() {
         let imageSrc = this.state.imageSource
         if(this.props.image){
@@ -61,32 +75,14 @@ class HeaderBar extends Component {
                         <i className={`united states flag ${classes.FlagIcon}`}></i>
                     </div>
                     <div className={`d-inline-block ${classes.float_right} ${classes.spacing} px-2 py-1 bg-white ${classes.item} ${classes.relative}`}>
-                        <img src={Bell} alt="bell" className="img-fluid"/>
-                        <span className={classes.button_badge}>4</span>
+                        <img style={{ cursor: 'pointer'}} onClick={this.VisChange} src={Bell} alt="bell" className="img-fluid" />
+                        <span onClick={this.VisChange} className={classes.button_badge}>4</span>
+                        <ItemsBell isVisible={this.state.isVis}/>
                     </div>
                 </div>
-                <div className={`p-4 ${classes.slidebar} ${content}`}>
-                    <div>
-                        <i className={`fa fa-times ${classes.cross}`} aria-hidden="true" onClick={this.closeHandler}></i>
-                    </div><br></br><br></br>
-                    <div className=''>
-                        <div className="d-flex">
-                            <img src={imageSrc} alt="John Doe"
-                                className="flex-shrink-0" style={{"width":"75px", "height":"75px", "borderRadius":"10px"}}/>
-                            <div>
-                                <span className={classes.name}>Mohamed Safieddine</span><br></br>
-                                <button onClick={()=>{this.props.history.push('/profile')}} className={`${classes.profileBtn} btn btn-sm`}>Edit Profile</button>
-                            </div>
-                        </div>
-                        <hr/>
-                        <Media/><br></br>
-                        <Media/><br></br>
-                        <Media/>
-                    </div>
-                    <div className={classes.footer}>
-                        <button onClick={this.logoutHandler} className={`btn btn-outline-danger btn-sm ${classes.logout}`}>Logout</button>
-                    </div>
-                </div>
+                <ProfileBar imageSrc={imageSrc} content ={`${content}`} close={this.closeHandler} 
+                    logout={this.logoutHandler} pushProfile={this.pushProfile} pushInterest={this.pushInterest} />
+                    
             </React.Fragment>
         )
     }

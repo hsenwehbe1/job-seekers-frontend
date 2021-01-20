@@ -41,7 +41,9 @@ box-shadow: 10px 10px 23px -6px rgba(191,187,187,1);
 .relative{
     position: relative;
 }
+
 .button_badge{
+    cursor: pointer;
     position: absolute;
     top: 0.1px;
     right: 1px;
@@ -81,37 +83,9 @@ box-shadow: 10px 10px 23px -6px rgba(191,187,187,1);
     transition: visibility 0.3s ease-in-out, opacity 0.3s linear;
     visibility: hidden;
 }
-.name{
-    font-size: 12px;
-    font-weight: bold;
-    padding-left: 6px;
-}
-.profileBtn{
-    background-color: #F0716A;
-    border-radius: 5px;
-    padding: 2px 8px;
-    margin-top: 5px;
-    margin-left: 5px;
-    border: none;
-    outline: none;
-    color: white!important;
-    text-transform: unset;
-    font-size: 14px;
-    box-shadow: none!important;
-}
-.profileBtn:hover{
-    background-color: #b94943!important;
-}
 .footer{
     position: absolute;
     bottom: 0px;
     margin-left: 70px;
     margin-bottom: 20px;
-}
-.logout{
-    border: 1px solid #F0716A!important;
-    outline: none!important;
-    font-size: 15px;
-    text-transform: unset;
-    border-radius: 15px;
 }

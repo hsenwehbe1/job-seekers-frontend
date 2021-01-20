@@ -60,7 +60,7 @@ class Sidebar extends Component {
             pages.terms.color = '#007FEB'
         }
         return (
-            <React.Fragment>
+            <div className={`${classes.main}`}>
                 <div>
                     {content} 
                 </div>
@@ -82,7 +82,7 @@ class Sidebar extends Component {
                         </div>
                     </div>
                 </div>
-            </React.Fragment>
+            </div>
         );
     }
 }

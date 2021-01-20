@@ -19,6 +19,6 @@ const loggerMiddleware = (store)=>{
     }
 }
 const devtools = process.env.NODE_ENV ==='development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose
-const store = createStore(rootReducer, devtools(applyMiddleware(loggerMiddleware, thunk)))
+const store = createStore(rootReducer, applyMiddleware(loggerMiddleware, thunk))
 ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
 registerServiceWorker();

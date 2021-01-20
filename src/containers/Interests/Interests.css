@@ -1,0 +1,13 @@
+.body_container{
+    display: flex; 
+    width: 100%;
+    justify-content: space-between;
+}
+.my_interests{
+    width:395px;
+}
+.careers_recommended{
+    width:610px;
+    margin-right:40px;
+    height:510px;
+}

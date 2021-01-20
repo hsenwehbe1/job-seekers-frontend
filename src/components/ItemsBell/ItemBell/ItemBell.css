@@ -1,0 +1,14 @@
+.image_width{
+    width:40px;
+}
+
+.text_font{
+    font: normal normal 100 11px/13px Helvetica;
+}
+.item_container{
+    cursor: pointer;
+    padding-top:10px;
+    border-bottom: 0.5px solid #D0D0D0;
+    opacity: 1;
+    height:25%;
+}
