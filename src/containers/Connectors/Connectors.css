@@ -1,0 +1,29 @@
+.body_container{
+    display: flex;
+    width: 100%;
+}
+.title{
+    padding-bottom:33px;
+    text-align: left;
+    font: normal normal bold 24px/29px Helvetica;
+    letter-spacing: 0px;
+    color: #133C59;
+    opacity: 1;
+}
+.main{
+    margin-left:100px;
+    width:1100px;
+}
+.info_items{
+    display:flex;
+    justify-content: space-between;
+    padding-bottom:33px;
+}
+.select{
+    padding-bottom:33px;
+}
+.connector_items{
+    display:flex;
+    flex-wrap: wrap;
+    padding-bottom:80px;
+}

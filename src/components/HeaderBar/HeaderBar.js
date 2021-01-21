@@ -9,8 +9,7 @@ import ProfileBar from '../ProfileBar/ProfileBar'
 class HeaderBar extends Component {
     state = ({
         isShownProfile : false,
-        imageSource : 'https://use.fontawesome.com/releases/v5.0.8/svgs/solid/user.svg',
-        isVis:false
+        imageSource : 'https://use.fontawesome.com/releases/v5.0.8/svgs/solid/user.svg'
     })
     componentDidMount = ()=>{
         let config = {
@@ -41,13 +40,14 @@ class HeaderBar extends Component {
         localStorage.removeItem('token')
         this.props.history.push('/')
     }
-    VisChange = () =>{
-        this.setState({
-            isVis: !this.state.isVis
-        })
-    }
     pushInterest = () =>{
         this.props.history.push('/interests')
+    }
+    pushConnectors = () =>{
+        this.props.history.push('/connectors')
+    }
+    pushSettings = () =>{
+        this.props.history.push('/settings')
     }
     pushProfile = () =>{
         this.props.history.push('/profile')
@@ -74,14 +74,10 @@ class HeaderBar extends Component {
                     <div className={`d-inline-block ${classes.float_right} ${classes.spacing} px-2 py-1 bg-white ${classes.item}`}>
                         <i className={`united states flag ${classes.FlagIcon}`}></i>
                     </div>
-                    <div className={`d-inline-block ${classes.float_right} ${classes.spacing} px-2 py-1 bg-white ${classes.item} ${classes.relative}`}>
-                        <img style={{ cursor: 'pointer'}} onClick={this.VisChange} src={Bell} alt="bell" className="img-fluid" />
-                        <span onClick={this.VisChange} className={classes.button_badge}>4</span>
-                        <ItemsBell isVisible={this.state.isVis}/>
-                    </div>
+                    <ItemsBell/>
                 </div>
                 <ProfileBar imageSrc={imageSrc} content ={`${content}`} close={this.closeHandler} 
-                    logout={this.logoutHandler} pushProfile={this.pushProfile} pushInterest={this.pushInterest} />
+                    logout={this.logoutHandler} pushProfile={this.pushProfile} pushInterest={this.pushInterest} pushConnectors={this.pushConnectors} pushSettings={this.pushSettings}/>
                     
             </React.Fragment>
         )

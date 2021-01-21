@@ -18,9 +18,9 @@ export default function ProfileBar(props) {
                     </div>
                 </div>
                 <hr/>
-                <Media click={props.pushInterest} /><br></br>
-                <Media/><br></br>
-                <Media/>
+                <Media click={props.pushInterest} title="My interest" content="Find your Interest"/><br></br>
+                <Media click={props.pushConnectors} title="My Connectors" content="Search and visit connectors And mentors profiles"/><br></br>
+                <Media click={props.pushSettings} title="Settings" content="Search and visit connectors And mentors profiles"/>
             </div>
             <div className={classes.footer}>
                 <button onClick={props.logout} className={`btn btn-outline-danger btn-sm ${classes.logout}`}>Logout</button>

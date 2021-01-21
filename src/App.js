@@ -11,6 +11,9 @@ import NotFound from './components/UnknownPage/UnknownPage'
 import Landing from './containers/LandingPage/LandingPage'
 import Interests from './containers/Interests/Interests'
 import TermsAndConditions from './containers/TermsAndConditions/TermsAndConditions'
+import Connectors from './containers/Connectors/Connectors'
+import Settings from './containers/Settings/Settings'
+
 class App extends Component {
   render() {
     return (
@@ -21,6 +24,8 @@ class App extends Component {
             <Route path='/home' component={Home}/>
             <Route path='/profile' component={Profile}/>
             <Route path='/interests' component={Interests}/>
+            <Route path='/connectors' component={Connectors}/>
+            <Route path='/settings' component={Settings}/>
             <Route path='/test' exact component={UserTest}/>
             <Route path='/test/start' component={StartTest}/>
             <Route path='/about' component={AboutUs}/>
