@@ -15,7 +15,10 @@
     background-color: orange;
     border-radius: 50%;
     display: inline-block;
-  }
+}
+.close{
+    transform: translate(1px,-5px);
+}
 .ul_style li:not(:first-child){
    margin-left: 10px;
 }
@@ -24,6 +27,7 @@
 }
 .li_style{
     cursor: pointer;
+    text-align: center;
     background: #FFFFFF 0% 0% no-repeat padding-box;
     border: 1px solid #C1CBD3;
     border-radius: 5px;

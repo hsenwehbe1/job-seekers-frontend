@@ -21,6 +21,7 @@
 }
 .select{
     padding-bottom:33px;
+    width:70%;
 }
 .connector_items{
     display:flex;

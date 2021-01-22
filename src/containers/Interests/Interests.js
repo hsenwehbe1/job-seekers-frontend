@@ -38,7 +38,12 @@ const Interests = () => {
                 'Authorization' : `Bearer ${localStorage.getItem('token')}`
             }
         }
-        axios.post('/students/add-interest',{
+        const position = newArray.indexOf(val)
+        if(position !== -1){
+            console.log("found")//put an alert 
+            return 
+        }
+        axios.patch('/students/add-interest',{
             interest:val
         },config).then((response)=>{
             newArray.push(val)
@@ -49,6 +54,27 @@ const Interests = () => {
             }
         }) 
         
+    }
+    const closeHandler = (e) =>{
+        const val= e.target.getAttribute('name')
+        let newArray = [...interestArray]
+        const valPosition = newArray.indexOf(val)
+        let config = {
+            headers: {
+                'Authorization' : `Bearer ${localStorage.getItem('token')}`
+            }
+        }
+        axios.patch('/students/delete-interest',{
+            interest:val
+        },config).then((response)=>{
+            newArray.splice(valPosition,1)
+            setInterestArray(newArray)
+        }).catch((error)=>{
+            if(error.response.data.error === "unauthorized"){
+                history.push('/')
+            }
+            console.log(error)//add alert
+        })
     }
     return (
         <div className="mt-4">
@@ -78,10 +104,14 @@ const Interests = () => {
                         <ul className={`${classes.ul_style}`}>
                             {interestArray.map((element)=>{
                                 return (
-                                    <li>
-                                        <div className={`d-flex  justify-content-around ${classes.li_style}`}>
+                                    <li >
+                                        <div className={`d-flex justify-content-around ${classes.li_style}`}>
                                             <div><span className={`${classes.dot}`}></span></div>
-                                            <div style={{marginLeft:'10px'}}>{element}</div>
+                                            <div name={element} style={{marginLeft:'10px'}}>{element}</div>
+                                            <div className={`${classes.close}`}>
+                                                <button onClick={(e)=>closeHandler(e)} type="button" className="close" aria-label="Close">
+                                                <span name={element} aria-hidden="true">&times;</span>
+                                            </button></div>
                                         </div>
                                     </li>
                                 )

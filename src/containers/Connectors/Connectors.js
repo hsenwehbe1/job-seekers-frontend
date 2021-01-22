@@ -6,138 +6,71 @@ import Connector from '../../components/ItemConnector/Connector/Connector'
 import Info from '../../components/ItemConnector/Info/Info'
 import axios from '../../axios' 
 import classes from './Connectors.css'
+import { useHistory } from "react-router-dom";
+import Select from 'react-select';
 
 const Connectors = () => {
     var first = 0
     const [send, setSend] = useState(false)
-    const [connectors, setConnectors] = useState([
-        {
-            imageSrc: imageTest,
-            name:"hussein wehbe",
-            career:"web developer"
-        },{
-            imageSrc: imageTest,
-            name:"mohamed saffiyedeen",
-            career:"front-end developer"
-        },{
-            imageSrc: imageTest,
-            name:"hadi mheidly",
-            career:"back-end developer"
-        },{
-            imageSrc: imageTest,
-            name:"omar malka",
-            career:"security consultant"
-        },{
-            imageSrc: imageTest,
-            name:"Ali Chalhoub",
-            career:"CyberSecurity"
-        },{
-            imageSrc: imageTest,
-            name:"Hussein Jaber",
-            career:"Data Analyst"
-        },{
-            imageSrc: imageTest,
-            name:"hussein wehbe",
-            career:"web developer"
-        },{
-            imageSrc: imageTest,
-            name:"mohamed saffiyedeen",
-            career:"front-end developer"
-        },{
-            imageSrc: imageTest,
-            name:"hadi mheidly",
-            career:"back-end developer"
-        },{
-            imageSrc: imageTest,
-            name:"omar malka",
-            career:"security consultant"
-        },{
-            imageSrc: imageTest,
-            name:"Ali Chalhoub",
-            career:"CyberSecurity"
-        },{
-            imageSrc: imageTest,
-            name:"Hussein Jaber",
-            career:"Data Analyst"
-        },{
-            imageSrc: imageTest,
-            name:"hussein wehbe",
-            career:"web developer"
-        },{
-            imageSrc: imageTest,
-            name:"mohamed saffiyedeen",
-            career:"front-end developer"
-        },{
-            imageSrc: imageTest,
-            name:"hadi mheidly",
-            career:"back-end developer"
-        },{
-            imageSrc: imageTest,
-            name:"omar malka",
-            career:"security consultant"
-        },{
-            imageSrc: imageTest,
-            name:"Ali Chalhoub",
-            career:"CyberSecurity"
-        },{
-            imageSrc: imageTest,
-            name:"Hussein Jaber",
-            career:"Data Analyst"
-        },{
-            imageSrc: imageTest,
-            name:"hussein wehbe",
-            career:"web developer"
-        },{
-            imageSrc: imageTest,
-            name:"mohamed saffiyedeen",
-            career:"front-end developer"
-        },{
-            imageSrc: imageTest,
-            name:"hadi mheidly",
-            career:"back-end developer"
-        },{
-            imageSrc: imageTest,
-            name:"omar malka",
-            career:"security consultant"
-        },{
-            imageSrc: imageTest,
-            name:"Ali Chalhoub",
-            career:"CyberSecurity"
-        },{
-            imageSrc: imageTest,
-            name:"Hussein Jaber",
-            career:"Data Analyst"
-        },{
-            imageSrc: imageTest,
-            name:"hussein wehbe",
-            career:"web developer"
-        },{
-            imageSrc: imageTest,
-            name:"mohamed saffiyedeen",
-            career:"front-end developer"
-        },{
-            imageSrc: imageTest,
-            name:"hadi mheidly",
-            career:"back-end developer"
-        },{
-            imageSrc: imageTest,
-            name:"omar malka",
-            career:"security consultant"
-        },{
-            imageSrc: imageTest,
-            name:"Ali Chalhoub",
-            career:"CyberSecurity"
-        }
-    ])
-
+    const [connectors, setConnectors] = useState([])
+    const [roles,setRoles] = useState([])
+    const[filter,setFilter] = useState([])
+    const[allConnectors,setAllConnectors] = useState([])
+    const history = useHistory()
     useEffect(()=>{
-        axios.get('/roles').then((response)=>{
-            console.log(response.data)
+        let config = {
+            headers: {
+                'Authorization' : `Bearer ${localStorage.getItem('token')}`
+            }
+        }
+        axios.get('/students/connectors',config).then((response)=>{
+            setConnectors(response.data.connectors)
+            setAllConnectors(response.data.connectors)
         }).catch((error)=>{
-            console.log(error.response.data.error)
+            history.push('/')
+        }) 
+        axios.get('/roles').then((response)=>{
+            const data = response.data.roles
+            console.log(data)
+            setRoles(data)
+        }).catch((error)=>{
+            console.log(error)
         }) 
     },[send])
     
+    useEffect(()=>{
+        let filteredConnectors = []
+        if(filter){
+            filteredConnectors = allConnectors.filter(searchV)
+        }else{
+            filteredConnectors = allConnectors
+        }
+        setConnectors(filteredConnectors)
+    },[filter])
+    const selectChange = (e) =>{
+        let config = {
+            headers: {
+                'Authorization' : `Bearer ${localStorage.getItem('token')}`
+            }
+        }
+        axios.get('token-validity',config).then((response)=>{  
+            setFilter(e)
+        }).catch((error)=>{
+            history.push('/')
+        })
+    }
+
+    const searchV = (connector) =>{
+        for(let i=0;i<filter.length;i++){
+            if(filter[i].label === connector.career){
+                return true
+            }
+        }
+        return false
+    }
+    const allBtn = () =>{
+        console.log("clicked")
+    }
     return (
         <div className="mt-4">
             <HeaderBar/>
@@ -154,10 +87,15 @@ const Connectors = () => {
                         <Info number="3914" text="Connections"/>
                         <Info number="3914" text="Connections"/>
                     </div>
-                    <div className={classes.select}>
-                        <select>
-                            <option value="All">All</option>
-                        </select>
+                    <div className={`${classes.select}`}>
+                        <Select
+                            isMulti
+                            name="roles"
+                            options={roles}
+                            className="basic-multi-select"
+                            classNamePrefix="select"
+                            onChange={(e)=>selectChange(e)}
+                        />
                     </div>
                     <div className={`${classes.connector_items}`}>
                         {
