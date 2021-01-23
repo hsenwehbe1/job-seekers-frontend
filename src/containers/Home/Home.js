@@ -86,6 +86,16 @@ class Home extends Component {
        } 
     }
     searchTrigger(e){
+        let config = {
+            headers: {
+                'Authorization' : `Bearer ${localStorage.getItem('token')}`
+            }
+        }
+        axios.get('token-validity',config).then((response)=>{  
+
+        }).catch((error)=>{
+            this.props.history.push('/')
+        })
         if(!e){
             this.setState({
                 ...this.state,

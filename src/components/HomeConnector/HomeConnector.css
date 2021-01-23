@@ -24,18 +24,13 @@
     width:60%;
 }
 .btn{
-    background: #EF726A ;
-    border-radius: 16px;
-    border:#EF726A;
-    color:white;
-    padding:3px 8px 3px 8px;
-    opacity: 1;
+    border-radius: 20px;
+    margin-top: 5px;
+    background-color: #F0716A!important;
+
 }
-.btn:hover{
-    background-color:#c74a41;
-    border-radius: 16px;
-    color:white;
-    border:#c74a41;
-    padding:3px 8px 3px 8px;
-    box-shadow: 0 0 10px#c74a41;
+.btn:active{
+    border-radius: 20px;
+    margin-top: 5px;
+    background-color: #c74a41!important;
 }

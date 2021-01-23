@@ -18,7 +18,7 @@ const HomeConnector = (props) => {
                 {props.salary}
             </div>
             <div style={{width:'15%'}}>
-                <button className={classes.btn}>Connect</button>
+                <button className={`btn btn-danger ${classes.btn}`}>Connect</button>
             </div>
         </div>
     )
