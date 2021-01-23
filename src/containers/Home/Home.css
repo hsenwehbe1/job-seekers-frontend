@@ -141,6 +141,16 @@ box-shadow: 10px 10px 23px -6px rgba(191,187,187,1);
     border-bottom: 1px solid #007FEB;
     outline: #007FEB;
 }
+.selectSearch{
+    width:70%;
+    transform: translate(0px,-10px);
+}
+.connectors{
+    display:flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding-bottom: 30px;
+}
 @media(max-width: 576px){
     .sidebar{
         height: 500px;

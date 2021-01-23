@@ -68,8 +68,34 @@ const Connectors = () => {
         }
         return false
     }
-    const allBtn = () =>{
-        console.log("clicked")
+    
+    const selectStyle = {
+        option: (provided, state) => ({
+            ...provided,
+            borderBottom: '1px solid #D0D0D0',
+            borderBottomWidth:'70%',
+            backgroundColor: 'white',
+            '&:hover': {
+                backgroundColor: '#007FEC',
+                borderRadius: '6px',
+                color:'white',
+                border:'#007FEC',
+                boxShadow: '0 0 10px #007FEC'
+            }
+        }),
+        control: (base, state) => ({
+            ...base,
+            border: state.isFocused ? 0 : 0,
+            boxShadow: state.isFocused ? 0 : 0,
+            borderRadius:'6px',
+            '&:hover': {
+                backgroundColor: 'white',
+                borderRadius: '6px',
+                color:'white',
+                border:'#007FEB',
+                boxShadow: '0px 0px 5px #007FEB'
+            }
+        })
     }
     return (
         <div className="mt-4">
@@ -89,11 +115,14 @@ const Connectors = () => {
                     </div>
                     <div className={`${classes.select}`}>
                         <Select
+                            components={{ DropdownIndicator:() => null, IndicatorSeparator:() => null }}
                             isMulti
                             name="roles"
                             options={roles}
                             className="basic-multi-select"
                             classNamePrefix="select"
+                            placeholder="title"
+                            styles={selectStyle}
                             onChange={(e)=>selectChange(e)}
                         />
                     </div>
