@@ -18,12 +18,9 @@ class HeaderBar extends Component {
             }
         }
         axios.get('students/photo', config).then((response)=>{
-            console.log(response)
             this.setState({
                 imageSource : `data:image/png;base64,${response.data.image}`
             })
-        }).catch((err)=>{
-            console.log(err)
         })
     }
     closeHandler = ()=>{

@@ -11,8 +11,12 @@ class Verify extends Component {
             this.props.triggerAlert(true, 'success', 'Account successfully verified', 10000)
             this.props.history.push('/login')
         }).catch((err)=>{
+            if (!err.response) { // connection error
+                this.props.triggerAlert(true, 'error', 'Connection interrupted: Check your internet connection', 10000)
+            }else{
+                this.props.triggerAlert(true, 'error', 'Something went wrong', 10000)
+            }
             localStorage.removeItem('token')
-            this.props.triggerAlert(true, 'error', 'Something went wrong', 10000)
             this.props.history.push('/')
         })
     }

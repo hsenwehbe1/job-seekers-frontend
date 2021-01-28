@@ -14,7 +14,6 @@ class ResetEmail extends Component {
     })
 
     componentDidMount = ()=>{
-        console.log(this.props.match.params.token)
         let config = {
             headers:{
                 'Authorization' : `Bearer ${this.props.match.params.token}`
@@ -26,8 +25,12 @@ class ResetEmail extends Component {
                 email: response.data.email
             })
         }).catch((err)=>{
-            this.props.triggerAlert(true, 'error', "Reset link expired", 3000)
-            this.props.history.push('/')
+            if (!err.response) { // connection error
+                this.props.triggerAlert(true, 'error', 'Connection interrupted: Check your internet connection', 10000)
+            }else{
+                this.props.triggerAlert(true, 'error', "Reset link expired", 3000)
+                this.props.history.push('/')
+            }
         })
     }
 
@@ -57,7 +60,11 @@ class ResetEmail extends Component {
                 this.props.triggerAlert(true, 'success', "Password changed successfully", 3000)
                 this.props.history.push('/login')
             }).catch((err)=>{
-                this.props.triggerAlert(true, 'error', "Something went wrong", 3000)
+                if (!err.response) { // connection error
+                    this.props.triggerAlert(true, 'error', 'Connection interrupted: Check your internet connection', 10000)
+                }else{
+                    this.props.triggerAlert(true, 'error', "Something went wrong", 3000)
+                }
             })
         }
     }

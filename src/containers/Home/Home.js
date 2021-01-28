@@ -67,10 +67,13 @@ class Home extends Component {
                 didTakeTest: response.data.didTakeTest
             })
         }).catch((err)=>{
-            if (!err.response) { // connection error
+            if(!err.response) { // connection error
                 this.props.triggerAlert(true, 'error', 'Connection interrupted: Check your internet connection', 10000)
             }else if(err.response.data.error==='unauthorized'){
+                this.props.triggerAlert(true, 'error', "Session expired", 3000)
                 this.props.history.push('/')
+            }else{
+                this.props.triggerAlert(true, 'error', 'Something went wrong', 10000)
             }
         })
     }

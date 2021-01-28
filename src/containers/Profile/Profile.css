@@ -26,6 +26,8 @@
     outline: none!important;
     background-color: #f8f8f8;
     padding-left: 0px!important;
+    display: inline!important;
+    width: 95%!important;
 }
 .input[placeholder]{
     text-overflow: ellipsis;
@@ -45,6 +47,15 @@
 }
 .allowed{
     cursor: pointer;
+    font-size: 12px;
+    float: right;
+    padding-top: 15px;
+}
+.notallowed{
+    cursor:not-allowed;
+    font-size: 12px;
+    float: right;
+    padding-top: 15px;
 }
 @media(max-width: 767px){
     .caption{

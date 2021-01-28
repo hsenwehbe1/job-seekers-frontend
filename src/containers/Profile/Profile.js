@@ -16,13 +16,13 @@ class Profile extends Component {
         timestamp : 0,
         fname : '',
         lname : '',
-        edit: true,
+        fnameEdit: false,
+        lnameEdit: false,
         oldPass: '',
         newPass: '',
         confirmPass: ''
     })
     componentDidMount(){
-        console.log('here')
         let config = {
             headers:{
                 'Authorization' : `Bearer ${localStorage.getItem('token')}`
@@ -36,7 +36,14 @@ class Profile extends Component {
                 lname: response.data.lname
             })
         }).catch((err)=>{
-            console.log(err)
+            if(!err.response) { // connection error
+                this.props.triggerAlert(true, 'error', 'Connection interrupted: Check your internet connection', 10000)
+            }else if(err.response.data.error==='unauthorized'){
+                this.props.triggerAlert(true, 'error', "Session expired", 3000)
+                this.props.history.push('/')
+            }else{
+                this.props.triggerAlert(true, 'error', 'Something went wrong', 10000)
+            }
         })
     }
     imageHandler = (event)=>{
@@ -53,7 +60,14 @@ class Profile extends Component {
                 image: `data:image/png;base64,${response.data.image}`
             })
         }).catch((err)=>{
-            console.log(err)
+            if(!err.response) { // connection error
+                this.props.triggerAlert(true, 'error', 'Connection interrupted: Check your internet connection', 10000)
+            }else if(err.response.data.error==='unauthorized'){
+                this.props.triggerAlert(true, 'error', "Session expired", 3000)
+                this.props.history.push('/')
+            }else{
+                this.props.triggerAlert(true, 'error', 'Something went wrong', 10000)
+            }
         })
     }
     editPictureHandler = ()=>{
@@ -72,19 +86,28 @@ class Profile extends Component {
                 image: 'https://use.fontawesome.com/releases/v5.0.8/svgs/solid/user.svg'
             })
         }).catch((err)=>{
-            console.log(err)
+            if(!err.response) { // connection error
+                this.props.triggerAlert(true, 'error', 'Connection interrupted: Check your internet connection', 10000)
+            }else if(err.response.data.error==='unauthorized'){
+                this.props.triggerAlert(true, 'error', "Session expired", 3000)
+                this.props.history.push('/')
+            }else{
+                this.props.triggerAlert(true, 'error', 'Something went wrong', 10000)
+            }
         })
     }
     fNameInputHandler = (event)=>{
         this.setState({
             ...this.state,
-            fname: event.target.value
+            fname: event.target.value,
+            fnameEdit: true
         })
     }
     lNameInputHandler = (event)=>{
         this.setState({
             ...this.state,
-            lname: event.target.value
+            lname: event.target.value,
+            lnameEdit: true
         })
     }
     fNameSaveHandler = ()=>{
@@ -97,9 +120,20 @@ class Profile extends Component {
                 }
             }
             axios.patch('students/fname', {fname:this.state.fname}, config).then((response)=>{
+                this.setState({
+                    ...this.state,
+                    fnameEdit: false
+                })
                 this.props.triggerAlert(true, 'success', 'Updated', 5000)
             }).catch((err)=>{
-                console.log(err)
+                if(!err.response) { // connection error
+                    this.props.triggerAlert(true, 'error', 'Connection interrupted: Check your internet connection', 10000)
+                }else if(err.response.data.error==='unauthorized'){
+                    this.props.triggerAlert(true, 'error', "Session expired", 3000)
+                    this.props.history.push('/')
+                }else{
+                    this.props.triggerAlert(true, 'error', 'Something went wrong', 10000)
+                }
             })
         }
     }
@@ -113,9 +147,20 @@ class Profile extends Component {
                 }
             }
             axios.patch('students/lname', {lname:this.state.lname}, config).then((response)=>{
+                this.setState({
+                    ...this.state,
+                    lnameEdit: false
+                })
                 this.props.triggerAlert(true, 'success', 'Updated', 5000)
             }).catch((err)=>{
-                console.log(err)
+                if(!err.response) { // connection error
+                    this.props.triggerAlert(true, 'error', 'Connection interrupted: Check your internet connection', 10000)
+                }else if(err.response.data.error==='unauthorized'){
+                    this.props.triggerAlert(true, 'error', "Session expired", 3000)
+                    this.props.history.push('/')
+                }else{
+                    this.props.triggerAlert(true, 'error', 'Something went wrong', 10000)
+                }
             })
         }
     }
@@ -157,13 +202,27 @@ class Profile extends Component {
                     this.props.triggerAlert(true, 'success', 'Password updated', 5000)
                 }
             }).catch((err)=>{
-                console.log(err)
+                if(!err.response) { // connection error
+                    this.props.triggerAlert(true, 'error', 'Connection interrupted: Check your internet connection', 10000)
+                }else if(err.response.data.error==='unauthorized'){
+                    this.props.triggerAlert(true, 'error', "Session expired", 3000)
+                    this.props.history.push('/')
+                }else{
+                    this.props.triggerAlert(true, 'error', 'Something went wrong', 10000)
+                }
             })
         }
     }
     render() {
         let imageSrc = this.state.image
-        let pointer = classes.allowed
+        let fnameEdit = <i onClick={this.fNameSaveHandler} className={`fas fa-pen ${classes.allowed}`}/>
+        let lnameEdit = <i onClick={this.lNameSaveHandler} className={`fas fa-pen ${classes.allowed}`}/>
+        if(!this.state.fnameEdit){
+            fnameEdit = <i className={`fas fa-pen ${classes.notallowed}`}/>
+        }
+        if(!this.state.lnameEdit){
+            lnameEdit = <i className={`fas fa-pen ${classes.notallowed}`}/>
+        }
         return (
             <div className="mt-4">
                 <HeaderBar image={imageSrc}/>
@@ -197,42 +256,34 @@ class Profile extends Component {
                                     <div className='col-12 col-md-9'>
                                         <div className='row'>
                                             <div className="col-sm-12 col-md-6 mb-3">
-                                                <label className='font-weight-bold'>First Name</label>
-                                                <div className="input-group border-bottom">
+                                                <div className="border-bottom d-inline-block w-100">
+                                                    <div className='font-weight-bold'>First Name</div>
                                                     <input type="text" className={`form-control ${classes.border} ${classes.input}`} defaultValue={this.state.fname} onChange={this.fNameInputHandler}/>
-                                                    <div className="input-group-append">
-                                                        <span className={`input-group-text ${classes.border}`} style={{marginTop:'8px'}}>
-                                                            <i onClick={this.fNameSaveHandler} className={`fas fa-pen ${pointer}`} style={{fontSize:'12px'}}/>
-                                                        </span>
-                                                    </div>
+                                                    {fnameEdit}
                                                 </div>
                                             </div>
                                             <div className="col-sm-12 col-md-6">
-                                                <label className='font-weight-bold'>Last Name</label>
-                                                <div className="input-group border-bottom">
+                                                <div className="border-bottom d-inline-block w-100">
+                                                    <div className='font-weight-bold'>Last Name</div>
                                                     <input type="text" className={`form-control ${classes.border} ${classes.input}`}  defaultValue={this.state.lname} onChange={this.lNameInputHandler}/>
-                                                    <div className="input-group-append">
-                                                        <span className={`input-group-text ${classes.border}`} style={{marginTop:'8px'}}>
-                                                            <i onClick={this.lNameSaveHandler} className={`fas fa-pen ${pointer}`} style={{fontSize:'12px'}}/>
-                                                        </span>
-                                                    </div>
+                                                    {lnameEdit}
                                                 </div>
                                             </div>
                                             <div className="col-12">
                                                 <Accordion>
                                                     <div className="row ">
                                                         <div className="col-sm-12 col-md-4">
-                                                            <div className="input-group border-bottom">
+                                                            <div className="border-bottom">
                                                                 <input onChange={this.oldPassHandler} type="password" placeholder='Current password' className={`form-control ${classes.border} ${classes.input}`}/>
                                                             </div>
                                                         </div>
                                                         <div className="col-sm-12 col-md-4 mt-3 mt-md-0">
-                                                            <div className="input-group border-bottom">
+                                                            <div className="border-bottom">
                                                                 <input onChange={this.newPassHandler} type="password" placeholder='New password' className={`form-control ${classes.border} ${classes.input}`}/>
                                                             </div>
                                                         </div> 
                                                         <div className="col-sm-12 col-md-4 mt-3 mt-md-0">
-                                                            <div className="input-group border-bottom">
+                                                            <div className="border-bottom">
                                                                 <input onChange={this.confirmPassHandler} type="password" placeholder='Confirm new password' className={`form-control ${classes.border} ${classes.input}`}/>
                                                             </div>
                                                         </div>  

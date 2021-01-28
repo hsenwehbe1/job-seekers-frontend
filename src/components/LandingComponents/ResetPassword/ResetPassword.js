@@ -23,7 +23,11 @@ class ResetPassword extends Component {
             axios.post('students/resetpass', {email: this.state.email}).then((response)=>{
                 this.props.triggerAlert(true, 'success', 'An email has been sent with the reset link', 10000)
             }).catch((err)=>{
-                this.props.triggerAlert(true, 'error', 'Something went wrong', 3000)
+                if (!err.response) { // connection error
+                    this.props.triggerAlert(true, 'error', 'Connection interrupted: Check your internet connection', 10000)
+                }else{
+                    this.props.triggerAlert(true, 'error', "Something went wrong", 3000)
+                }
             })
         }else{
             this.props.triggerAlert(true, 'error', 'Invalid input', 3000)
