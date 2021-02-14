@@ -1,0 +1,30 @@
+.item{
+    text-align: center;
+    display: inline-block;
+    width: 22.5%;
+    font-weight: bold;
+}
+.special{
+    text-align: center;
+    display: inline-block;
+    width: 10%;
+}
+.container{
+    margin-top: 25px;
+    background-color: white;
+    min-width: 1000px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 7px;
+    -webkit-box-shadow: 0px 0px 16px -8px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 16px -8px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 16px -8px rgba(0,0,0,0.75);
+}
+.light{
+    font-weight: 300;
+}
+.light:hover{
+    transition: 0.5s;
+    background-color: #e9f3fd;
+    cursor: pointer;
+}

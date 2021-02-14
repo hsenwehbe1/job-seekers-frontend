@@ -47,8 +47,8 @@ class Profile extends Component {
         })
     }
     imageHandler = (event)=>{
-        const formData = new FormData();
-        formData.append('upload1', event.target.files[0]);
+        const formData = new FormData()
+        formData.append('upload1', event.target.files[0])
         let config = {
             headers:{
                 'Authorization' : `Bearer ${localStorage.getItem('token')}`

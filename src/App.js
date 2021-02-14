@@ -13,7 +13,9 @@ import Interests from './containers/Interests/Interests'
 import TermsAndConditions from './containers/TermsAndConditions/TermsAndConditions'
 import Connectors from './containers/Connectors/Connectors'
 import Settings from './containers/Settings/Settings'
-
+import Advisors from './containers/Advisors/Advisors'
+import Path from './containers/Path/Path'
+import SpecificPath from './containers/Path/SpecificPath/SpecificPath'
 class App extends Component {
   render() {
     return (
@@ -30,11 +32,14 @@ class App extends Component {
             <Route path='/test/start' component={StartTest}/>
             <Route path='/about' component={AboutUs}/>
             <Route path='/faq' component={Faq}/>
+            <Route path='/My path' exact component={Path}/>
+            <Route path='/My path/:role' exact component={SpecificPath}/>
             <Route path='/terms&conditions' component={TermsAndConditions}/>
             <Route path='/resetpassword' exact render={()=><Landing section='resetpassword'/>}/>
             <Route path='/resetpassword/:token' exact render={()=><Landing section='updatepassword'/>}/>
             <Route path='/login' render={()=><Landing section='login'/>}/>
             <Route path='/signup' render={()=><Landing section='signup'/>}/>
+            <Route path='/advisors' component={Advisors}/>
             <Route path='/' exact render={()=><Landing section='landing'/>}/>
             <Route component={NotFound}/>
           </Switch>

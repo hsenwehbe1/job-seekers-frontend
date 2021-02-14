@@ -1,0 +1,13 @@
+.skill{
+    background-color: #e8f5f7;
+    border-radius: 7px;
+    padding: 3px 12px 3px 12px;
+    margin-right: 10px;
+    margin-top: 10px;
+    font-weight: 300;
+}
+@media(max-width: 632px){
+    .skill{
+        margin-right: 5px;
+    }
+}

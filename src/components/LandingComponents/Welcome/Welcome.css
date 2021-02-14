@@ -20,6 +20,7 @@
 .account{
     color:#133C59;
     padding-top: 10px;
+    font-weight: 300;
 }
 .signup{
     color: white;
@@ -37,7 +38,7 @@
 }
 .bottom{
     font-size: 11px;
-    font-weight: 100;
+    font-weight: 300;
     word-spacing: 20px;
     padding-top: 10px;
 }
