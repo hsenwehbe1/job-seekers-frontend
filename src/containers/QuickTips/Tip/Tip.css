@@ -1,0 +1,20 @@
+.card{
+    background-color: white;
+    padding: 10px 20px 10px 20px;
+    font-weight: 390;
+    border-radius: 7px;
+    border: 1px solid #007FEB;
+    -webkit-box-shadow: 0px 0px 1px 0px rgba(0,127,235,1);
+    -moz-box-shadow: 0px 0px 1px 0px rgba(0,127,235,1);
+    box-shadow: 0px 0px 1px 0px rgba(0,127,235,1);
+    display: grid;
+    grid-template-columns: 1fr 100fr;
+    margin-bottom: 10px;
+}
+.number{
+    font-weight: bold;
+    color: rgb(255, 29, 29);
+}
+.text{
+    padding-left: 10px;
+}

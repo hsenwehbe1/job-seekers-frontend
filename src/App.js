@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
 import AboutUs from './containers/AboutUs/AboutUs'
 import Home from './containers/Home/Home'
-import StartTest from './containers/StartTest/StartTest'
+import StartTest from './containers/StartTest/StartTest1'
 import UserTest from './containers/UserTest/UserTest'
 import Verify from './containers/Verify/Verify'
 import Faq from './containers/FAQ/Faq'
@@ -12,10 +12,10 @@ import Landing from './containers/LandingPage/LandingPage'
 import Interests from './containers/Interests/Interests'
 import TermsAndConditions from './containers/TermsAndConditions/TermsAndConditions'
 import Connectors from './containers/Connectors/Connectors'
-import Settings from './containers/Settings/Settings'
 import Advisors from './containers/Advisors/Advisors'
 import Path from './containers/Path/Path'
 import SpecificPath from './containers/Path/SpecificPath/SpecificPath'
+import QuickTips from './containers/QuickTips/QuickTips'
 class App extends Component {
   render() {
     return (
@@ -27,11 +27,11 @@ class App extends Component {
             <Route path='/profile' component={Profile}/>
             <Route path='/interests' component={Interests}/>
             <Route path='/connectors' component={Connectors}/>
-            <Route path='/settings' component={Settings}/>
             <Route path='/test' exact component={UserTest}/>
             <Route path='/test/start' component={StartTest}/>
             <Route path='/about' component={AboutUs}/>
             <Route path='/faq' component={Faq}/>
+            <Route path='/quick tips' component={QuickTips}/>
             <Route path='/My path' exact component={Path}/>
             <Route path='/My path/:role' exact component={SpecificPath}/>
             <Route path='/terms&conditions' component={TermsAndConditions}/>

@@ -6,9 +6,9 @@ export default function Answer(props) {
         selectedCss = classes.selected
     }
     const clickHandler = (event)=>{
-        props.handler(event.target.value, event.target.id)
+        props.handler(event.target.value)
     }
     return (
-        <input onClick={clickHandler} type="text" className={`px-3 py-2 ${selectedCss} ${classes.input}`} readOnly value={props.question} id={props.id}/>
+        <div className='mb-3'><input onClick={clickHandler} type="text" className={`px-3 py-2 ${selectedCss} ${classes.input}`} readOnly value={props.children} /></div>
     )
 }

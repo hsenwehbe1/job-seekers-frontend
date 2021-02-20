@@ -227,7 +227,7 @@ class Profile extends Component {
             <div className="mt-4">
                 <HeaderBar image={imageSrc}/>
                 <div className={`${classes.body_container} px-3 mt-4`}>
-                    <Sidebar page='about'/>
+                    <Sidebar page=''/>
                     <div className="container">
                         <div className={`${classes.upper_part} px-0`}>
                             <div className={`${classes.text_lg}`}>

@@ -1,13 +1,19 @@
 import * as variables from '../../globalVariables'
 
 const initState = {
-    email : ''
+    data : {},
+    answers: new Array(8)
 }
 const reducer = (state=initState, action)=>{
-    if(action.type === variables.SAVEEMAIL){
+    if(action.type === variables.SAVEDATA){
         return {
             ...state,
-            email: action.email
+            data: action.data
+        }
+    }else if(action.type === variables.SAVEANSWER){
+        return {
+            ...state,
+            answers: action.answers
         }
     }
     return state

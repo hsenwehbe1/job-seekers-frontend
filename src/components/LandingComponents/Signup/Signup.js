@@ -4,7 +4,6 @@ import classes from './Signup.css'
 import axios from '../../../axios'
 import {connect} from 'react-redux'
 import * as alertActions from '../../../redux/actions/alert'
-import * as authActions from '../../../redux/actions/auth'
 import validator from 'email-validator'
 import Alert from '../../Alert/Alert'
 import LinkedinIcon from '../../../assets/images/linkedin.png'
@@ -70,7 +69,6 @@ class Signup extends Component {
                 email : this.state.email,
                 password : this.state.password
             }).then((response)=>{
-                this.props.saveEmail(this.state.email)
                 this.props.triggerAlert(true, 'success', 'Success', 3000)
                 this.setState({
                     ...this.state,
@@ -165,8 +163,7 @@ class Signup extends Component {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        triggerAlert: (alertOpen, alertType, alertMessage, alertDuration) => dispatch(alertActions.triggerAlert(alertOpen, alertType, alertMessage, alertDuration)),
-        saveEmail: (email) => dispatch(authActions.saveEmail(email))
+        triggerAlert: (alertOpen, alertType, alertMessage, alertDuration) => dispatch(alertActions.triggerAlert(alertOpen, alertType, alertMessage, alertDuration))
     };
 };
 export default withRouter(connect(null, mapDispatchToProps)(Signup))

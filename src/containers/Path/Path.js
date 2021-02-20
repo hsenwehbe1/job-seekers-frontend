@@ -10,14 +10,25 @@ export default class Path extends Component {
     state = ({
         page: 1, // for pagination,
         highlight: 0,
-        data: []
+        data: [],
+        numberOfEntryLevelRoles : 0,
+        numberOfAdvisors: 0
     })
     componentDidMount(){
         axios.get('students/allroles').then((response)=>{
-
             this.setState({
                 ...this.state,
                 data: [...response.data]
+            })
+        }).catch((err)=>{
+
+        })
+        axios.get('students/entrylevel').then((response)=>{
+            console.log(response)
+            this.setState({
+                ...this.state,
+                numberOfEntryLevelRoles: response.data.data,
+                numberOfAdvisors: response.data.advisors
             })
         }).catch((err)=>{
 
@@ -49,7 +60,7 @@ export default class Path extends Component {
         this.props.history.push(`/my path/${role}`)
     }
     render() {
-        let display = ''
+        console.log(this.state)
         let content = ''
         content = (
             this.state.data.map((element, key) => {
@@ -76,13 +87,13 @@ export default class Path extends Component {
                             </div>
                             <div className="col-6 col-md-3 mt-sm-4 mb-sm-4 mt-md-0 mb-md-0">
                                 <div className={classes.card}>
-                                    <div className={classes.blue}>40K</div>
+                                    <div className={classes.blue}>{this.state.numberOfEntryLevelRoles}</div>
                                     <div className='font-weight-light'>Number of entry level roles</div>
                                 </div>
                             </div>
                             <div className="col-6 col-md-3 mt-sm-4 mb-sm-4 mt-md-0 mb-md-0">
                                 <div className={classes.card}>
-                                    <div className={classes.red}>76K</div>
+                                    <div className={classes.red}>{this.state.numberOfAdvisors}</div>
                                     <div className='font-weight-light'>Number of active mentors</div>
                                 </div>
                             </div>

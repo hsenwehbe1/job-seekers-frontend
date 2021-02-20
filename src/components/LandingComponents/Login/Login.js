@@ -3,7 +3,6 @@ import {Link, withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
 import axios from '../../../axios'
 import * as alertActions from '../../../redux/actions/alert'
-import * as authActions from '../../../redux/actions/auth'
 import classes from './Login.css'
 import Alert from '../../Alert/Alert'
 import Spinner from '../../Spinner/Spinner'
@@ -64,8 +63,6 @@ class Login extends Component {
                 })
             })
         }
-        this.props.saveEmail(this.state.email)
-        
     }
     render() {
         let spinner = ''
@@ -111,8 +108,7 @@ class Login extends Component {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        triggerAlert: (alertOpen, alertType, alertMessage, alertDuration) => dispatch(alertActions.triggerAlert(alertOpen, alertType, alertMessage, alertDuration)),
-        saveEmail: (email) => dispatch(authActions.saveEmail(email))
+        triggerAlert: (alertOpen, alertType, alertMessage, alertDuration) => dispatch(alertActions.triggerAlert(alertOpen, alertType, alertMessage, alertDuration))
     };
 };
 export default withRouter(connect(null, mapDispatchToProps)(Login))

@@ -36,7 +36,6 @@ class ProfileBar extends Component {
                     <hr/>
                     <Media click={this.props.pushInterest} title="My interest" content="Find your Interest"/><br></br>
                     <Media click={this.props.pushConnectors} title="My Connectors" content="Search and visit connectors And mentors profiles"/><br></br>
-                    <Media click={this.props.pushSettings} title="Settings" content="Search and visit connectors And mentors profiles"/>
                 </div>
                 <div className={classes.footer}>
                     <button onClick={this.props.logout} className={`btn btn-outline-danger btn-sm ${classes.logout}`}>Logout</button>

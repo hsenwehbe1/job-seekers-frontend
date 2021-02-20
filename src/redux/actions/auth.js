@@ -1,8 +1,15 @@
 import * as variables from '../../globalVariables';
 
-export const saveEmail = (email)=>{
+export const saveData = (data)=>{
     return{
-        type: variables.SAVEEMAIL,
-        email
+        type: variables.SAVEDATA,
+        data
+    }
+}
+export const saveAnswer = (answers)=>{
+    console.log(answers)
+    return{
+        type: variables.SAVEANSWER,
+        answers: [...answers]
     }
 }

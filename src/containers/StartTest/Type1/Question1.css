@@ -10,3 +10,8 @@
     border-color: #F0716A;
     color: #F0716A;
 }
+.input:hover{
+    transition: 0.75s;
+    border-color: #F0716A;
+    color: #F0716A;
+}

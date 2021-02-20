@@ -61,6 +61,9 @@ class Sidebar extends Component {
             pages.faq.color = '#007FEB'
         }else if(this.props.page==='terms&conditions'){
             pages.terms.color = '#007FEB'
+        }else if(this.props.page==='tips'){
+            pages.tips.active = true
+            pages.tips.color = '#007FEB'
         }
         return (
             <div className={`${classes.main}`}>
@@ -72,7 +75,7 @@ class Sidebar extends Component {
                         <SidebarIcons text='Home' selected={pages.home.active} icon={<Home color={pages.home.color}/>}/>
                         <SidebarIcons text='My path' selected={pages.path.active} icon={<Path color={pages.path.color}/>}/>
                         <SidebarIcons text='Careers news' icon={<CareerNews color='#133c59'/>}/>
-                        <SidebarIcons text='Quick tips' icon={<QuickTips color='#133c59'/>}/>
+                        <SidebarIcons text='Quick tips' selected={pages.tips.active} icon={<QuickTips color={pages.tips.color}/>}/>
                         <SidebarIcons text='About' selected={pages.about.active} icon={<About color={pages.about.color}/>}/>
                         <div className={`${classes.small_text} text-center`}>
                             <Link to='/terms&conditions' className={classes.link} style={{color: `${pages.terms.color}`}}>
