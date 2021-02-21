@@ -120,4 +120,8 @@
   margin-top: 20px;
   padding: 20px;
   border-radius: 10px;
+  margin-bottom: 10px;
+}
+.back{
+  visibility: hidden;
 }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import classes from './Question1.css'
+import classes from './Question4.css'
 import {connect} from 'react-redux'
-import * as authActions from '../../../redux/actions/auth'
+import * as authActions from '../../../../redux/actions/auth'
 import { withRouter } from 'react-router-dom'
 class Type1 extends Component{
     state = ({
@@ -9,7 +9,7 @@ class Type1 extends Component{
     })
     clickHandler = (event)=>{
         let arr = [...this.props.reduxAnswers]
-        arr[0] = event.target.value
+        arr[3] = event.target.value
         this.props.saveAnswer(arr)
         let s = ['', '', '']
         s[event.target.id[0]] = classes.selected
@@ -22,15 +22,15 @@ class Type1 extends Component{
         let option2 = ''
         let option3 = ''
         if(this.props.reduxData.page){
-            option1 = this.props.reduxData.questions.type1.q1[1]
-            option2 = this.props.reduxData.questions.type1.q1[2]
-            option3 = this.props.reduxData.questions.type1.q1[3]
+            option1 = this.props.reduxData.questions.type1.q3[1]
+            option2 = this.props.reduxData.questions.type1.q3[2]
+            option3 = this.props.reduxData.questions.type1.q3[3]
         }
         return (
             <div className='mb-3'>
-                <input onClick={this.clickHandler} type="text" className={`px-3 py-2 ${classes.input} ${this.state.selected[0]}`} readOnly value={option1} id='0q1'/><br></br>
-                <input onClick={this.clickHandler} type="text" className={`px-3 py-2 mt-3 ${classes.input} ${this.state.selected[1]}`} readOnly value={option2} id='1q1'/><br></br>
-                <input onClick={this.clickHandler} type="text" className={`px-3 py-2 mt-3 ${classes.input} ${this.state.selected[2]}`} readOnly value={option3} id='2q1'/>
+                <textarea onClick={this.clickHandler} type="text" className={`px-3 py-2 ${classes.input} ${this.state.selected[0]}`} readOnly value={option1} id='0q4'/><br></br>
+                <textarea onClick={this.clickHandler} type="text" className={`px-3 py-2 mt-3 ${classes.input} ${this.state.selected[1]}`} readOnly value={option2} id='1q4'/><br></br>
+                <textarea onClick={this.clickHandler} type="text" className={`px-3 py-2 mt-3 ${classes.input} ${this.state.selected[2]}`} readOnly value={option3} id='2q4'/>
             </div>
         )
     }

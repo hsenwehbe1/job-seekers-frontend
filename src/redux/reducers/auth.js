@@ -2,7 +2,7 @@ import * as variables from '../../globalVariables'
 
 const initState = {
     data : {},
-    answers: new Array(8)
+    answers: new Array(10)
 }
 const reducer = (state=initState, action)=>{
     if(action.type === variables.SAVEDATA){

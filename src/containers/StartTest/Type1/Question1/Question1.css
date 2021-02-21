@@ -1,0 +1,21 @@
+.input{
+    transition: 0.50s;
+    color: rgb(77, 77, 77);
+    border: 2px solid  rgb(224, 224, 224);
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
+    text-align: center;
+    overflow: hidden;
+    resize: none;
+    min-height: 90px;
+}
+.selected{
+    border-color: #F0716A;
+    color: #F0716A;
+}
+.input:hover{
+    transition: 0.75s;
+    border-color: #F0716A;
+    color: #F0716A;
+}
