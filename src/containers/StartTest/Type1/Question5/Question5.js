@@ -4,18 +4,15 @@ import {connect} from 'react-redux'
 import * as authActions from '../../../../redux/actions/auth'
 import { withRouter } from 'react-router-dom'
 class Type1 extends Component{
-    state = ({
-        selected: ['', '', '']
-    })
     clickHandler = (event)=>{
         let arr = [...this.props.reduxAnswers]
         arr[4] = event.target.value
         this.props.saveAnswer(arr)
-        let s = ['', '', '']
+        let s = ['', '', '', '', '']
         s[event.target.id[0]] = classes.selected
-        this.setState({
-            selected : [...s]
-        })
+        let r = [...this.props.reduxOptions]
+        r[4] = s
+        this.props.saveOptions(r)
     }
     render() {
         let option1 = ''
@@ -32,11 +29,11 @@ class Type1 extends Component{
         }
         return (
             <div className='mb-3'>
-                <textarea onClick={this.clickHandler} type="text" className={`px-3 py-2 ${classes.input} ${this.state.selected[0]}`} readOnly value={option1} id='0q5'/><br></br>
-                <textarea onClick={this.clickHandler} type="text" className={`px-3 py-2 mt-3 ${classes.input} ${this.state.selected[1]}`} readOnly value={option2} id='1q5'/><br></br>
-                <textarea onClick={this.clickHandler} type="text" className={`px-3 py-2 mt-3 ${classes.input} ${this.state.selected[2]}`} readOnly value={option3} id='2q5'/><br></br>
-                <textarea onClick={this.clickHandler} type="text" className={`px-3 py-2 mt-3 ${classes.input} ${this.state.selected[3]}`} readOnly value={option4} id='3q5'/><br></br>
-                <textarea onClick={this.clickHandler} type="text" className={`px-3 py-2 mt-3 ${classes.input} ${this.state.selected[4]}`} readOnly value={option5} id='4q5'/>
+                <textarea onClick={this.clickHandler} type="text" className={`px-3 py-2 ${classes.input} ${this.props.reduxOptions[4][0]}`} readOnly value={option1} id='0q5'/><br></br>
+                <textarea onClick={this.clickHandler} type="text" className={`px-3 py-2 mt-3 ${classes.input} ${this.props.reduxOptions[4][1]}`} readOnly value={option2} id='1q5'/><br></br>
+                <textarea onClick={this.clickHandler} type="text" className={`px-3 py-2 mt-3 ${classes.input} ${this.props.reduxOptions[4][2]}`} readOnly value={option3} id='2q5'/><br></br>
+                <textarea onClick={this.clickHandler} type="text" className={`px-3 py-2 mt-3 ${classes.input} ${this.props.reduxOptions[4][3]}`} readOnly value={option4} id='3q5'/><br></br>
+                <textarea onClick={this.clickHandler} type="text" className={`px-3 py-2 mt-3 ${classes.input} ${this.props.reduxOptions[4][4]}`} readOnly value={option5} id='4q5'/>
             </div>
         )
     }
@@ -44,13 +41,15 @@ class Type1 extends Component{
 const mapStateToProps = state => {
     return {
       reduxData: state.authState.data,
-      reduxAnswers: state.authState.answers
+      reduxAnswers: state.authState.answers,
+      reduxOptions: state.authState.options
     }
 }
 const mapDispatchToProps = dispatch => {
     return {
         saveData: (data) => dispatch(authActions.saveData(data)),
-        saveAnswer: (answers) => dispatch(authActions.saveAnswer(answers))
+        saveAnswer: (answers) => dispatch(authActions.saveAnswer(answers)),
+        saveOptions: (options) => dispatch(authActions.saveOption(options))
     }
 }
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Type1))

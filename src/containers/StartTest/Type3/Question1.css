@@ -1,0 +1,44 @@
+.borderless{
+    border: none!important;
+    outline: none!important;
+}
+.container{
+    border: 1px solid #F0716A;
+    border-radius: 7px;
+    padding: 1px;
+    width: 300px;
+}
+.borderless:focus{
+    outline:0px !important;
+    -webkit-appearance:none;
+    box-shadow: none !important;
+}
+.parent{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.dropdown{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.options{
+    background-color: rgb(251, 251, 251);
+    max-height: 200px;
+    width: 300px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+.option{
+    cursor: pointer;
+    padding: 5px;
+}
+.option:hover{
+    border: 1px solid #F0716A;
+    border-radius: 5px;
+}
+.selected{
+    border: 1px solid #F0716A;
+    border-radius: 5px;
+}

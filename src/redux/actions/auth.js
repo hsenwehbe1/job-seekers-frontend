@@ -13,3 +13,15 @@ export const saveAnswer = (answers)=>{
         answers: [...answers]
     }
 }
+export const saveOption = (options)=>{
+    return{
+        type: variables.SAVEOPTIONS,
+        options: [...options]
+    }
+}
+export const saveCheck = (check)=>{
+    return{
+        type: variables.SAVECHECK,
+        check: [...check]
+    }
+}

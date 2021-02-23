@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import classes from './Question1.css'
+import classes from './Question2.css'
 import Checkbox from '@material-ui/core/Checkbox'
 import {connect} from 'react-redux'
 import * as authActions from '../../../../redux/actions/auth'
@@ -12,6 +12,7 @@ class Type1 extends Component{
             '2':'Biology',
             '3':'Chemistry',
             '4':'Physics',
+            '5':'None'
         },
         answers: []
     })
@@ -26,21 +27,21 @@ class Type1 extends Component{
         }else{
             answers.push(answer)
         }
-        arr[5] = answers
+        arr[6] = answers
         this.props.saveAnswer(arr)
         //select / unselect
         let s = [...this.props.reduxOptions]
         let c = [...this.props.reduxCheck]
-        let c1 = [...c[0]]
-        let s1 = [...s[5]]
+        let c1 = [...c[1]]
+        let s1 = [...s[6]]
         if(s1[event.target.id[0]]===''){
             s1[event.target.id[0]] = classes.selected
         }else{
             s1[event.target.id[0]] = ''
         }
         c1[event.target.id[0]] = !c1[event.target.id[0]]
-        s[5] = [...s1]
-        c[0] = [...c1]
+        s[6] = [...s1]
+        c[1] = [...c1]
         this.props.saveOptions(s)
         this.props.saveCheck(c)
         this.setState({
@@ -53,33 +54,38 @@ class Type1 extends Component{
         let option3 = ''
         let option4 = ''
         let option5 = ''
+        let option6 = ''
         if(this.props.reduxData.page){
-            option1 = this.props.reduxData.questions.type2.q1[1]
-            option2 = this.props.reduxData.questions.type2.q1[2]
-            option3 = this.props.reduxData.questions.type2.q1[3]
-            option4 = this.props.reduxData.questions.type2.q1[4]
-            option5 = this.props.reduxData.questions.type2.q1[5]
+            option1 = this.props.reduxData.questions.type2.q2[1]
+            option2 = this.props.reduxData.questions.type2.q2[2]
+            option3 = this.props.reduxData.questions.type2.q2[3]
+            option4 = this.props.reduxData.questions.type2.q2[4]
+            option5 = this.props.reduxData.questions.type2.q2[5]
+            option6 = this.props.reduxData.questions.type2.q2[6]
         }
         return (
             <div className='mb-3'>
                 <div className="row">
                     <div className="col-6">
-                        <div onClick={this.clickHandler} className={`${classes.input} ${this.props.reduxOptions[5][0]}`} id='0q6'>
-                            <Checkbox checked={this.props.reduxCheck[0][0]} id='0q6' size="small" inputProps={{ 'aria-label': 'checkbox with small size' }}/>{option1}
+                        <div onClick={this.clickHandler} className={`${classes.input} ${this.props.reduxOptions[6][0]}`} id='0q7'>
+                            <Checkbox checked={this.props.reduxCheck[1][0]} id='0q7' size="small" inputProps={{ 'aria-label': 'checkbox with small size' }}/>{option1}
                         </div>
-                        <div onClick={this.clickHandler} className={`mt-2 ${classes.input} ${this.props.reduxOptions[5][1]}`} id='1q6'>
-                            <Checkbox checked={this.props.reduxCheck[0][1]} id='1q6' size="small" inputProps={{ 'aria-label': 'checkbox with small size' }}/>{option2}
+                        <div onClick={this.clickHandler} className={`mt-2 ${classes.input} ${this.props.reduxOptions[6][1]}`} id='1q7'>
+                            <Checkbox checked={this.props.reduxCheck[1][1]} id='1q7' size="small" inputProps={{ 'aria-label': 'checkbox with small size' }}/>{option2}
                         </div>
-                        <div onClick={this.clickHandler} className={`mt-2 ${classes.input} ${this.props.reduxOptions[5][2]}`} id='2q6'>
-                            <Checkbox checked={this.props.reduxCheck[0][2]} id='2q6' size="small" inputProps={{ 'aria-label': 'checkbox with small size' }}/>{option3}
+                        <div onClick={this.clickHandler} className={`mt-2 ${classes.input} ${this.props.reduxOptions[6][2]}`} id='2q7'>
+                            <Checkbox checked={this.props.reduxCheck[1][2]} id='2q7' size="small" inputProps={{ 'aria-label': 'checkbox with small size' }}/>{option3}
                         </div>
                     </div>
                     <div className="col-6">
-                        <div onClick={this.clickHandler} className={`${classes.input} ${this.props.reduxOptions[5][3]}`} id='3q6'>
-                            <Checkbox checked={this.props.reduxCheck[0][3]} id='3q6' size="small" inputProps={{ 'aria-label': 'checkbox with small size' }}/>{option4}
+                        <div onClick={this.clickHandler} className={`${classes.input} ${this.props.reduxOptions[6][3]}`} id='3q7'>
+                            <Checkbox checked={this.props.reduxCheck[1][3]} id='3q7' size="small" inputProps={{ 'aria-label': 'checkbox with small size' }}/>{option4}
                         </div>
-                        <div onClick={this.clickHandler} className={`mt-2 ${classes.input} ${this.props.reduxOptions[5][4]}`} id='4q6'>
-                            <Checkbox checked={this.props.reduxCheck[0][4]} id='4q6' size="small" inputProps={{ 'aria-label': 'checkbox with small size' }}/>{option5}
+                        <div onClick={this.clickHandler} className={`mt-2 ${classes.input} ${this.props.reduxOptions[6][4]}`} id='4q7'>
+                            <Checkbox checked={this.props.reduxCheck[1][4]} id='4q7' size="small" inputProps={{ 'aria-label': 'checkbox with small size' }}/>{option5}
+                        </div>
+                        <div onClick={this.clickHandler} className={`mt-2 ${classes.input} ${this.props.reduxOptions[6][5]}`} id='5q7'>
+                            <Checkbox checked={this.props.reduxCheck[1][5]} id='5q7' size="small" inputProps={{ 'aria-label': 'checkbox with small size' }}/>{option6}
                         </div>
                     </div>
                 </div>
