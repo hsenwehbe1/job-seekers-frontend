@@ -58,7 +58,7 @@ class LandingPage extends Component {
                 <div className={isShown}>
                     <nav className={`navbar navbar-expand-md navbar-light bg-transparent ${classes.nav} p-3`}>
                         <div className="container-fluid">
-                            <a className="navbar-brand"><img src={Logo} alt="Logo"/></a>
+                            <a className="navbar-brand font-weight-bold" style={{'color':'#007FEB'}}>MentorEd</a>
                             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                                 <i className="fas fa-bars"></i>
                             </button>

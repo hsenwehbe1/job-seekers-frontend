@@ -1,21 +1,24 @@
 import React, { Component } from 'react'
 import classes from './Advisors.css'
+import Sidebar from '../../components/Sidebar/Sidebar'
+import HeaderBar from '../../components/HeaderBar/HeaderBar'
 import Query from 'query-string'
 import axios from '../../axios'
 import defaultAxios from 'axios'
 import {connect} from 'react-redux'
 import * as alertActions from '../../redux/actions/alert'
 import Alert from '../../components/Alert/Alert'
-import Logo from '../../assets/icons/logo.svg'
+import Spinner from '../../components/Spinner/Spinner'
 class Advisors extends Component {
     state = ({
         fname : '',
         lname : '',
         email : '',
-        univeristy : '',
         linkedin : '',
-        major : '',
-        image : ''
+        major : [],
+        image : 'https://use.fontawesome.com/releases/v5.0.8/svgs/solid/user.svg',
+        spinner1 : false,
+        spinner2: false
     })
     componentDidMount(){
         let params = Query.parse(this.props.location.search)
@@ -53,12 +56,6 @@ class Advisors extends Component {
             email : event.target.value
         })
     }
-    universityHandler = (event)=>{
-        this.setState({
-            ...this.state,
-            univeristy : event.target.value
-        })
-    }
     linkedinHandler = (event)=>{
         this.setState({
             ...this.state,
@@ -73,11 +70,11 @@ class Advisors extends Component {
     }
     redirectHandler = ()=>{
         // save the state in local storage then redirect the user.
-        console.log(this.state)
         localStorage.setItem('state', JSON.stringify(this.state))
     }
     submitHandler = ()=>{
-        if(this.state.fname==='' || this.state.lname==='' || this.state.email==='' || this.state.major==='' || this.state.univeristy==='' || this.state.image==='' || this.state.linkedin===''){
+        console.log(this.state)
+        if(this.state.fname==='' || this.state.lname==='' || this.state.email==='' || this.state.major==='' || this.state.image==='' || this.state.linkedin===''){
             this.props.triggerAlert(true, 'error', "Missing field(s)", 10000)
         }else{
             axios.post('advisors/signup', {
@@ -85,11 +82,14 @@ class Advisors extends Component {
                 lname: this.state.lname,
                 email: this.state.email,
                 linkedin: this.state.linkedin,
-                university: this.state.univeristy,
-                major: this.state.major,
+                roles: this.state.major,
                 image: this.state.image
             }).then((response)=>{
-                this.props.triggerAlert(true, 'success', "Successfully signed up", 10000)
+                if(response.data.message==='exists'){
+                    this.props.triggerAlert(true, 'error', "Mentor with the same email exists", 10000)
+                }else{
+                    this.props.triggerAlert(true, 'success', "Successfully signed up", 10000)
+                }
             }).catch((err)=>{
                 this.props.triggerAlert(true, 'error', "Something went wrong. Try again", 10000)
             })
@@ -99,7 +99,6 @@ class Advisors extends Component {
         const formData = new FormData()
         formData.append('file', event.target.files[0])
         let fileType = event.target.files[0].name.split('.')[1]
-        console.log(fileType)
         if(fileType==='doc' || fileType==='docx' || fileType==='pdf'){
             formData.append('fileName', event.target.files[0].name)
             let token = '74d6116771b61cd7b242b5d539dd1f1c3e78f4ff'
@@ -114,20 +113,16 @@ class Advisors extends Component {
                     'Authorization': `Bearer ${token}`
                 }
             }
+            this.setState({
+                ...this.state,
+                spinner1: true
+            })
             defaultAxios.post('https://resume-parser.affinda.com/public/api/v1/documents/', formData, config).then((response)=>{
-                console.log(response.data.identifier)
                 let id = response.data.identifier
                 setTimeout(() => {
                     defaultAxios.get(`https://resume-parser.affinda.com/public/api/v1/documents/${id}`, config1).then((response)=>{
-                        console.log(response.data.data)
                         let data = response.data.data
-                        let univeristy = ''
                         let linkedin = ''
-                        data.education.forEach(element => {
-                            if(element.organization.toLowerCase().includes('university')){
-                                univeristy = element.organization
-                            }
-                        })
                         data.websites.forEach(element => {
                             if(element.toLowerCase().includes('linkedin.com')){
                                 linkedin = element
@@ -137,12 +132,12 @@ class Advisors extends Component {
                             this.props.triggerAlert(true, 'warning', "We couldn't retrieve your LinkedIn public url from the resume. Please insert it manually.", 10000)
                         }
                         this.setState({
+                            ...this.state,
                             fname: data.name.first,
                             lname: data.name.last,
                             email: data.emails[0],
-                            univeristy: univeristy,
                             linkedin: linkedin,
-                            major: 'whatever'// fix later
+                            spinner1: false
                         })
                     }).catch((err)=>{
                         this.props.triggerAlert(true, 'error', 'Something went wrong. Please try again', 10000)
@@ -156,37 +151,84 @@ class Advisors extends Component {
         }
     }
     render() {
+        let spinner = ''
+        if(this.state.spinner1){
+            spinner = <Spinner/>
+        }
         return (
-            <React.Fragment>
-                <div className={classes.logo}>
-                    <img src={Logo} alt="Logo"/>
-                </div>
-                <div>
-                    <button onClick={()=>{this.fileInput.click()}}>Upload Resume</button> or manually fill the fields <br></br>
-                    <input type="text" placeholder='First name' defaultValue={this.state.fname} onChange={this.fnameHandler}/> <br></br>
-                    <input type="text" placeholder='Last name' defaultValue={this.state.lname} onChange={this.lnameHandler}/> <br></br>
-                    <input type="text" placeholder='Email' defaultValue={this.state.email} onChange={this.emailHandler}/> <br></br>
-                    <input type="text" placeholder='Linkedin Public URL' defaultValue={this.state.linkedin} onChange={this.linkedinHandler}/><br></br>
-                    <input type="text" placeholder='University' defaultValue={this.state.univeristy} onChange={this.universityHandler}/> <br></br>
-                    <input type="text" placeholder='Major' defaultValue={this.state.major} onChange={this.majorHandler}/> <br></br>
-                    <a onClick={this.redirectHandler} href="https://www.linkedin.com/oauth/v2/authorization?response_type=code&scope=r_liteprofile%20r_emailaddress&client_id=78q6bhbb9echn1&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fadvisors">use your LinkedIn profile photo</a><br></br>
-                    <button onClick={this.submitHandler}>Submit</button><br></br>
+            <div className="mt-4">
+                <HeaderBar/>
+                <div className={`${classes.body_container} px-3 mt-4`}>
+                    <Sidebar page='about'/>
+                    <div className="container">
+                        <div className={`${classes.upper_part} px-0`}>
+                            <div className={`${classes.text_lg}`}>
+                                Mentor Signup
+                            </div>
+                            <div className="">
+                                <div className='row pt-3'>
+                                    <div className="col-12 col-md-3">
+                                        <img src={this.state.image} alt="" className={classes.image}/><br></br>
+                                        <a className='font-weight-light' onClick={this.redirectHandler} href="https://www.linkedin.com/oauth/v2/authorization?response_type=code&scope=r_liteprofile%20r_emailaddress&client_id=78q6bhbb9echn1&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fadvisors">Upload your LinkedIn photo</a>
+                                    </div>
+                                    <div className='col-12 col-md-9'>
+                                        <div className='row'>
+                                            <div className="col-sm-12">
+                                                <button className='btn btn-outline-primary mb-3' onClick={()=>{this.fileInput.click()}}>Upload Resume</button>{spinner}
+                                            </div>
+                                            <div className="col-sm-12 col-md-6 mb-3">
+                                                <div className="border-bottom d-inline-block w-100">
+                                                    <div className='font-weight-light'>First Name</div>
+                                                    <input type="text" className={`form-control ${classes.border} ${classes.input}`} defaultValue={this.state.fname} onChange={this.fnameHandler}/>
+                                                </div>
+                                            </div>
+                                            <div className="col-sm-12 col-md-6 mb-3">
+                                                <div className="border-bottom d-inline-block w-100">
+                                                    <div className='font-weight-light'>Last Name</div>
+                                                    <input type="text" className={`form-control ${classes.border} ${classes.input}`} defaultValue={this.state.lname} onChange={this.lnameHandler}/>
+                                                </div>
+                                            </div>
+                                            <div className="col-sm-12 col-md-6 mb-3">
+                                                <div className="border-bottom d-inline-block w-100">
+                                                    <div className='font-weight-light'>Email</div>
+                                                    <input type="email" className={`form-control ${classes.border} ${classes.input}`} defaultValue={this.state.email} onChange={this.emailHandler}/>
+                                                </div>
+                                            </div>
+                                            <div className="col-sm-12 col-md-6 mb-3">
+                                                <div className="border-bottom d-inline-block w-100">
+                                                    <div className='font-weight-light'>Work Field (you can select more than one)</div>
+                                                    <input type="text" className={`form-control ${classes.border} ${classes.input}`}  onChange={this.lNameInputHandler}/>
+                                                </div>
+                                            </div>
+                                            <div className="col-sm-12 col-md-6 mb-3">
+                                                <div className="border-bottom d-inline-block w-100">
+                                                    <div className='font-weight-light'>LinkedIn Public URL</div>
+                                                    <input type="text" className={`form-control ${classes.border} ${classes.input}`} defaultValue={this.state.linkedin} onChange={this.linkedinHandler} style={{'color':'#007FEB'}}/>
+                                                </div>
+                                            </div>
+                                            <div className="col-12">
+                                                Work Experience
+                                            </div>
+                                            <div className="col-12">
+                                                <button onClick={this.submitHandler} className="btn btn-dark btn-block">Submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <Alert/>
                 <input style={{"display":"none"}} ref={fileInput=>this.fileInput=fileInput} type="file" name='upload1' id='upload1' onChange={this.cvHandler}/>
                 <input style={{"display":"none"}} ref={imageInput=>this.imageInput=imageInput} type="file" name='upload2' id='upload2' onChange={this.imageHandler}/>
-            </React.Fragment>
-        );
+            </div>
+        )
     }
 }
-const mapStateToProps = state => {
-    return {
-
-    };
-};
 const mapDispatchToProps = dispatch => {
     return {
         triggerAlert: (alertOpen, alertType, alertMessage, alertDuration) => dispatch(alertActions.triggerAlert(alertOpen, alertType, alertMessage, alertDuration))
-    };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(Advisors)
+    }
+}
+export default connect(null, mapDispatchToProps)(Advisors)

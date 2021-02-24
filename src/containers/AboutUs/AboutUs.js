@@ -17,7 +17,7 @@ export default class AboutUs extends Component {
                     <div className="container">
                         <div className={`${classes.upper_part} px-0`}>
                             <div className={`${classes.text_lg}`}>
-                                About LinkedEd!
+                                About MentorEd!
                             </div>
                             <div className="row container">
                                 <div className="col-md-12 col-lg-6 my-3">

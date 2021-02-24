@@ -1,4 +1,85 @@
 .logo{
     padding-top: 16px;
     padding-left: 16px;
+    font-size: 20px;
+    color: #007FEB;
+    font-weight: bold;
+}
+.body_container{
+    display: flex; 
+    width: 100%;
+}
+.text_lg{
+    font-size: 24px;
+    color: #133C59;
+}
+.body_container{
+    display: flex; 
+    width: 100%;
+}
+.text_lg{
+    font-size: 24px;
+    color: #133C59;
+}
+.WhiteBorder{
+    padding: 2px;
+    border: 6px solid white;
+    border-radius: 12px;
+}
+.caption{
+    width: 150px;
+    font-size: 12px;
+    text-align: center;
+}
+.pr{
+    padding-right: 10px;
+}
+.pl{
+    padding-left: 10px;
+}
+.input{
+    outline: none!important;
+    background-color: #f8f8f8;
+    padding-left: 0px!important;
+    display: inline!important;
+    width: 95%!important;
+}
+.input[placeholder]{
+    text-overflow: ellipsis;
+}
+.input:focus, .input:active{
+    box-shadow: none!important;
+    outline: 0px!important;
+    background-color: #f8f8f8;
+}
+.border{
+    border: none;
+}
+.image{
+    max-width: 168px;
+    max-height: 168px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+.allowed{
+    cursor: pointer;
+    font-size: 12px;
+    float: right;
+    padding-top: 15px;
+}
+.notallowed{
+    cursor:not-allowed;
+    font-size: 12px;
+    float: right;
+    padding-top: 15px;
+}
+@media(max-width: 767px){
+    .caption{
+        width: 100%;
+        font-size: 12px;
+        text-align: center;
+    }
+    .center{
+        text-align: center;
+    }
 }

@@ -6,7 +6,7 @@ export default function Welcome() {
     return (
         <WhiteSquare>
             <div className="text-center">
-                <p className='font-weight-bold'>Welcome to LinkedEd</p>
+                <p className='font-weight-bold'>Welcome to MentorEd</p>
                 <Link to='/signup' className={classes.signup}><button className={`btn btn-danger btn-lg ${classes.red} mt-5`}>Sign up</button></Link>
                 <div className={`pt-5 ${classes.line_through}`}>
                     <div className={classes.line}></div>
