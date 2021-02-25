@@ -23,18 +23,30 @@ class Profile extends Component {
         confirmPass: ''
     })
     componentDidMount(){
+        console.log('here')
         let config = {
             headers:{
                 'Authorization' : `Bearer ${localStorage.getItem('token')}`
             }
         }
         axios.get('students/photo', config).then((response)=>{
-            this.setState({
-                image : `data:image/png;base64,${response.data.image}`,
-                timestamp : moment(response.data.timestamp).format('MMMM DD, YYYY'),
-                fname: response.data.fname,
-                lname: response.data.lname
-            })
+            if(response.data.error==='notfound'){
+                this.setState({
+                    ...this.state,
+                    timestamp : moment(response.data.timestamp).format('MMMM DD, YYYY'),
+                    fname: response.data.fname,
+                    lname: response.data.lname
+                })
+            }else{
+                this.setState({
+                    ...this.state,
+                    image : `data:image/png;base64,${response.data.image}`,
+                    timestamp : moment(response.data.timestamp).format('MMMM DD, YYYY'),
+                    fname: response.data.fname,
+                    lname: response.data.lname
+                })
+            }
+            
         }).catch((err)=>{
             if(!err.response) { // connection error
                 this.props.triggerAlert(true, 'error', 'Connection interrupted: Check your internet connection', 10000)

@@ -9,6 +9,7 @@ import {connect} from 'react-redux'
 import * as alertActions from '../../redux/actions/alert'
 import Alert from '../../components/Alert/Alert'
 import Spinner from '../../components/Spinner/Spinner'
+import Job from './Job/Job'
 class Advisors extends Component {
     state = ({
         fname : '',
@@ -18,9 +19,15 @@ class Advisors extends Component {
         major : [],
         image : 'https://use.fontawesome.com/releases/v5.0.8/svgs/solid/user.svg',
         spinner1 : false,
-        spinner2: false
+        dropdown: false,
+        roles: ['hello', 'my', 'name', 'is', 'Mohamed', 'Safieddine', 'And', 'im', 'a', 'beast'],
+        search: ['hello', 'my', 'name', 'is', 'Mohamed', 'Safieddine', 'And', 'im', 'a', 'beast'],
+        workExperience: [],
+        wrapperRef: React.createRef(),
+        handleClickOutside: this.handleClickOutside.bind(this)
     })
     componentDidMount(){
+        document.addEventListener('mousedown', this.state.handleClickOutside);
         let params = Query.parse(this.props.location.search)
         if(params.code!==undefined){
             let oldState = JSON.parse(localStorage.getItem('state'))
@@ -35,6 +42,17 @@ class Advisors extends Component {
                 this.props.triggerAlert(true, 'success', "Photo added", 10000)
             }).catch((err)=>{
                 this.props.triggerAlert(true, 'error', "Photo failed. Try again", 10000)
+            })
+        }
+    }
+    componentWillUnmount() {
+        document.removeEventListener('mousedown', this.state.handleClickOutside);
+    }
+    handleClickOutside(event) {
+        if (this.state.wrapperRef && !this.state.wrapperRef.current.contains(event.target)) {
+            this.setState({
+                ...this.state,
+                dropdown: false
             })
         }
     }
@@ -72,9 +90,44 @@ class Advisors extends Component {
         // save the state in local storage then redirect the user.
         localStorage.setItem('state', JSON.stringify(this.state))
     }
+    workHandler = (event)=>{
+        let arr = []
+        this.state.roles.forEach(element => {
+            if(element.toLowerCase().includes(event.target.value.toLowerCase())){
+                arr.push(element)
+            }
+        })
+        if(arr.length===0 && event.target.value===''){
+            this.setState({
+                ...this.state,
+                search: [...this.state.roles]
+            })
+        }else{
+            this.setState({
+                ...this.state,
+                search: [...arr]
+            })
+        }
+    }
+    optionHandler = (event)=>{
+        let arr = [...this.state.major]
+        let selected = this.state.search[event.target.id]
+        arr.push(selected)
+        this.setState({
+            major: [...arr]
+        })
+    }
+    optionHandlerUnselect = (event)=>{
+        let arr = [...this.state.major]
+        let selected = this.state.search[event.target.id]
+        arr.splice(arr.indexOf(selected), 1)
+        this.setState({
+            major: [...arr]
+        })
+    }
     submitHandler = ()=>{
-        console.log(this.state)
-        if(this.state.fname==='' || this.state.lname==='' || this.state.email==='' || this.state.major==='' || this.state.image==='' || this.state.linkedin===''){
+        //console.log(this.state.workExperience)
+        if(this.state.fname==='' || this.state.lname==='' || this.state.email==='' || this.state.major.length===0 || this.state.image==='' || this.state.linkedin==='' || this.state.workExperience.length===0){
             this.props.triggerAlert(true, 'error', "Missing field(s)", 10000)
         }else{
             axios.post('advisors/signup', {
@@ -121,6 +174,7 @@ class Advisors extends Component {
                 let id = response.data.identifier
                 setTimeout(() => {
                     defaultAxios.get(`https://resume-parser.affinda.com/public/api/v1/documents/${id}`, config1).then((response)=>{
+                        console.log(response)
                         let data = response.data.data
                         let linkedin = ''
                         data.websites.forEach(element => {
@@ -136,6 +190,7 @@ class Advisors extends Component {
                             fname: data.name.first,
                             lname: data.name.last,
                             email: data.emails[0],
+                            workExperience: [...data.workExperience],
                             linkedin: linkedin,
                             spinner1: false
                         })
@@ -151,15 +206,42 @@ class Advisors extends Component {
         }
     }
     render() {
+        console.log(this.state.workExperience)
+        let dropdownContent = (
+            this.state.search.map((element, index)=>{
+                if(this.state.major.includes(element)){
+                    return <div key={`i${index}`} className={`${classes.item} ${classes.selectedItem}`} id={index} onClick={this.optionHandlerUnselect}>{element}</div>
+
+                }else{
+                    return <div key={`o${index}`} className={classes.item} id={index} onClick={this.optionHandler}>{element}</div>
+                }
+            })
+        )
+        let workExperienceContent = ''
+        workExperienceContent = (
+            this.state.workExperience.map((element, index)=>{
+                return <div>
+                <div className={classes.Media}>
+                    <i className={`fas fa-suitcase pt-1 ${classes.Media_figure}`}></i>
+                    <div className={classes.Media_body}>
+                        <input className={`font-weight-bold w-100 ${classes.input1}`} type="text" value={element.jobTitle}/><br></br>
+                        <input className={`font-weight-light w-100 ${classes.input1}`} type="text" value={element.organization}/><br></br>
+                    </div>
+                </div></div>
+            })
+        )
         let spinner = ''
+        let isShownDropdown = ''
+        if(!this.state.dropdown){
+            isShownDropdown = 'd-none'
+        }
         if(this.state.spinner1){
             spinner = <Spinner/>
         }
         return (
             <div className="mt-4">
-                <HeaderBar/>
+                <p className={classes.platform}>MentorEd</p>
                 <div className={`${classes.body_container} px-3 mt-4`}>
-                    <Sidebar page='about'/>
                     <div className="container">
                         <div className={`${classes.upper_part} px-0`}>
                             <div className={`${classes.text_lg}`}>
@@ -194,10 +276,14 @@ class Advisors extends Component {
                                                     <input type="email" className={`form-control ${classes.border} ${classes.input}`} defaultValue={this.state.email} onChange={this.emailHandler}/>
                                                 </div>
                                             </div>
-                                            <div className="col-sm-12 col-md-6 mb-3">
+                                            <div className="col-sm-12 col-md-6 mb-3 position-relative">
                                                 <div className="border-bottom d-inline-block w-100">
-                                                    <div className='font-weight-light'>Work Field (you can select more than one)</div>
-                                                    <input type="text" className={`form-control ${classes.border} ${classes.input}`}  onChange={this.lNameInputHandler}/>
+                                                    <div className='font-weight-light'>Work Field</div>
+                                                    <input type="text" onFocus={()=>{this.setState({...this.state, dropdown:true})}} className={`form-control ${classes.border} ${classes.input}`} onChange={this.workHandler}/>
+                                                </div>
+                                                <div ref={this.state.wrapperRef} className={`${classes.dropdown} ${isShownDropdown}`}>
+                                                    <p className='font-weight-bold'>Work Experience</p>
+                                                    {dropdownContent}
                                                 </div>
                                             </div>
                                             <div className="col-sm-12 col-md-6 mb-3">
@@ -206,8 +292,10 @@ class Advisors extends Component {
                                                     <input type="text" className={`form-control ${classes.border} ${classes.input}`} defaultValue={this.state.linkedin} onChange={this.linkedinHandler} style={{'color':'#007FEB'}}/>
                                                 </div>
                                             </div>
-                                            <div className="col-12">
-                                                Work Experience
+                                            <div className={`col-12 ${classes.experience}`}>
+                                                <p className='font-weight-bold'>Work Experience</p>
+                                                {workExperienceContent}
+                                                <div className="text-center"><span style={{'cursor':'pointer'}}>Add <i className='fas fa-plus-circle'></i></span></div>
                                             </div>
                                             <div className="col-12">
                                                 <button onClick={this.submitHandler} className="btn btn-dark btn-block">Submit</button>
