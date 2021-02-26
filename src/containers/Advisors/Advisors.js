@@ -9,7 +9,7 @@ import {connect} from 'react-redux'
 import * as alertActions from '../../redux/actions/alert'
 import Alert from '../../components/Alert/Alert'
 import Spinner from '../../components/Spinner/Spinner'
-import Job from './Job/Job'
+import { Tooltip } from '@material-ui/core'
 class Advisors extends Component {
     state = ({
         fname : '',
@@ -22,12 +22,13 @@ class Advisors extends Component {
         dropdown: false,
         roles: ['hello', 'my', 'name', 'is', 'Mohamed', 'Safieddine', 'And', 'im', 'a', 'beast'],
         search: ['hello', 'my', 'name', 'is', 'Mohamed', 'Safieddine', 'And', 'im', 'a', 'beast'],
-        workExperience: [],
+        workExperience: [], // array of objects that has jobTitle and organization
+        manualWorkExperience: [],
         wrapperRef: React.createRef(),
         handleClickOutside: this.handleClickOutside.bind(this)
     })
     componentDidMount(){
-        document.addEventListener('mousedown', this.state.handleClickOutside);
+        document.addEventListener('mousedown', this.state.handleClickOutside)
         let params = Query.parse(this.props.location.search)
         if(params.code!==undefined){
             let oldState = JSON.parse(localStorage.getItem('state'))
@@ -125,28 +126,97 @@ class Advisors extends Component {
             major: [...arr]
         })
     }
-    submitHandler = ()=>{
-        //console.log(this.state.workExperience)
-        if(this.state.fname==='' || this.state.lname==='' || this.state.email==='' || this.state.major.length===0 || this.state.image==='' || this.state.linkedin==='' || this.state.workExperience.length===0){
-            this.props.triggerAlert(true, 'error', "Missing field(s)", 10000)
-        }else{
-            axios.post('advisors/signup', {
-                fname: this.state.fname,
-                lname: this.state.lname,
-                email: this.state.email,
-                linkedin: this.state.linkedin,
-                roles: this.state.major,
-                image: this.state.image
-            }).then((response)=>{
-                if(response.data.message==='exists'){
-                    this.props.triggerAlert(true, 'error', "Mentor with the same email exists", 10000)
-                }else{
-                    this.props.triggerAlert(true, 'success', "Successfully signed up", 10000)
-                }
-            }).catch((err)=>{
-                this.props.triggerAlert(true, 'error', "Something went wrong. Try again", 10000)
-            })
+    addWorkExperience = ()=>{
+        let arr = [...this.state.manualWorkExperience]
+        let obj = {
+            'jobTitle': '',
+            'organization': ''
         }
+        arr.push(obj)
+        this.setState({
+            manualWorkExperience: [...arr]
+        })
+    }
+    jobTitleHandler = (event)=>{
+        console.log('auto')
+        let arr = [...this.state.workExperience]
+        let obj = {...arr[event.target.id]}
+        obj.jobTitle = event.target.value
+        arr[event.target.id] = obj
+        this.setState({
+            ...this.state,
+            workExperience: arr
+        })
+    }
+    manualJobTitleHandler = (event)=>{
+        console.log('manual')
+        let arr = [...this.state.manualWorkExperience]
+        let obj = {...arr[event.target.id]}
+        obj.jobTitle = event.target.value
+        arr[event.target.id] = obj
+        this.setState({
+            ...this.state,
+            manualWorkExperience: arr
+        })
+    }
+    organizationHandler = (event)=>{
+        let arr = [...this.state.workExperience]
+        let obj = {...arr[event.target.id]}
+        obj.organization = event.target.value
+        arr[event.target.id] = obj
+        this.setState({
+            ...this.state,
+            workExperience: arr
+        })
+    }
+    manualOrganizationHandler = (event)=>{
+        let arr = [...this.state.manualWorkExperience]
+        let obj = {...arr[event.target.id]}
+        obj.organization = event.target.value
+        arr[event.target.id] = obj
+        this.setState({
+            ...this.state,
+            manualWorkExperience: arr
+        })
+    }
+    deleteJob = (event)=>{
+        let arr = [...this.state.workExperience]
+        arr.splice(event.target.id, 1)
+        this.setState({
+            ...this.state,
+            workExperience: arr
+        })
+    }
+    manualDeleteJob = (event)=>{
+        let arr = [...this.state.manualWorkExperience]
+        arr.splice(event.target.id, 1)
+        this.setState({
+            ...this.state,
+            manualWorkExperience: arr
+        })
+    }
+    submitHandler = ()=>{
+        console.log(this.state.workExperience.concat(this.state.manualWorkExperience))
+        // if(this.state.fname==='' || this.state.lname==='' || this.state.email==='' || this.state.major.length===0 || this.state.image==='' || this.state.linkedin==='' || this.state.workExperience.length===0){
+        //     this.props.triggerAlert(true, 'error', "Missing field(s)", 10000)
+        // }else{
+        //     axios.post('advisors/signup', {
+        //         fname: this.state.fname,
+        //         lname: this.state.lname,
+        //         email: this.state.email,
+        //         linkedin: this.state.linkedin,
+        //         roles: this.state.major,
+        //         image: this.state.image
+        //     }).then((response)=>{
+        //         if(response.data.message==='exists'){
+        //             this.props.triggerAlert(true, 'error', "Mentor with the same email exists", 10000)
+        //         }else{
+        //             this.props.triggerAlert(true, 'success', "Successfully signed up", 10000)
+        //         }
+        //     }).catch((err)=>{
+        //         this.props.triggerAlert(true, 'error', "Something went wrong. Try again", 10000)
+        //     })
+        // }
     }
     cvHandler = (event)=>{
         const formData = new FormData()
@@ -206,7 +276,31 @@ class Advisors extends Component {
         }
     }
     render() {
-        console.log(this.state.workExperience)
+        let major = ''
+        let ok = ''
+        if(!this.state.dropdown){
+            major = this.state.major.join(', ')
+        }else{
+            ok = 'd-none'
+        }
+        let manualExperience = (
+            this.state.manualWorkExperience.map((element, index)=>{
+                return (
+                    <div>
+                        <div className={classes.Media}>
+                            <div className={classes.Media_figure}>
+                                <div className={`fas fa-suitcase pt-1 d-block`}></div>
+                                <Tooltip title='Delete Job'><div className={`fas fa-minus-circle pt-1`} style={{'color':'#F37168', 'cursor':'pointer'}} id={index} onClick={this.manualDeleteJob}></div></Tooltip>
+                            </div>
+                            <div className={classes.Media_body}>
+                                <input placeholder='Job Title' onChange={this.manualJobTitleHandler} className={`font-weight-bold w-100 ${classes.input1}`} type="text" id={index}/><br></br>
+                                <input placeholder='Organization' onChange={this.manualOrganizationHandler} className={`font-weight-light w-100 ${classes.input1}`} type="text" id={index}/><br></br>
+                            </div>
+                        </div>
+                    </div>
+                )
+            })
+        )
         let dropdownContent = (
             this.state.search.map((element, index)=>{
                 if(this.state.major.includes(element)){
@@ -222,10 +316,13 @@ class Advisors extends Component {
             this.state.workExperience.map((element, index)=>{
                 return <div>
                 <div className={classes.Media}>
-                    <i className={`fas fa-suitcase pt-1 ${classes.Media_figure}`}></i>
+                    <div className={classes.Media_figure}>
+                        <div className={`fas fa-suitcase pt-1 d-block`}></div>
+                        <Tooltip title='Delete Job'><div className={`fas fa-minus-circle pt-1`} id={index} style={{'color':'#F37168', 'cursor':'pointer'}} onClick={this.deleteJob}></div></Tooltip>
+                    </div>
                     <div className={classes.Media_body}>
-                        <input className={`font-weight-bold w-100 ${classes.input1}`} type="text" value={element.jobTitle}/><br></br>
-                        <input className={`font-weight-light w-100 ${classes.input1}`} type="text" value={element.organization}/><br></br>
+                        <input onChange={this.jobTitleHandler} className={`font-weight-bold w-100 ${classes.input1}`} type="text" defaultValue={element.jobTitle} id={index}/><br></br>
+                        <input onChange={this.organizationHandler} className={`font-weight-light w-100 ${classes.input1}`} type="text" defaultValue={element.organization} id={index}/><br></br>
                     </div>
                 </div></div>
             })
@@ -280,9 +377,9 @@ class Advisors extends Component {
                                                 <div className="border-bottom d-inline-block w-100">
                                                     <div className='font-weight-light'>Work Field</div>
                                                     <input type="text" onFocus={()=>{this.setState({...this.state, dropdown:true})}} className={`form-control ${classes.border} ${classes.input}`} onChange={this.workHandler}/>
+                                                    <span className={ok}><input className={`position-absolute form-control ${classes.border} ${classes.input}`} onFocus={()=>{this.setState({...this.state, dropdown:true})}} style={{'left':'12px'}} value={major}/></span>
                                                 </div>
                                                 <div ref={this.state.wrapperRef} className={`${classes.dropdown} ${isShownDropdown}`}>
-                                                    <p className='font-weight-bold'>Work Experience</p>
                                                     {dropdownContent}
                                                 </div>
                                             </div>
@@ -295,7 +392,8 @@ class Advisors extends Component {
                                             <div className={`col-12 ${classes.experience}`}>
                                                 <p className='font-weight-bold'>Work Experience</p>
                                                 {workExperienceContent}
-                                                <div className="text-center"><span style={{'cursor':'pointer'}}>Add <i className='fas fa-plus-circle'></i></span></div>
+                                                {manualExperience}
+                                                <div onClick={this.addWorkExperience} className="text-center pt-2"><span style={{'cursor':'pointer'}}>Add <i className='fas fa-plus-circle'></i></span></div>
                                             </div>
                                             <div className="col-12">
                                                 <button onClick={this.submitHandler} className="btn btn-dark btn-block">Submit</button>
