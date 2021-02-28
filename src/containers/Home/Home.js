@@ -16,9 +16,13 @@ import image1 from '../../assets/images/imageProfile1.jpg'
 import image2 from '../../assets/images/imageProfile2.jpg'
 import image3 from '../../assets/images/imageProfile3.jpg'
 import image4 from '../../assets/images/imageProfile4.jpg'
-
+import PathContainer from './Connector/Connector'
+import Pagination from '@material-ui/lab/Pagination'
 class Home extends Component {
     state = ({
+        page: 1, // for pagination,
+        highlight: 0,
+        data: [],
         fname: '',
         lname: '',
         didTakeTest: false,
@@ -49,10 +53,10 @@ class Home extends Component {
     })
 
     componentDidMount(){
-        this.setState({
-            ...this.state,
-            connectors:this.state.allConnectors
-        })
+        // this.setState({
+        //     ...this.state,
+        //     connectors:this.state.allConnectors
+        // })
         let config = {
             headers: {
                 'Authorization' : `Bearer ${localStorage.getItem('token')}`
@@ -75,6 +79,12 @@ class Home extends Component {
                 this.props.triggerAlert(true, 'error', 'Something went wrong', 10000)
             }
         })
+        axios.get('/advisors/all', config).then((response)=>{
+            this.setState({
+                ...this.state,
+                data: [...response.data]
+            })
+        })
     }
     componentDidUpdate(prevProps,prevState){
        if(prevState.filter !== this.state.filter){
@@ -86,6 +96,12 @@ class Home extends Component {
        }else{
         console.log("no")
        } 
+    }
+    paginationHandler = (element, value)=>{
+        this.setState({
+            ...this.state,
+            page: value
+        })
     }
     searchTrigger(e){
         let config = {
@@ -124,6 +140,7 @@ class Home extends Component {
     }
     render() {
         let content = ''
+        let contentTable = ''
         let headerText = ''
         if(this.state.didTakeTest){
             headerText = 'Your Strengths!'
@@ -143,12 +160,28 @@ class Home extends Component {
                 </React.Fragment>
             )
         }
+        if(this.state.data.length!==0){
+            console.log(this.state.data)
+            contentTable = (
+                this.state.data.map((element, key) => {
+                    let index = (this.state.page - 1)*10
+                    if(key>=index && key<=index+9){
+                        let title = <span><img className='rounded-circle' src={`data:image/png;base64,${element.image}`} alt='profile' width='35px' height='35px'/>&nbsp;&nbsp;<span className={classes.advisor} onClick={()=>{window.location.pathname = `advisor/${element._id}`}}>{`${element.fname} ${element.lname}`}</span></span>
+                        let connect = <button onClick={this.connectHandler} className={`btn btn-danger ${classes.red}`}>Connect</button>
+                        return (
+                            <PathContainer middle={true} title={title} roles={element.roles.join(', ')} connect={connect} bullets={true} key={key}/>
+                        )
+                    }
+                })
+            )
+        }
         const SelectStyle = {
             control: (base, state) => ({
                 ...base,
                 border: state.isFocused ? 0 : 0,
                 boxShadow: state.isFocused ? 0 : 0,
-                borderRadius:'6px'
+                borderRadius:'6px',
+                cursor: 'text'
             })
         }
         return (
@@ -185,24 +218,10 @@ class Home extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <div style={this.state.searching?{display:'none'}:{display:'block'}} className='px-5 pt-5'>
-                                <p className={classes.text}>
-                                    Insights in USA, California
-                                </p>
-                                <div className="row">
-                                    <div className="col-sm-12 col-md-3">
-                                        <Box number='340K' text='Some text Some text Some text Some text'/>
-                                    </div>
-                                    <div className="col-sm-12 col-md-3">
-                                        <Box number='340K' text='Some text Some text Some text Some text'/>
-                                    </div>
-                                    <div className="col-sm-12 col-md-3">
-                                        <Box number='340K' text='Some text Some text Some text Some text'/>
-                                    </div>
-                                    <div className="col-sm-12 col-md-3">
-                                        <Box number='340K' text='Some text Some text Some text Some text'/>
-                                    </div>
-                                </div>
+                            <div className="mt-2">
+                                <PathContainer title='Mentors' roles='Job Title' bullets={false} highlight={this.state.highlight}/>
+                                {contentTable}
+                                <div className='pt-3 pb-3 text-center' style={{'minWidth':'1000px'}}><Pagination onChange={this.paginationHandler} className='d-inline-block' count={Math.ceil(this.state.data.length/10)} size="small" /></div>
                             </div>
                             <div className={classes.connectors} style={this.state.searching?{display:'block'}:{display:'none'}} >
                                 {
@@ -217,7 +236,7 @@ class Home extends Component {
                     </div>
                 </div>
                 <div className={classes.hidden}>
-                    <Dialog isShown={true}/>
+                    <Dialog isShown={false}/>
                 </div>
                 <Alert/>
             </React.Fragment>

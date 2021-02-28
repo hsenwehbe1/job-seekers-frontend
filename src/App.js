@@ -16,6 +16,7 @@ import Advisors from './containers/Advisors/Advisors'
 import Path from './containers/Path/Path'
 import SpecificPath from './containers/Path/SpecificPath/SpecificPath'
 import QuickTips from './containers/QuickTips/QuickTips'
+import ViewAdvisor from './containers/ViewAdvisor/ViewAdvisor'
 class App extends Component {
   render() {
     return (
@@ -39,7 +40,8 @@ class App extends Component {
             <Route path='/resetpassword/:token' exact render={()=><Landing section='updatepassword'/>}/>
             <Route path='/login' render={()=><Landing section='login'/>}/>
             <Route path='/signup' render={()=><Landing section='signup'/>}/>
-            <Route path='/advisors' component={Advisors}/>
+            <Route path='/advisors' exact component={Advisors}/>
+            <Route path='/advisor/:id' exact component={ViewAdvisor}/>
             <Route path='/' exact render={()=><Landing section='landing'/>}/>
             <Route component={NotFound}/>
           </Switch>

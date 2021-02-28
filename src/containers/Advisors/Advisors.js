@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import classes from './Advisors.css'
-import Sidebar from '../../components/Sidebar/Sidebar'
-import HeaderBar from '../../components/HeaderBar/HeaderBar'
 import Query from 'query-string'
 import axios from '../../axios'
 import defaultAxios from 'axios'
@@ -20,18 +18,26 @@ class Advisors extends Component {
         image : 'https://use.fontawesome.com/releases/v5.0.8/svgs/solid/user.svg',
         spinner1 : false,
         dropdown: false,
-        roles: ['hello', 'my', 'name', 'is', 'Mohamed', 'Safieddine', 'And', 'im', 'a', 'beast'],
-        search: ['hello', 'my', 'name', 'is', 'Mohamed', 'Safieddine', 'And', 'im', 'a', 'beast'],
+        roles: [],
+        search: []  ,
         workExperience: [], // array of objects that has jobTitle and organization
         manualWorkExperience: [],
-        wrapperRef: React.createRef(),
         handleClickOutside: this.handleClickOutside.bind(this)
     })
+    wrapperRef= React.createRef()
     componentDidMount(){
+        axios.get('students/allroles').then((response)=>{
+            this.setState({
+                ...this.state,
+                roles: [...response.data],
+                search: [...response.data]
+            })
+        }).catch((error)=>{
+        })
         document.addEventListener('mousedown', this.state.handleClickOutside)
         let params = Query.parse(this.props.location.search)
         if(params.code!==undefined){
-            let oldState = JSON.parse(localStorage.getItem('state'))
+            let oldState = {...JSON.parse(localStorage.getItem('state'))}
             this.setState({
                 ...oldState
             })
@@ -50,7 +56,7 @@ class Advisors extends Component {
         document.removeEventListener('mousedown', this.state.handleClickOutside);
     }
     handleClickOutside(event) {
-        if (this.state.wrapperRef && !this.state.wrapperRef.current.contains(event.target)) {
+        if (this.wrapperRef && !this.wrapperRef.current.contains(event.target)) {
             this.setState({
                 ...this.state,
                 dropdown: false
@@ -89,7 +95,8 @@ class Advisors extends Component {
     }
     redirectHandler = ()=>{
         // save the state in local storage then redirect the user.
-        localStorage.setItem('state', JSON.stringify(this.state))
+        let obj = JSON.stringify({...this.state})
+        localStorage.setItem('state', obj)
     }
     workHandler = (event)=>{
         let arr = []
@@ -196,27 +203,29 @@ class Advisors extends Component {
         })
     }
     submitHandler = ()=>{
-        console.log(this.state.workExperience.concat(this.state.manualWorkExperience))
-        // if(this.state.fname==='' || this.state.lname==='' || this.state.email==='' || this.state.major.length===0 || this.state.image==='' || this.state.linkedin==='' || this.state.workExperience.length===0){
-        //     this.props.triggerAlert(true, 'error', "Missing field(s)", 10000)
-        // }else{
-        //     axios.post('advisors/signup', {
-        //         fname: this.state.fname,
-        //         lname: this.state.lname,
-        //         email: this.state.email,
-        //         linkedin: this.state.linkedin,
-        //         roles: this.state.major,
-        //         image: this.state.image
-        //     }).then((response)=>{
-        //         if(response.data.message==='exists'){
-        //             this.props.triggerAlert(true, 'error', "Mentor with the same email exists", 10000)
-        //         }else{
-        //             this.props.triggerAlert(true, 'success', "Successfully signed up", 10000)
-        //         }
-        //     }).catch((err)=>{
-        //         this.props.triggerAlert(true, 'error', "Something went wrong. Try again", 10000)
-        //     })
-        // }
+        console.log(this.state)
+        console.log('********')
+        if(this.state.fname==='' || this.state.lname==='' || this.state.email==='' || this.state.major.length===0 || this.state.image==='' || this.state.linkedin==='' || (this.state.workExperience.length===0 && this.state.manualWorkExperience===0)){
+            this.props.triggerAlert(true, 'error', "Missing field(s)", 10000)
+        }else{
+            axios.post('advisors/signup', {
+                fname: this.state.fname,
+                lname: this.state.lname,
+                email: this.state.email,
+                linkedin: this.state.linkedin,
+                roles: this.state.major,
+                image: this.state.image,
+                workExperience: this.state.workExperience.concat(this.state.manualWorkExperience)
+            }).then((response)=>{
+                if(response.data.message==='exists'){
+                    this.props.triggerAlert(true, 'error', "Mentor with the same email exists", 10000)
+                }else{
+                    this.props.triggerAlert(true, 'success', "Successfully signed up", 10000)
+                }
+            }).catch((err)=>{
+                this.props.triggerAlert(true, 'error', "Something went wrong. Try again", 10000)
+            })
+        }
     }
     cvHandler = (event)=>{
         const formData = new FormData()
@@ -276,6 +285,7 @@ class Advisors extends Component {
         }
     }
     render() {
+        console.log(this.state.roles)
         let major = ''
         let ok = ''
         if(!this.state.dropdown){
@@ -293,8 +303,8 @@ class Advisors extends Component {
                                 <Tooltip title='Delete Job'><div className={`fas fa-minus-circle pt-1`} style={{'color':'#F37168', 'cursor':'pointer'}} id={index} onClick={this.manualDeleteJob}></div></Tooltip>
                             </div>
                             <div className={classes.Media_body}>
-                                <input placeholder='Job Title' onChange={this.manualJobTitleHandler} className={`font-weight-bold w-100 ${classes.input1}`} type="text" id={index}/><br></br>
-                                <input placeholder='Organization' onChange={this.manualOrganizationHandler} className={`font-weight-light w-100 ${classes.input1}`} type="text" id={index}/><br></br>
+                                <input placeholder='Job Title' onChange={this.manualJobTitleHandler} defaultValue={element.jobTitle} className={`font-weight-bold w-100 ${classes.input1}`} type="text" id={index}/><br></br>
+                                <input defaultValue={element.organization} placeholder='Organization' onChange={this.manualOrganizationHandler} className={`font-weight-light w-100 ${classes.input1}`} type="text" id={index}/><br></br>
                             </div>
                         </div>
                     </div>
@@ -379,7 +389,7 @@ class Advisors extends Component {
                                                     <input type="text" onFocus={()=>{this.setState({...this.state, dropdown:true})}} className={`form-control ${classes.border} ${classes.input}`} onChange={this.workHandler}/>
                                                     <span className={ok}><input className={`position-absolute form-control ${classes.border} ${classes.input}`} onFocus={()=>{this.setState({...this.state, dropdown:true})}} style={{'left':'12px'}} value={major}/></span>
                                                 </div>
-                                                <div ref={this.state.wrapperRef} className={`${classes.dropdown} ${isShownDropdown}`}>
+                                                <div ref={this.wrapperRef} className={`${classes.dropdown} ${isShownDropdown}`}>
                                                     {dropdownContent}
                                                 </div>
                                             </div>

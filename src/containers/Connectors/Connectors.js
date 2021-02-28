@@ -26,7 +26,8 @@ const Connectors = () => {
             setConnectors(response.data.connectors)
             setAllConnectors(response.data.connectors)
         }).catch((error)=>{
-            history.push('/')
+            // history.push('/')
+            console.log(error)
         }) 
         axios.get('/roles').then((response)=>{
             const data = response.data.roles
@@ -55,7 +56,8 @@ const Connectors = () => {
         axios.get('token-validity',config).then((response)=>{  
             setFilter(e)
         }).catch((error)=>{
-            history.push('/')
+            // history.push('/')
+            console.log(error)
         })
     }
 
@@ -106,10 +108,6 @@ const Connectors = () => {
                         My Connectors
                     </div>
                     <div className={`${classes.info_items}`}>
-                        <Info number="3914" text="Connections"/>
-                        <Info number="3914" text="Connections"/>
-                        <Info number="3914" text="Connections"/>
-                        <Info number="3914" text="Connections"/>
                         <Info number="3914" text="Connections"/>
                     </div>
                     <div className={`${classes.select}`}>
