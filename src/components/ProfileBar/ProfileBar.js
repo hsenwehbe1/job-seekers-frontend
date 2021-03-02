@@ -34,7 +34,7 @@ class ProfileBar extends Component {
                         </div>
                     </div>
                     <hr/>
-                    <Media click={this.props.pushInterest} title="My interest" content="Find your Interest"/><br></br>
+                    <Media click={this.props.pushInterest} title="My Interest" content="Find your Interest"/><br></br>
                     <Media click={this.props.pushConnectors} title="My Connectors" content="Search and visit connectors And mentors profiles"/><br></br>
                 </div>
                 <div className={classes.footer}>

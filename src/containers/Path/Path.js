@@ -15,7 +15,14 @@ export default class Path extends Component {
         numberOfAdvisors: 0
     })
     componentDidMount(){
-        axios.get('students/allroles').then((response)=>{
+        let config = {
+            headers:{
+                'Authorization' : `Bearer ${localStorage.getItem('token')}`
+            }
+        }
+        axios.get('students/allroles', config).then((response)=>{
+            console.log('here')
+            console.log(response.data)
             this.setState({
                 ...this.state,
                 data: [...response.data]
@@ -23,7 +30,7 @@ export default class Path extends Component {
         }).catch((err)=>{
 
         })
-        axios.get('students/entrylevel').then((response)=>{
+        axios.get('students/entrylevel', config).then((response)=>{
             console.log(response)
             this.setState({
                 ...this.state,

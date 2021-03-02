@@ -1,0 +1,26 @@
+.container{
+    font-size: 13px;
+    padding: 1px 15px;
+    display: inline-block;
+    border-radius: 5px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+.container:hover{
+    transition: 0.5s;
+    background-color: #F0716A;
+    border: 1px solid #F0716A;
+    color: white;
+}
+.white{
+    transition: 0.25s;
+    background-color: white;
+    border: 1px solid rgb(133, 133, 133);
+    color: #133C59;
+}
+.red{
+    transition: 0.25s;
+    background-color: #F0716A;
+    border: 1px solid #F0716A;
+    color: white;
+}

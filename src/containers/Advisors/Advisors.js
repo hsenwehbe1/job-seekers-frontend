@@ -26,7 +26,7 @@ class Advisors extends Component {
     })
     wrapperRef= React.createRef()
     componentDidMount(){
-        axios.get('students/allroles').then((response)=>{
+        axios.get('students/retreiveallroles').then((response)=>{
             this.setState({
                 ...this.state,
                 roles: [...response.data],

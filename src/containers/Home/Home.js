@@ -18,6 +18,7 @@ import image3 from '../../assets/images/imageProfile3.jpg'
 import image4 from '../../assets/images/imageProfile4.jpg'
 import PathContainer from './Connector/Connector'
 import Pagination from '@material-ui/lab/Pagination'
+import Spinner from '../../components/Spinner/Spinner'
 class Home extends Component {
     state = ({
         page: 1, // for pagination,
@@ -49,7 +50,9 @@ class Home extends Component {
             {imageSrc:image3,name:"hussein wehbe",jobTitle:"back-end developer",salary:"1200$"},
             {imageSrc:image4,name:"hussein wehbe",jobTitle:"Business Development",salary:"1200$"}
         ],
-        filter:[]
+        filter:[],
+        spinner: false,
+        studentID: ''
     })
 
     componentDidMount(){
@@ -65,9 +68,11 @@ class Home extends Component {
         // check if user did the test
         axios.get('/students/info', config).then((response)=>{
             this.setState({
+                ...this.state,
                 fname: response.data.fname,
                 lname: response.data.lname,
-                didTakeTest: response.data.didTakeTest
+                didTakeTest: response.data.didTakeTest,
+                studentID: response.data.id
             })
         }).catch((err)=>{
             if(!err.response) { // connection error
@@ -79,10 +84,15 @@ class Home extends Component {
                 this.props.triggerAlert(true, 'error', 'Something went wrong', 10000)
             }
         })
+        this.setState({
+            ...this.state,
+            spinner: true
+        })
         axios.get('/advisors/all', config).then((response)=>{
             this.setState({
                 ...this.state,
-                data: [...response.data]
+                data: [...response.data],
+                spinner: false
             })
         })
     }
@@ -138,6 +148,22 @@ class Home extends Component {
         }
         return false
     }
+    connectHandler = (event)=>{
+        let config = {
+            headers: {
+                'Authorization' : `Bearer ${localStorage.getItem('token')}`
+            }
+        }
+        axios.post('students/connect', {id: event.target.id}, config).then((response)=>{
+            axios.get('/advisors/all', config).then((response)=>{
+                this.setState({
+                    ...this.state,
+                    data: [...response.data],
+                    spinner: false
+                })
+            })
+        })
+    }
     render() {
         let content = ''
         let contentTable = ''
@@ -161,13 +187,15 @@ class Home extends Component {
             )
         }
         if(this.state.data.length!==0){
-            console.log(this.state.data)
             contentTable = (
                 this.state.data.map((element, key) => {
                     let index = (this.state.page - 1)*10
                     if(key>=index && key<=index+9){
+                        let connect = <button onClick={this.connectHandler} id={element._id} className={`btn btn-danger ${classes.red}`}>Connect</button>
+                        if(element.students.includes(this.state.studentID)){
+                            connect = <span style={{'color':'#007FEB'}}>Connected</span>
+                        }
                         let title = <span><img className='rounded-circle' src={`data:image/png;base64,${element.image}`} alt='profile' width='35px' height='35px'/>&nbsp;&nbsp;<span className={classes.advisor} onClick={()=>{window.location.pathname = `advisor/${element._id}`}}>{`${element.fname} ${element.lname}`}</span></span>
-                        let connect = <button onClick={this.connectHandler} className={`btn btn-danger ${classes.red}`}>Connect</button>
                         return (
                             <PathContainer middle={true} title={title} roles={element.roles.join(', ')} connect={connect} bullets={true} key={key}/>
                         )
@@ -202,8 +230,8 @@ class Home extends Component {
                                         <div className={`w-100 p-1 ${classes.outer}`}>
                                             <div className={`w-100 p-3 bg-white d-flex ${classes.inner}`}>
                                                 <i className={`fas fa-search ${classes.searchIcon}`}></i>
-                                                {/* <input className={`w-100 ${classes.search}`} type="text" placeholder="Search"/> */}
-                                                <div className={`${classes.selectSearch}`}>
+                                                <input className={`w-100 ${classes.search}`} type="text" placeholder="Search"/>
+                                                {/*<div className={`${classes.selectSearch}`}>
                                                     <Select
                                                         components={{ DropdownIndicator:() => null, IndicatorSeparator:() => null }}
                                                         isMulti
@@ -212,7 +240,7 @@ class Home extends Component {
                                                         onChange={(e)=>this.searchTrigger(e)}
                                                         options={this.state.roles}
                                                     />
-                                                </div>
+                                                </div>*/}
                                             </div>
                                         </div>
                                     </div>
@@ -220,7 +248,7 @@ class Home extends Component {
                             </div>
                             <div className="mt-2">
                                 <PathContainer title='Mentors' roles='Job Title' bullets={false} highlight={this.state.highlight}/>
-                                {contentTable}
+                                {this.state.spinner ? <Spinner/> : contentTable}
                                 <div className='pt-3 pb-3 text-center' style={{'minWidth':'1000px'}}><Pagination onChange={this.paginationHandler} className='d-inline-block' count={Math.ceil(this.state.data.length/10)} size="small" /></div>
                             </div>
                             <div className={classes.connectors} style={this.state.searching?{display:'block'}:{display:'none'}} >
