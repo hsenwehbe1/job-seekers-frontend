@@ -20,23 +20,10 @@ class UserTest extends Component {
                                     Start your test to allow us detect your path
                                 </p>
                                 <p className={classes.sub_content}>
-                                    In order for us to estimate your personal Interests and Usual Style, you will first need to answer a series of questions. Read each pair of phrases below and decide which one of the two most describes you, then select the radio button next to that phrase.
+                                    In order for us to estimate your personal interests and usual Style, you will first need to answer a series of questions. When answering, don't just let your grades be the driver of your response. Sometimes we know how to think but we aren't great test takers. Also, try your best to answer by focusing on the subject or skill and not whether you had a good experience in a specific class or with a specific teacher; sometimes we may be good at a subject but the way it is taught doesn't suit our learning style.
                                 </p>
                                 <button onClick={()=>this.props.history.push('/test/start')} className={`btn btn-lg btn-danger ${classes.red}`}>Start Now</button><br></br><br></br>
-                                <p className={classes.text}>
-                                    Why taking the test?
-                                </p>
-                                <div className={`${classes.box_shadow} p-3 mb-5`}>
-                                    <p>
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem natus accusamus impedit voluptatum aperiam dolores nobis nostrum atque, quidem ex.
-                                    </p>
-                                    <p>
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem natus accusamus impedit voluptatum aperiam dolores nobis nostrum atque, quidem ex.
-                                    </p>
-                                    <p>
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem natus accusamus impedit voluptatum aperiam dolores nobis nostrum atque, quidem ex.
-                                    </p>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>

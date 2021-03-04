@@ -17,15 +17,20 @@ class AboutUs extends Component {
         image : '',
         spinner : false,
         workExperience: [],
-        date: ''
+        date: '',
+        isAdvisor: ''
     })
     componentDidMount(){
         this.setState({
             ...this.state,
             spinner: true
         })
-        axios.get(`advisors/${this.props.match.params.id}`).then((response)=>{
-            console.log(response.data)
+        let config = {
+            headers:{
+                'Authorization' : `Bearer ${localStorage.getItem('token')}`
+            }
+        }
+        axios.get(`advisors/${this.props.match.params.id}`, config).then((response)=>{
             this.setState({
                 ...this.state,
                 fname: response.data.fname,
@@ -40,6 +45,44 @@ class AboutUs extends Component {
             })
         }).catch((error)=>{
             console.log(error)
+        })
+        axios.get(`students/isadvisor/${this.props.match.params.id}`, config).then((response)=>{
+            this.setState({
+                ...this.state,
+                isAdvisor: response.data
+            })
+        }).catch((error)=>{
+
+        })
+    }
+    addAdvisor = ()=>{
+        let config = {
+            headers:{
+                'Authorization' : `Bearer ${localStorage.getItem('token')}`
+            }
+        }
+        axios.post('students/connect', {id: this.props.match.params.id}, config).then((response)=>{
+            this.setState({
+                ...this.state,
+                isAdvisor: true
+            })
+        }).catch((err)=>{
+
+        })
+    }
+    removeAdvisor = ()=>{
+        let config = {
+            headers:{
+                'Authorization' : `Bearer ${localStorage.getItem('token')}`
+            }
+        }
+        axios.post('students/removeadvisor', {id: this.props.match.params.id}, config).then((response)=>{
+            this.setState({
+                ...this.state,
+                isAdvisor: false
+            })
+        }).catch((err)=>{
+            
         })
     }
     render() {
@@ -74,10 +117,11 @@ class AboutUs extends Component {
                     <div className="container">
                         <div className={`${classes.upper_part} px-0`}>
                             <div>
-                            {this.state.spinner ? <Spinner/> : 
+                            {this.state.spinner ? <Spinner/> :
                                 <div className='row pt-3'>
                                 <div className="col-12 col-md-3">
                                     <img src={`data:image/png;base64,${this.state.image}`} alt="" className={classes.image}/><p className='font-weight-light'>Joined {this.state.date}</p>
+                                    {this.state.isAdvisor ? <p><button className={`btn btn-danger ${classes.red}`} onClick={this.removeAdvisor}>Remove advisor</button></p> : <p><button className={`btn btn-primary ${classes.blue}`} onClick={this.addAdvisor}>Add advisor</button></p>}
                                 </div>
                                 <div className='col-12 col-md-9'>
                                     <div className='row'>

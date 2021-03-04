@@ -12,7 +12,8 @@ export default class Path extends Component {
         highlight: 0,
         data: [],
         numberOfEntryLevelRoles : 0,
-        numberOfAdvisors: 0
+        numberOfAdvisors: 0,
+        myAdvisors: []
     })
     componentDidMount(){
         let config = {
@@ -21,7 +22,6 @@ export default class Path extends Component {
             }
         }
         axios.get('students/allroles', config).then((response)=>{
-            console.log('here')
             console.log(response.data)
             this.setState({
                 ...this.state,
@@ -31,11 +31,18 @@ export default class Path extends Component {
 
         })
         axios.get('students/entrylevel', config).then((response)=>{
-            console.log(response)
             this.setState({
                 ...this.state,
                 numberOfEntryLevelRoles: response.data.data,
                 numberOfAdvisors: response.data.advisors
+            })
+        }).catch((err)=>{
+
+        })
+        axios.get('students/myadvisors', config).then((response)=>{
+            this.setState({
+                ...this.state,
+                myAdvisors: [...response.data]
             })
         }).catch((err)=>{
 
@@ -67,14 +74,31 @@ export default class Path extends Component {
         this.props.history.push(`/my path/${role}`)
     }
     render() {
-        console.log(this.state)
         let content = ''
         content = (
             this.state.data.map((element, key) => {
                 let index = (this.state.page - 1)*10
                 if(key>=index && key<=index+9){
+                    //get images of advisors & 3 more
+                    let i = 0
+                    let images = (
+                        this.state.myAdvisors.map((elem, index) => {
+                            console.log(index)
+                            console.log(this.state.myAdvisors.length)
+                            if(elem.roles.includes(element.role)){
+                                if(index<3){
+                                    return <img src={`data:image/png;base64,${elem.image}`} alt='Advisor' style={{'marginRight':'5px'}} className='rounded-circle' width='30px' height='30px'/>
+                                }else{
+                                    i = i + 1
+                                }
+                                if(index+1===this.state.myAdvisors.length){
+                                    return <small className='small'> & {i} more</small>
+                                }
+                            }
+                        })
+                    )
                     return (
-                        <PathContainer handler={this.pathClickHandler} title={element.role} roles={element.jobs} salary={`$${element.salary}`} advisors={element.advisors} bullets={true} sort={false} key={key}/>
+                        <PathContainer handler={this.pathClickHandler} title={element.role} roles={element.jobs} salary={`$${element.salary}`} advisors={images} bullets={true} sort={false} key={key}/>
                     )
                 }
             })
@@ -116,7 +140,7 @@ export default class Path extends Component {
                                     <li><span className='dropdown-item'>Hello</span></li>
                                 </ul>
                             </div>
-                            <PathContainer handler={()=>{}} title='Job Title' roles='Open Entry Level Roles' salary='Average Starting Salary' advisors='Advisors in my network' bullets={false} sort={true} highlight={this.state.highlight} rolesSortHandler={this.rolesSortHandler} salarySortHandler={this.salarySortHandler}/>
+                            <PathContainer handler={()=>{}} title='Job Title' roles='Open Entry Level Roles' salary='Average Starting Salary' advisors='Mentors in my network' bullets={false} sort={true} highlight={this.state.highlight} rolesSortHandler={this.rolesSortHandler} salarySortHandler={this.salarySortHandler}/>
                             {content}
                             <div className='pt-3 pb-3 text-center' style={{'minWidth':'1000px'}}><Pagination onChange={this.paginationHandler} className='d-inline-block' count={Math.ceil(this.state.data.length/10)} size="small" /></div>
                         </div>

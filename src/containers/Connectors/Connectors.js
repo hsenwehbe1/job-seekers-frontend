@@ -12,7 +12,8 @@ export default class AboutUs extends Component {
         interets: ['All', 'Software Developer', 'Design', 'UI/UX'],
         filter:[true, false, false, false],
         role: 'All',
-        spinner: false
+        spinner: false,
+        numberOfConnectors: ''
     })
     componentDidMount(){
         let config = {
@@ -24,12 +25,12 @@ export default class AboutUs extends Component {
             ...this.state,
             spinner: true,
         })
-        axios.get('advisors/all', config).then((response)=>{
-            console.log(response.data)
+        axios.get('students/myadvisors', config).then((response)=>{
             this.setState({
                 ...this.state,
                 data: [...response.data],
-                spinner: false
+                spinner: false,
+                numberOfConnectors: response.data.length
             })
         }).catch((error)=>{
             
@@ -48,9 +49,8 @@ export default class AboutUs extends Component {
         }
     }
     render() {
-        console.log(this.state.data)
         let btns = ''
-        let content = ''
+        let content = 'No connectors yet'
         btns= (
             this.state.interets.map((element, index)=>{
                 return (
@@ -60,6 +60,7 @@ export default class AboutUs extends Component {
         )
         content = (
             this.state.data.map((element, index)=>{
+                console.log(element)
                 if(this.state.role==='All'){
                     return (
                         <div key={`p${index}`} className="col-lg-2 col-md-4 col-12 mt-3">
@@ -89,7 +90,7 @@ export default class AboutUs extends Component {
                             </div>
                             <div className="">
                                 <div className="bg-white p-3 text-center mt-3" style={{'borderRadius':'7px', 'width':'150px'}}>
-                                    <div style={{'fontSize':'26px', 'color':'#007FEB'}}>12</div>
+                                    <div style={{'fontSize':'26px', 'color':'#007FEB'}}>{this.state.numberOfConnectors}</div>
                                     <div className='font-weight-light'>Connections</div>
                                 </div>
                                 <div className='mt-4'>

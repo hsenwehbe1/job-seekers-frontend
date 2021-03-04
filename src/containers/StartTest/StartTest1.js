@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import classes from './StartTest.css'
 import {connect} from 'react-redux'
 import * as authActions from '../../redux/actions/auth'
+import Alert from '../../components/Alert/Alert'
+import * as alertActions from '../../redux/actions/alert'
 import Sidebar from '../../components/Sidebar/Sidebar'
 import HeaderBar from '../../components/HeaderBar/HeaderBar'
 import Result from '../../components/Result/Result'
@@ -18,7 +20,7 @@ import Question10 from './Type3/Question1'
 import { withRouter } from 'react-router-dom'
 class StartTest1 extends Component {
     state = ({
-        page: 3,
+        page: 1,
         questions: {
             type1: {
                 q1: ['Have you taken Computer Science? If yes, did you like it?', 'I took it and found it interesting', 'I took it and I did not enjoy it', 'I have never taken Computer Science or Programming'],
@@ -65,19 +67,30 @@ class StartTest1 extends Component {
     }
     nextHandler = ()=>{
         if(this.state.page===3){ // check if all answers are filled
-            console.log(this.props.reduxAnswers)
-        }
-        if (this.state.index < Object.keys(this.state.questions[`type${this.state.page}`]).length-1) {
-            this.setState({
-                ...this.state,
-                index: this.state.index + 1
-            })
-        } else {
-            this.setState({
-                ...this.state,
-                index: 1,
-                page: this.state.page + 1
-            })
+            console.log(this.props.reduxAnswers[0])
+            let isEmpty = false
+            for (let index = 0; index < this.props.reduxAnswers.length; index++) {
+                if(this.props.reduxAnswers[index]===undefined || this.props.reduxAnswers.length===0){
+                    isEmpty = true
+                    break
+                }
+            }
+            if(isEmpty){
+                this.props.triggerAlert(true, 'error', 'Missing answer(s)', 10000)
+            }
+        }else{
+            if (this.state.index < Object.keys(this.state.questions[`type${this.state.page}`]).length-1) {
+                this.setState({
+                    ...this.state,
+                    index: this.state.index + 1
+                })
+            } else {
+                this.setState({
+                    ...this.state,
+                    index: 1,
+                    page: this.state.page + 1
+                })
+            }
         }
     }
     render() {
@@ -158,6 +171,7 @@ class StartTest1 extends Component {
                                         <div onClick={this.nextHandler} className="col-1 font-weight-bold text-decoration-underline" style={{'cursor': 'pointer'}}>
                                             {next}
                                         </div>
+                                        <Alert/>
                                     </div>
                                 </div>
                             </div>
@@ -175,7 +189,8 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        saveData: (data) => dispatch(authActions.saveData(data))
+        saveData: (data) => dispatch(authActions.saveData(data)),
+        triggerAlert: (alertOpen, alertType, alertMessage, alertDuration) => dispatch(alertActions.triggerAlert(alertOpen, alertType, alertMessage, alertDuration))
     }
 }
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(StartTest1))

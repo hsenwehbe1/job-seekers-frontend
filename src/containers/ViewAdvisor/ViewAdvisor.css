@@ -147,3 +147,28 @@
       padding-right: 10px;
       padding-top: 8.5px;
   }
+.red{
+    border-radius: 20px;
+    background-color: #F0716A!important;
+    text-transform: unset!important;
+    font-size: 14px;
+    height: 28px;
+    padding-top: 0px!important;
+    padding-bottom: 0px!important;
+}
+.red:hover{
+    background-color: #c74238!important;
+}
+.blue{
+    border-radius: 20px;
+    background-color: #007FEB!important;
+    text-transform: unset!important;
+    font-size: 14px;
+    height: 28px;
+    padding-top: 0px!important;
+    padding-bottom: 0px!important;
+}
+
+.blue:hover{
+    background-color: #0361b3!important;
+}

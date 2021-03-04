@@ -15,6 +15,7 @@
 .sub_content{
     color: #133C59;
     font: normal normal 300 16px/18px;
+    line-height: 2rem;
 }
 .red{
     border-radius: 10px;
