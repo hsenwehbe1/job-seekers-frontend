@@ -7,18 +7,31 @@ import axios from '../../../axios'
 import { withRouter } from 'react-router-dom'
 class SpecificPath extends Component {
     state = ({
-        data: {}
+        data: {},
+        myAdvisors: []
     })
     componentDidMount(){
+        let config = {
+            headers:{
+                'Authorization' : `Bearer ${localStorage.getItem('token')}`
+            }
+        }
         axios.get(`/students/specificrole/${this.props.match.params.role}`).then((response)=>{
             this.setState({
                 ...this.state,
                 data: {...response.data}
             })
         })
+        axios.get('students/myadvisors', config).then((response)=>{
+            this.setState({
+                ...this.state,
+                myAdvisors: [...response.data]
+            })
+        }).catch((err)=>{
+
+        })
     }
     render() {
-        console.log(this.props.match.params.role)
         let pay = ''
         let text = ''
         let bullets = ''
@@ -49,6 +62,12 @@ class SpecificPath extends Component {
                 })
             )
         }
+        let i = 0
+        this.state.myAdvisors.map(element => {
+            if(element.roles.includes(this.props.match.params.role)){
+                i++
+            }
+        })
         return (
             <div className="mt-4">
                 <HeaderBar/>
@@ -57,7 +76,7 @@ class SpecificPath extends Component {
                     <div className="container">
                         <div className={`${classes.upper_part} px-0`}>
                             <div className={`${classes.text_lg}`}>
-                                <i onClick={()=>{this.props.history.push('/my path')}} className="fas fa-long-arrow-alt-left" style={{'cursor':'pointer'}}></i> {this.state.data.role}
+                                <i onClick={()=>{this.props.history.goBack()}} className="fas fa-long-arrow-alt-left" style={{'cursor':'pointer'}}></i> {this.state.data.role}
                             </div>
                             <div className='row mt-3'>
                                 <div className="col-12 col-md-8">
@@ -76,7 +95,7 @@ class SpecificPath extends Component {
                                         </div>
                                         <div className="col-12 col-sm-4">
                                             <div className={classes.card}>
-                                                <div className={classes.blue}>12</div>
+                                                <div className={classes.blue}>{i}</div>
                                                 <div className='font-weight-light'>Advisors in your network</div>
                                             </div>
                                         </div>
@@ -95,11 +114,6 @@ class SpecificPath extends Component {
                                                     <ul className={classes.list}>
                                                         {education}
                                                     </ul>
-                                                </div>
-                                            </div>
-                                            <div className="col-12 col-sm-12 col-md-6">
-                                                <div className='p-3 bg-white pb-1' style={{'borderRadius':'10px'}}>
-                                                    People in your network
                                                 </div>
                                             </div>
                                         </div><br></br>

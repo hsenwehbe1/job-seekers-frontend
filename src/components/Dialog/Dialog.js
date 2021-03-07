@@ -21,8 +21,6 @@ export default function AlertDialog(props) {
     setOpen(false);
   };
   const rightHandler = ()=>{
-      console.log('right')
-      console.log(radio)
     if(radio.radio1){
         setRadio({
             radio1: false,

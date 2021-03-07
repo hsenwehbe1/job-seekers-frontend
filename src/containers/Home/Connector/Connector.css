@@ -29,3 +29,8 @@
 .light{
     font-weight: 300;
 }
+.role:hover{
+    text-decoration: underline;
+    color: #007feb;
+    cursor: pointer
+}

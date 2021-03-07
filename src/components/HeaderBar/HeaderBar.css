@@ -6,6 +6,7 @@
     color: #007FEB;
     font-weight: bold;
     font-size: 20px;
+    cursor: pointer;
 }
 .float_right{
     float: right !important;

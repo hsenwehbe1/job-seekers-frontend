@@ -30,26 +30,7 @@ class Home extends Component {
         searching:false,
         roles : [{label:"None",value:1},{label:"Accounting",value:2},{label:"Administrative",value:3},
         {label:"Arts and Design",value:4},{label:"Business Development",value:5},{label:"back-end developer",value:6}],
-        connectors:[
-        ],
-        allConnectors:[
-            {imageSrc:image1,name:"hussein wehbe",jobTitle:"Arts and Design",salary:"1200$"},
-            {imageSrc:image2,name:"mohamed saf.",jobTitle:"back-end developer",salary:"1200$"},
-            {imageSrc:image3,name:"ali jaber",jobTitle:"back-end developer",salary:"1200$"},
-            {imageSrc:image4,name:"mahmoud abbas",jobTitle:"Arts and Design",salary:"1200$"},
-            {imageSrc:image1,name:"hassan ali",jobTitle:"Business Development",salary:"1200$"},
-            {imageSrc:image2,name:"elie samra",jobTitle:"Business Development",salary:"1200$"},
-            {imageSrc:image3,name:"jad rydan",jobTitle:"back-end developer",salary:"1200$"},
-            {imageSrc:image4,name:"elie maalouf",jobTitle:"Business Development",salary:"1200$"},
-            {imageSrc:image1,name:"hussein wehbe",jobTitle:"Arts and Design",salary:"1200$"},
-            {imageSrc:image2,name:"hussein wehbe",jobTitle:"back-end developer",salary:"1200$"},
-            {imageSrc:image3,name:"hussein wehbe",jobTitle:"back-end developer",salary:"1200$"},
-            {imageSrc:image4,name:"hussein wehbe",jobTitle:"Arts and Design",salary:"1200$"},
-            {imageSrc:image1,name:"hussein wehbe",jobTitle:"Business Development",salary:"1200$"},
-            {imageSrc:image2,name:"hussein wehbe",jobTitle:"Business Development",salary:"1200$"},
-            {imageSrc:image3,name:"hussein wehbe",jobTitle:"back-end developer",salary:"1200$"},
-            {imageSrc:image4,name:"hussein wehbe",jobTitle:"Business Development",salary:"1200$"}
-        ],
+        connectors:[],
         filter:[],
         spinner: false,
         studentID: ''
@@ -197,7 +178,7 @@ class Home extends Component {
                         }
                         let title = <span><img className='rounded-circle' src={`data:image/png;base64,${element.image}`} alt='profile' width='35px' height='35px'/>&nbsp;&nbsp;<span className={classes.advisor} onClick={()=>{window.location.pathname = `advisor/${element._id}`}}>{`${element.fname} ${element.lname}`}</span></span>
                         return (
-                            <PathContainer middle={true} title={title} roles={element.roles.join(', ')} connect={connect} bullets={true} key={key}/>
+                            <PathContainer middle={true} title={title} roles={element.roles} connect={connect} bullets={true} key={key}/>
                         )
                     }
                 })

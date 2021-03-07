@@ -9,7 +9,7 @@ import Spinner from '../../components/Spinner/Spinner'
 export default class AboutUs extends Component {
     state = ({
         data : [],
-        interets: ['All', 'Software Developer', 'Design', 'UI/UX'],
+        interets: ['All', 'Software Developer', 'Data Scientist', 'UI/UX'],
         filter:[true, false, false, false],
         role: 'All',
         spinner: false,

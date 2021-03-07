@@ -97,3 +97,7 @@
         text-align: center;
     }
 }
+.more:hover{
+    transition: 0.25s;
+    text-decoration: underline;
+}

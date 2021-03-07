@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import classes from './Path.css'
+import axios from '../../axios'
 import sortObjectArray from 'sort-objects-array'
 import Sidebar from '../../components/Sidebar/Sidebar'
 import HeaderBar from '../../components/HeaderBar/HeaderBar'
 import PathContainer from './PathContainer/PathContainer'
 import Pagination from '@material-ui/lab/Pagination'
-import axios from '../../axios'
+import Tooltip from '@material-ui/core/Tooltip'
+import Dialog from './Dialog/Dialog'
 export default class Path extends Component {
     state = ({
         page: 1, // for pagination,
@@ -13,7 +15,9 @@ export default class Path extends Component {
         data: [],
         numberOfEntryLevelRoles : 0,
         numberOfAdvisors: 0,
-        myAdvisors: []
+        myAdvisors: [],
+        dialog: false, // viewing the dialog,
+        dialogData: []
     })
     componentDidMount(){
         let config = {
@@ -73,26 +77,43 @@ export default class Path extends Component {
     pathClickHandler = (role)=>{
         this.props.history.push(`/my path/${role}`)
     }
+    moreAdvisorsHandler = (event, totalAdvisors)=>{
+        this.setState({
+            ...this.state,
+            dialog: !this.state.dialog,
+            dialogData: [...totalAdvisors]
+        })
+        event.stopPropagation()
+    }
+    closeDialog = ()=>{
+        this.setState({
+            ...this.state,
+            dialog: false,
+        })
+    }
     render() {
         let content = ''
+        let dialog = ''
         content = (
             this.state.data.map((element, key) => {
                 let index = (this.state.page - 1)*10
                 if(key>=index && key<=index+9){
                     //get images of advisors & 3 more
                     let i = 0
+                    let j = 0
+                    let totalAdvisors = []
                     let images = (
                         this.state.myAdvisors.map((elem, index) => {
-                            console.log(index)
-                            console.log(this.state.myAdvisors.length)
                             if(elem.roles.includes(element.role)){
-                                if(index<3){
-                                    return <img src={`data:image/png;base64,${elem.image}`} alt='Advisor' style={{'marginRight':'5px'}} className='rounded-circle' width='30px' height='30px'/>
+                                totalAdvisors.push(elem)
+                                i++
+                                if(i<=3){
+                                    return <Tooltip onClick={(e)=>{window.location.pathname = `advisor/${elem._id}`; e.stopPropagation()}} title={`${elem.fname} ${elem.lname}`}><img src={`data:image/png;base64,${elem.image}`} alt='Advisor' style={{'marginRight':'5px'}} className='rounded-circle' width='30px' height='30px' key={`xd${index}`} id={`k${index}`}/></Tooltip>
                                 }else{
-                                    i = i + 1
+                                    j++
                                 }
-                                if(index+1===this.state.myAdvisors.length){
-                                    return <small className='small'> & {i} more</small>
+                                if(j!==0){
+                                    return <small onClick={(event)=>{this.moreAdvisorsHandler(event, totalAdvisors)}} className={`small ${classes.more}`}> & {j} more</small>
                                 }
                             }
                         })
@@ -103,6 +124,9 @@ export default class Path extends Component {
                 }
             })
         )
+        if(this.state.dialog){
+            dialog = <Dialog handler={this.closeDialog} isShown={true} data={this.state.dialogData}/>
+        }
         return (
             <div className="mt-4">
                 <HeaderBar/>
@@ -146,6 +170,7 @@ export default class Path extends Component {
                         </div>
                     </div>
                 </div>
+                {dialog}
             </div>
         )
     }

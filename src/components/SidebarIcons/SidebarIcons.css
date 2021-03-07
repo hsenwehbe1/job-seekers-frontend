@@ -5,6 +5,9 @@
 .pointer{
     cursor: pointer;
 }
+.pointer:hover{
+    border-left: 3px solid #0074FF;
+}
 .links{
     text-decoration: none;
     color: #4f4f4f;

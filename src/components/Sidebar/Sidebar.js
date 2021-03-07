@@ -19,6 +19,7 @@ class Sidebar extends Component {
     render() {
         let cssClass = ''
         let content = ''
+        let content1 = ''
         let pages = {
             home: {
                 active: false,
@@ -42,7 +43,7 @@ class Sidebar extends Component {
             }
         }
         if(this.state.isShown){
-            content = <i onClick={this.togglerHandler} className={`fa fa-times ${classes.toggler}`}></i>
+            content1 = <i onClick={this.togglerHandler} className={`fa fa-times ${classes.toggler}`}></i>
             cssClass = classes.appear
         }else{
             content = <i onClick={this.togglerHandler} className={`fas fa-bars ${classes.toggler}`}></i>
@@ -70,7 +71,8 @@ class Sidebar extends Component {
                 <div>
                     {content} 
                 </div>
-                <div>
+                <div className='position-relative'>
+                    <div className="position-absolute" style={{'right':'7px', 'top':'2px'}}>{content1}</div>
                     <div className={`${classes.sidebar} bg-white ${cssClass}`}>
                         <SidebarIcons text='Home' selected={pages.home.active} icon={<Home color={pages.home.color}/>}/>
                         <SidebarIcons text='My path' selected={pages.path.active} icon={<Path color={pages.path.color}/>}/>

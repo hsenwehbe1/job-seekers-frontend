@@ -55,31 +55,10 @@ class LandingPage extends Component {
             <React.Fragment>
                 <div className={isHidden}><br></br><Spinner/></div>
                 <div className={isShown}>
-                    <nav className={`navbar navbar-expand-md navbar-light bg-transparent ${classes.nav} p-3`}>
-                        <div className="container-fluid">
-                            <a className="navbar-brand font-weight-bold" style={{'color':'#007FEB'}}>MentorEd</a>
-                            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                                <i className="fas fa-bars"></i>
-                            </button>
-                            <div className={`collapse navbar-collapse ${classes.navpad}`} id="navbarNavDropdown">
-                                <ul className="navbar-nav">
-                                    <li className={`nav-item`}>
-                                        <a className={`nav-link font-weight-bold ${classes.nav}`} aria-current="page">Home</a>
-                                    </li>
-                                    <li className={`nav-item ${classes.itempad}`}>
-                                        <a className={`nav-link font-weight-bold ${classes.nav}`}>About</a>
-                                    </li>
-                                    <li className={`nav-item ${classes.itempad}`}>
-                                        <a className={`nav-link font-weight-bold ${classes.nav}`}>Career news</a>
-                                    </li>
-                                    <li className={`nav-item ${classes.itempad}`}>
-                                        <a className={`nav-link font-weight-bold ${classes.nav}`}>Quick tips</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div className={classes.icon}><i className={`united states flag ${classes.flagicon}`}></i></div>
-                        </div>
-                    </nav>
+                    <div className="container-fluid mt-3">
+                        <a className="font-weight-bold d-inline float-left" style={{'color':'#007FEB', 'fontSize':'20px'}}>MentorEd</a>
+                        <div className={classes.icon}><i className={`united states flag ${classes.flagicon}`}></i></div>
+                    </div>
                     <div className="container mt-5" style={{color:'#133C59'}}>
                         <div className="row">
                             <div className={`col-md-7 ${classes.left_content}`}>
