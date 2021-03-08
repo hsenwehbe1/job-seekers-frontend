@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import classes from './HeaderBar.css'
-import Bell from '../../assets/icons/bell.svg'
 import axios from '../../axios'
 import { withRouter } from 'react-router-dom'
 import ItemsBell from '../ItemsBell/ItemsBell'

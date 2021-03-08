@@ -5,7 +5,7 @@ const HomeConnector = (props) => {
         <div className={classes.main}>
             <div className={classes.first}>
                 <div>
-                    <img className={classes.image} src={props.imageSrc} alt="image"/>
+                    <img className={classes.image} src={props.imageSrc} alt="Alternate"/>
                 </div>
                 <div className={classes.text}>
                    {props.name} 

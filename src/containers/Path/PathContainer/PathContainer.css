@@ -21,10 +21,11 @@
     box-shadow: 0px 0px 16px -8px rgba(0,0,0,0.75);
 }
 .light{
+    transition: 0.3s;
     font-weight: 300;
 }
 .light:hover{
-    transition: 0.5s;
+    transition: 0.3s;
     background-color: #e9f3fd;
     cursor: pointer;
 }

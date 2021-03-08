@@ -8,6 +8,8 @@ import PathContainer from './PathContainer/PathContainer'
 import Pagination from '@material-ui/lab/Pagination'
 import Tooltip from '@material-ui/core/Tooltip'
 import Dialog from './Dialog/Dialog'
+import TextField from '@material-ui/core/TextField'
+import SortObjectArray from 'sort-objects-array'
 export default class Path extends Component {
     state = ({
         page: 1, // for pagination,
@@ -17,7 +19,8 @@ export default class Path extends Component {
         numberOfAdvisors: 0,
         myAdvisors: [],
         dialog: false, // viewing the dialog,
-        dialogData: []
+        dialogData: [],
+        searchData: []
     })
     componentDidMount(){
         let config = {
@@ -26,10 +29,11 @@ export default class Path extends Component {
             }
         }
         axios.get('students/allroles', config).then((response)=>{
-            console.log(response.data)
+            let arr = [...SortObjectArray(response.data, 'role')]
             this.setState({
                 ...this.state,
-                data: [...response.data]
+                data: [...arr],
+                searchData: [...arr]
             })
         }).catch((err)=>{
 
@@ -53,19 +57,19 @@ export default class Path extends Component {
         })
     }
     rolesSortHandler = ()=>{
-        let arr = [...sortObjectArray(this.state.data, 'sortJobs')]
+        let arr = [...sortObjectArray(this.state.searchData, 'sortJobs')]
         this.setState({
             ...this.state,
             highlight: 1,
-            data: arr
+            searchData: [...arr]
         })
     }
     salarySortHandler = ()=>{
-        let arr = [...sortObjectArray(this.state.data, 'sortSalary')]
+        let arr = [...sortObjectArray(this.state.searchData, 'sortSalary')]
         this.setState({
             ...this.state,
             highlight: 2,
-            data: arr
+            searchData: [...arr]
         })
     }
     paginationHandler = (element, value)=>{
@@ -91,11 +95,30 @@ export default class Path extends Component {
             dialog: false,
         })
     }
+    search = (event)=>{
+        if(event.target.value===''){
+            this.setState({
+                ...this.state,
+                searchData: [...this.state.data]
+            })
+        }else{
+            let arr = []
+            this.state.data.forEach(element => {
+                if(element.role.toLowerCase().includes(event.target.value.toLowerCase())){
+                    arr.push(element)
+                } 
+            })
+            this.setState({
+                ...this.state,
+                searchData: [...arr]
+            })
+        }
+    }
     render() {
         let content = ''
         let dialog = ''
         content = (
-            this.state.data.map((element, key) => {
+            this.state.searchData.map((element, key) => {
                 let index = (this.state.page - 1)*10
                 if(key>=index && key<=index+9){
                     //get images of advisors & 3 more
@@ -164,9 +187,10 @@ export default class Path extends Component {
                                     <li><span className='dropdown-item'>Hello</span></li>
                                 </ul>
                             </div>
-                            <PathContainer handler={()=>{}} title='Job Title' roles='Open Entry Level Roles' salary='Average Starting Salary' advisors='Mentors in my network' bullets={false} sort={true} highlight={this.state.highlight} rolesSortHandler={this.rolesSortHandler} salarySortHandler={this.salarySortHandler}/>
+                            <TextField style={{"marginTop":"10px"}} onChange={this.search} id="standard-basic" label="Search" autoComplete='off'/>
+                            <PathContainer handler={()=>{}} title='Job Title' roles='Open Entry Level Roles' salary='Average Starting Salary' advisors='Mentors in my Network' bullets={false} sort={true} highlight={this.state.highlight} rolesSortHandler={this.rolesSortHandler} salarySortHandler={this.salarySortHandler}/>
                             {content}
-                            <div className='pt-3 pb-3 text-center' style={{'minWidth':'1000px'}}><Pagination onChange={this.paginationHandler} className='d-inline-block' count={Math.ceil(this.state.data.length/10)} size="small" /></div>
+                            <div className='pt-3 pb-3 text-center' style={{'minWidth':'1000px'}}><Pagination onChange={this.paginationHandler} className='d-inline-block' count={Math.ceil(this.state.searchData.length/10)} size="small" /></div>
                         </div>
                     </div>
                 </div>
