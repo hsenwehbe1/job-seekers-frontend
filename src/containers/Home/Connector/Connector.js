@@ -9,6 +9,7 @@ export default function PathContainer(props) {
         // fill bullet
         light = classes.light
         light1 = 'font-weight-light'
+        bullet = <span><i className='fas fa-circle' style={{'color':'#F89691', 'fontSize':'12px'}}/>&nbsp;<i className='fas fa-circle' style={{'color':'#F89691', 'fontSize':'12px'}}/></span>
     }
     if(props.middle){
         css = classes.item1

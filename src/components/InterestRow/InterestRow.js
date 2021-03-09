@@ -7,13 +7,13 @@ const InterestRow = (props) => {
             <div>{props.text}</div>
             <div className="d-flex align-items-center">
                 <div>
-                    <img className={`${classes.image}`} src={props.imageOne} alt="image"/>                    
+                    <img className={`${classes.image}`} src={props.imageOne} alt="comp"/>                    
                 </div>
                 <div>
-                    <img className={`${classes.image}`} src={props.imageTwo} alt="image"/>
+                    <img className={`${classes.image}`} src={props.imageTwo} alt="comp"/>
                 </div>
                 <div>
-                    <img className={`${classes.image}`} src={props.imageThree} alt="image"/>
+                    <img className={`${classes.image}`} src={props.imageThree} alt="comp"/>
                 </div>
                 <div style={{marginLeft:'5px'}}>& 3 more</div>
             </div>

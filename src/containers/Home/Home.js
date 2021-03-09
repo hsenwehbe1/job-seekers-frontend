@@ -4,18 +4,11 @@ import {connect} from 'react-redux'
 import * as alertActions from '../../redux/actions/alert'
 import axios from '../../axios'
 import Dialog from '../../components/Dialog/Dialog'
-import Box from '../../components/Box/Box'
 import BulletPoints from '../../components/BulletPoints/BulletPoints'
 import Sidebar from '../../components/Sidebar/Sidebar'
 import HeaderBar from '../../components/HeaderBar/HeaderBar'
 import { withRouter } from 'react-router-dom'
 import Alert from '../../components/Alert/Alert'
-import HomeConnector from '../../components/HomeConnector/HomeConnector'
-import Select from 'react-select'
-import image1 from '../../assets/images/imageProfile1.jpg'
-import image2 from '../../assets/images/imageProfile2.jpg'
-import image3 from '../../assets/images/imageProfile3.jpg'
-import image4 from '../../assets/images/imageProfile4.jpg'
 import PathContainer from './Connector/Connector'
 import Pagination from '@material-ui/lab/Pagination'
 import Spinner from '../../components/Spinner/Spinner'
@@ -52,7 +45,7 @@ class Home extends Component {
                 ...this.state,
                 fname: response.data.fname,
                 lname: response.data.lname,
-                didTakeTest: response.data.didTakeTest,
+                didTakeTest: true,
                 studentID: response.data.id
             })
         }).catch((err)=>{
@@ -184,15 +177,6 @@ class Home extends Component {
                 })
             )
         }
-        const SelectStyle = {
-            control: (base, state) => ({
-                ...base,
-                border: state.isFocused ? 0 : 0,
-                boxShadow: state.isFocused ? 0 : 0,
-                borderRadius:'6px',
-                cursor: 'text'
-            })
-        }
         return (
             <React.Fragment>
                 <div className="mt-4">
@@ -212,34 +196,15 @@ class Home extends Component {
                                             <div className={`w-100 p-3 bg-white d-flex ${classes.inner}`}>
                                                 <i className={`fas fa-search ${classes.searchIcon}`}></i>
                                                 <input className={`w-100 ${classes.search}`} type="text" placeholder="Search"/>
-                                                {/*<div className={`${classes.selectSearch}`}>
-                                                    <Select
-                                                        components={{ DropdownIndicator:() => null, IndicatorSeparator:() => null }}
-                                                        isMulti
-                                                        styles={SelectStyle}
-                                                        placeholder="Search"
-                                                        onChange={(e)=>this.searchTrigger(e)}
-                                                        options={this.state.roles}
-                                                    />
-                                                </div>*/}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div className="mt-2">
-                                <PathContainer title='Mentors' roles='Job Title' bullets={false} highlight={this.state.highlight}/>
+                                <PathContainer title='Mentors' roles='Job Title' connect='Status' bullets={false} highlight={this.state.highlight}/>
                                 {this.state.spinner ? <Spinner/> : contentTable}
                                 <div className='pt-3 pb-3 text-center' style={{'minWidth':'1000px'}}><Pagination onChange={this.paginationHandler} className='d-inline-block' count={Math.ceil(this.state.data.length/10)} size="small" /></div>
-                            </div>
-                            <div className={classes.connectors} style={this.state.searching?{display:'block'}:{display:'none'}} >
-                                {
-                                    this.state.connectors.map((connector)=>{
-                                        return(
-                                            <HomeConnector imageSrc={connector.imageSrc} name={connector.name} jobTitle={connector.jobTitle} salary={connector.salary}/>
-                                        )
-                                    })
-                                }
                             </div>
                         </div>
                     </div>

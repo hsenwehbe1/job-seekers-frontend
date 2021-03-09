@@ -7,8 +7,7 @@ import InterestRow from '../../components/InterestRow/InterestRow'
 import imageTest from '../../assets/images/0.jpg'
 import $ from 'jquery'
 import axios from '../../axios'
-import { useHistory } from "react-router-dom";
-import Alert from '../../components/Alert/Alert'
+import { useHistory } from "react-router-dom"
 
 const Interests = () => {
     const [interestArray, setInterestArray] = useState([])

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import classes from './Question1.css'
 import Icon from './education.svg'
 import Major from '../../../components/Hobby/Hobby'
-import axios from '../../../axios'
 import {connect} from 'react-redux'
 import * as authActions from '../../../redux/actions/auth'
 import { withRouter } from 'react-router-dom';

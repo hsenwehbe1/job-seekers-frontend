@@ -1,6 +1,6 @@
 import React from 'react'
 import classes from './SidebarIcons.css'
-import {Link, withRouter} from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
 function SidebarIcons(props) {
     let cssClass = ''
     if(props.selected){
