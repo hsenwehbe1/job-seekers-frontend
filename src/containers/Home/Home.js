@@ -12,40 +12,70 @@ import Alert from '../../components/Alert/Alert'
 import PathContainer from './Connector/Connector'
 import Pagination from '@material-ui/lab/Pagination'
 import Spinner from '../../components/Spinner/Spinner'
+import Select from 'react-select'
+import makeAnimated from 'react-select/animated'
+import Sort from 'sort-algorithms-js'
 class Home extends Component {
     state = ({
         page: 1, // for pagination,
-        highlight: 0,
         data: [],
         fname: '',
         lname: '',
         didTakeTest: false,
-        searching:false,
-        roles : [{label:"None",value:1},{label:"Accounting",value:2},{label:"Administrative",value:3},
-        {label:"Arts and Design",value:4},{label:"Business Development",value:5},{label:"back-end developer",value:6}],
-        connectors:[],
-        filter:[],
+        roles : [],
         spinner: false,
-        studentID: ''
+        studentID: '',
+        searchData: []
     })
 
     componentDidMount(){
-        // this.setState({
-        //     ...this.state,
-        //     connectors:this.state.allConnectors
-        // })
         let config = {
             headers: {
                 'Authorization' : `Bearer ${localStorage.getItem('token')}`
             }
         }
+        this.setState({
+            ...this.state,
+            spinner: true
+        })
         // check if user did the test
-        axios.get('/students/info', config).then((response)=>{
+        axios.get('students/info', config).then((response)=>{
+            let fname = response.data.fname
+            let lname = response.didTakeTest
+            let didTakeTest = response.didTakeTest
+            let studentID = response.data.id
+            // let interests = [...response.interests]
+            let interests = ["Electrician"]
+            axios.get('students/retreiveallroles', config).then((response)=>{
+                let arr = [...Sort.mergeSort(response.data)]
+                let objArr = []
+                let searchArr = []
+                arr.forEach((element, index) => {
+                    if(interests.includes(element)){
+                        searchArr.push({label: element, value: index})
+                    }
+                    let obj = {
+                        label: element,
+                        value: index
+                    }
+                    objArr.push(obj)
+                })
+                this.setState({
+                    ...this.state,
+                    fname,
+                    lname,
+                    didTakeTest,
+                    studentID,
+                    roles: [...objArr],
+                    searchData: [...searchArr],
+                    spinner: false
+                })
+            })
             this.setState({
                 ...this.state,
                 fname: response.data.fname,
                 lname: response.data.lname,
-                didTakeTest: true,
+                didTakeTest: response.didTakeTest,
                 studentID: response.data.id
             })
         }).catch((err)=>{
@@ -58,28 +88,15 @@ class Home extends Component {
                 this.props.triggerAlert(true, 'error', 'Something went wrong', 10000)
             }
         })
-        this.setState({
-            ...this.state,
-            spinner: true
-        })
-        axios.get('/advisors/all', config).then((response)=>{
+        
+        axios.get('advisors/all', config).then((response)=>{
             this.setState({
                 ...this.state,
-                data: [...response.data],
-                spinner: false
+                data: [...response.data]
             })
+        }).catch((err)=>{
+
         })
-    }
-    componentDidUpdate(prevProps,prevState){
-       if(prevState.filter !== this.state.filter){
-           let filteredConnectors = this.state.allConnectors.filter(this.searchV,this)
-           this.setState({
-               ...this.state,
-               connectors:filteredConnectors
-           })
-       }else{
-        console.log("no")
-       } 
     }
     paginationHandler = (element, value)=>{
         this.setState({
@@ -87,40 +104,18 @@ class Home extends Component {
             page: value
         })
     }
-    searchTrigger(e){
-        let config = {
-            headers: {
-                'Authorization' : `Bearer ${localStorage.getItem('token')}`
-            }
-        }
-        axios.get('token-validity',config).then((response)=>{  
-
-        }).catch((error)=>{
-            this.props.history.push('/')
-        })
-        if(!e){
+    searchTrigger(event){
+        if(event==null){
             this.setState({
                 ...this.state,
-                searching:false,
-                filter:[]
+                searchData: []
             })
         }else{
             this.setState({
                 ...this.state,
-                searching:true,
-                filter:e,
+                searchData: [...event]
             })
         }
-    }
-
-    searchV(connector){
-        let the_filter = this.state.filter
-        for(let i=0;i<the_filter.length;i++){
-            if(the_filter[i].label === connector.jobTitle){
-                return true
-            }
-        }
-        return false
     }
     connectHandler = (event)=>{
         let config = {
@@ -129,11 +124,10 @@ class Home extends Component {
             }
         }
         axios.post('students/connect', {id: event.target.id}, config).then((response)=>{
-            axios.get('/advisors/all', config).then((response)=>{
+            axios.get('advisors/all', config).then((response)=>{
                 this.setState({
                     ...this.state,
-                    data: [...response.data],
-                    spinner: false
+                    data: [...response.data]
                 })
             })
         })
@@ -163,8 +157,15 @@ class Home extends Component {
         if(this.state.data.length!==0){
             contentTable = (
                 this.state.data.map((element, key) => {
+                    let isValid = false
+                    this.state.searchData.forEach(elem => {
+                        if(element.roles.includes(elem.label)){
+                            isValid = true
+                        }
+                    })
+                    if(this.state.searchData.length===0){isValid=true}
                     let index = (this.state.page - 1)*10
-                    if(key>=index && key<=index+9){
+                    if(key>=index && key<=index+9 && isValid){
                         let connect = <button onClick={this.connectHandler} id={element._id} className={`btn btn-danger ${classes.red}`}>Connect</button>
                         if(element.students.includes(this.state.studentID)){
                             connect = <span style={{'color':'#007FEB'}}>Connected</span>
@@ -177,36 +178,57 @@ class Home extends Component {
                 })
             )
         }
+        const SelectStyle = {
+            control: (base, state) => ({
+                ...base,
+                border: 0,
+                boxShadow: 0,
+                borderRadius:'6px',
+                cursor: 'text'
+            }),
+            multiValue: base => ({
+                ...base,
+                padding: 0,
+                borderRadius: 4,
+                border: '1px solid #007feb',
+                backgroundColor: 'transparent',
+                ':hover': {
+                    cursor: 'pointer'
+                }
+            }),
+        }
         return (
             <React.Fragment>
                 <div className="mt-4">
                     <HeaderBar/>
                     <div className={`${classes.body_container} px-3 mt-4`}>
                         <Sidebar page='home'/>
-                        <div className="container">
-                            <div className={`${classes.upper_part} ${classes.pad}`}>
-                                <div className={`${classes.text_lg}`}>
-                                    {headerText}
-                                </div>
-                                <div className={classes.fool}>
-                                    {content}
-                                    <br></br>
-                                    <div className={`${classes.bar} ${classes.pt_6} w-100`}>
-                                        <div className={`w-100 p-1 ${classes.outer}`}>
-                                            <div className={`w-100 p-3 bg-white d-flex ${classes.inner}`}>
-                                                <i className={`fas fa-search ${classes.searchIcon}`}></i>
-                                                <input className={`w-100 ${classes.search}`} type="text" placeholder="Search"/>
+                        {this.state.spinner?<Spinner/>:<div className="container">
+                        <div className={`${classes.upper_part} ${classes.pad}`}>
+                            <div className={`${classes.text_lg}`}>
+                                {headerText}
+                            </div>
+                            <div className={classes.fool}>
+                                {content}
+                                <br></br>
+                                <div className={`${classes.bar} ${classes.pt_6} w-100`}>
+                                    <div className={`w-100 p-1 ${classes.outer}`}>
+                                        <div className={`w-100 p-3 bg-white d-flex ${classes.inner}`}>
+                                            <i className={`fas fa-search ${classes.searchIcon}`}></i>
+                                            <div className={`${classes.selectSearch}`}>
+                                                <Select className={`${classes.search}`} defaultValue={[...this.state.searchData]} components={makeAnimated()} isMulti styles={SelectStyle} placeholder="Search" onChange={(e)=>this.searchTrigger(e)} options={this.state.roles}/>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="mt-2">
-                                <PathContainer title='Mentors' roles='Job Title' connect='Status' bullets={false} highlight={this.state.highlight}/>
-                                {this.state.spinner ? <Spinner/> : contentTable}
-                                <div className='pt-3 pb-3 text-center' style={{'minWidth':'1000px'}}><Pagination onChange={this.paginationHandler} className='d-inline-block' count={Math.ceil(this.state.data.length/10)} size="small" /></div>
-                            </div>
                         </div>
+                        <div className="mt-2">
+                            <PathContainer title='Mentors' roles='Job Title' connect='Status' bullets={false}/>
+                            {contentTable}
+                            <div className='pt-3 pb-3 text-center' style={{'minWidth':'1000px'}}><Pagination onChange={this.paginationHandler} className='d-inline-block' count={Math.ceil(this.state.data.length/10)} size="small" /></div>
+                        </div>
+                    </div>}
                     </div>
                 </div>
                 <div className={classes.hidden}>
