@@ -17,7 +17,7 @@ import makeAnimated from 'react-select/animated'
 import Sort from 'sort-algorithms-js'
 class Home extends Component {
     state = ({
-        page: 1, // for pagination,
+        page: 1,
         data: [],
         fname: '',
         lname: '',
@@ -25,7 +25,8 @@ class Home extends Component {
         roles : [],
         spinner: false,
         studentID: '',
-        searchData: []
+        searchData: [],
+        interests: []
     })
 
     componentDidMount(){
@@ -41,36 +42,60 @@ class Home extends Component {
         // check if user did the test
         axios.get('students/info', config).then((response)=>{
             let fname = response.data.fname
-            let lname = response.didTakeTest
-            let didTakeTest = response.didTakeTest
+            let lname = response.data.didTakeTest
+            let didTakeTest = response.data.didTakeTest
             let studentID = response.data.id
-            // let interests = [...response.interests]
-            let interests = ["Electrician"]
-            axios.get('students/retreiveallroles', config).then((response)=>{
-                let arr = [...Sort.mergeSort(response.data)]
-                let objArr = []
-                let searchArr = []
-                arr.forEach((element, index) => {
-                    if(interests.includes(element)){
-                        searchArr.push({label: element, value: index})
-                    }
-                    let obj = {
-                        label: element,
-                        value: index
-                    }
-                    objArr.push(obj)
+            if(didTakeTest){
+                let interests = [...response.data.interests]
+                axios.get('students/retreiveallroles', config).then((response)=>{
+                    let arr = [...Sort.mergeSort(response.data)]
+                    let objArr = []
+                    let searchArr = []
+                    let interestColors = []
+                    let colors = {color1: '#3BC3EB', color2: '#F89691', color3: '#5ef7de'}
+                    let i = 0
+                    arr.forEach((element, index) => {
+                        if(interests.includes(element)){
+                            i++
+                            searchArr.push({label: element, value: index})
+                            interestColors.push({role: element, color: colors[`color${i}`]})
+                        }
+                        let obj = {
+                            label: element,
+                            value: index
+                        }
+                        objArr.push(obj)
+                    })
+                    this.setState({
+                        ...this.state,
+                        fname,
+                        lname,
+                        didTakeTest,
+                        studentID,
+                        roles: [...objArr],
+                        searchData: [...searchArr],
+                        spinner: false,
+                        interests: [...interestColors]
+                    })
                 })
-                this.setState({
-                    ...this.state,
-                    fname,
-                    lname,
-                    didTakeTest,
-                    studentID,
-                    roles: [...objArr],
-                    searchData: [...searchArr],
-                    spinner: false
+            }else{
+                axios.get('students/retreiveallroles', config).then((response)=>{
+                    let arr = [...Sort.mergeSort(response.data)]
+                    let objArr = []
+                    arr.forEach((element, index) => {
+                        objArr.push({label: element, value: index})
+                    })
+                    this.setState({
+                        ...this.state,
+                        fname,
+                        lname,
+                        didTakeTest,
+                        studentID,
+                        roles: [...objArr],
+                        spinner: false
+                    })
                 })
-            })
+            }
             this.setState({
                 ...this.state,
                 fname: response.data.fname,
@@ -118,12 +143,15 @@ class Home extends Component {
         }
     }
     connectHandler = (event)=>{
+        
         let config = {
             headers: {
                 'Authorization' : `Bearer ${localStorage.getItem('token')}`
             }
         }
         axios.post('students/connect', {id: event.target.id}, config).then((response)=>{
+            // console.log(response.data)
+            window.open(`https://${response.data}`)
             axios.get('advisors/all', config).then((response)=>{
                 this.setState({
                     ...this.state,
@@ -139,11 +167,11 @@ class Home extends Component {
         if(this.state.didTakeTest){
             headerText = 'Your Strengths!'
             content = (
-                <React.Fragment>
-                    <BulletPoints text='Computer Science'/>
-                    <BulletPoints text='Design'/>
-                    <BulletPoints text='Writing'/>
-                </React.Fragment>
+                this.state.interests.map((element, key)=>{
+                    return(
+                        <BulletPoints text={element.role} color={element.color} key={key}/>
+                    )
+                })
             )
         }else{
             headerText = `Hey, ${this.state.fname}!`
@@ -172,7 +200,7 @@ class Home extends Component {
                         }
                         let title = <span><img className='rounded-circle' src={`data:image/png;base64,${element.image}`} alt='profile' width='35px' height='35px'/>&nbsp;&nbsp;<span className={classes.advisor} onClick={()=>{window.location.pathname = `advisor/${element._id}`}}>{`${element.fname} ${element.lname}`}</span></span>
                         return (
-                            <PathContainer middle={true} title={title} roles={element.roles} connect={connect} bullets={true} key={key}/>
+                            <PathContainer middle={true} title={title} roles={element.roles} connect={connect} bullets={true} bulletData={this.state.interests} key={key}/>
                         )
                     }
                 })

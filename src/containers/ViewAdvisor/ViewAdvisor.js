@@ -47,6 +47,7 @@ class AboutUs extends Component {
             console.log(error)
         })
         axios.get(`students/isadvisor/${this.props.match.params.id}`, config).then((response)=>{
+            console.log(response.data)
             this.setState({
                 ...this.state,
                 isAdvisor: response.data

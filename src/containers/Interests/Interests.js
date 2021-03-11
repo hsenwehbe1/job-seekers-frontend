@@ -1,146 +1,118 @@
-import React,{useState,useEffect} from 'react'
+import React, { Component } from 'react'
+import classes from './Interests.css'
+import axios from '../../axios'
 import Sidebar from '../../components/Sidebar/Sidebar'
 import HeaderBar from '../../components/HeaderBar/HeaderBar'
-import classes from './Interests.css'
 import WhiteSqure from '../../components/WhiteSquare/WhiteSquare'
 import InterestRow from '../../components/InterestRow/InterestRow'
 import imageTest from '../../assets/images/0.jpg'
-import $ from 'jquery'
-import axios from '../../axios'
-import { useHistory } from "react-router-dom"
-
-const Interests = () => {
-    const [interestArray, setInterestArray] = useState([])
-    const [defaultArray,setDefaultArray] = useState([])
-    const [send, setSend] = useState(false)
-    const history= useHistory()
-
-    useEffect(()=>{
-        let config = {
-            headers: {
-                'Authorization' : `Bearer ${localStorage.getItem('token')}`
-            }
-        }
-        axios.get('/students/interests',config).then((response)=>{
-            setInterestArray(response.data.interests)
-            setDefaultArray(response.data.default_values)
-        }).catch((error)=>{
-            history.push('/')
-        }) 
-    },[send])
-
-    const btnClick = ()=>{
-        const val = $(`.${classes.input}`).val()
-        let newArray = [...interestArray]
-        let config = {
-            headers: {
-                'Authorization' : `Bearer ${localStorage.getItem('token')}`
-            }
-        }
-        const position = newArray.indexOf(val)
-        if(position !== -1){
-            console.log("found")//put an alert 
-            return 
-        }
-        axios.patch('/students/add-interest',{
-            interest:val
-        },config).then((response)=>{
-            newArray.push(val)
-            setInterestArray(newArray)
-        }).catch((error)=>{
-            if(error.response.data.error === "unauthorized"){
-                history.push('/')
-            }
-        }) 
-        
+import Select from 'react-select'
+import Interest from './Interest/Interest'
+import Sort from 'sort-algorithms-js'
+export default class Interesets extends Component {
+    state = {
+        roles: [],
+        colors : ['#3BC3EB', '#F89691', '#5ef7de'],
+        interests: [],
+        advisors: []
     }
-    const closeHandler = (e) =>{
-        const val= e.target.getAttribute('name')
-        let newArray = [...interestArray]
-        const valPosition = newArray.indexOf(val)
+    componentDidMount(){
         let config = {
             headers: {
                 'Authorization' : `Bearer ${localStorage.getItem('token')}`
             }
         }
-        axios.patch('/students/delete-interest',{
-            interest:val
-        },config).then((response)=>{
-            newArray.splice(valPosition,1)
-            setInterestArray(newArray)
+        axios.get('students/info', config).then((response)=>{
+            this.setState({
+                ...this.state,
+                interests: [...response.data.interests]
+            })
         }).catch((error)=>{
-            if(error.response.data.error === "unauthorized"){
-                history.push('/')
-            }
-            console.log(error)//add alert
+
+        })
+        axios.get('students/retreiveallroles', config).then((response)=>{
+            let arr = [...Sort.mergeSort(response.data)]
+            let objArr = []
+            arr.forEach((element, index) => {
+                objArr.push({label: element, value: index})
+            })
+            this.setState({
+                ...this.state,
+                roles: [...objArr]
+            })
+        }).catch((error)=>{
+
+        })
+        axios.get('advisors/all', config).then((response)=>{
+            this.setState({
+                ...this.state,
+                advisors: [...response.data]
+            })
+        }).catch((error)=>{
+
         })
     }
-    return (
-        <div className="mt-4">
-            <HeaderBar/>
-            <div className={`${classes.body_container} px-3 mt-4`}>
-                <Sidebar/>
-                <div className={`d-lg-flex flex-column ${classes.my_interests}`}>
-                    <div className={`${classes.first_interests}`}>
-                        My Interests
+    selectHandler = (e)=>{
+        console.log(e)
+    }
+    render() {
+        const SelectStyle = {
+            control: (base, state) => ({
+                ...base,
+                border: 0,
+                boxShadow: 0,
+                borderRadius:'6px',
+                cursor: 'text'
+            })
+        }
+        let content = ''
+        content = (
+            this.state.interests.map((element, index)=>{
+                let data = []
+                this.state.advisors.forEach(elem => {
+                    if(elem.roles.includes(element)){
+                        data.push(elem)
+                    }
+                })
+                return (
+                    <InterestRow data={data} text={element}/>
+                )
+            })
+        )
+        return (
+            <div className="mt-4">
+                <HeaderBar/>
+                <div className={`${classes.body_container} px-3 mt-4`}>
+                    <Sidebar/>
+                    <div className="container">
+                        <div className={`${classes.upper_part} px-0`}>
+                            <div className={`${classes.text_lg}`}>
+                                Your Interests
+                            </div>
+                            <div className="row">
+                                <div className="col-12 col-sm-12 col-md-5">
+                                    <p className='mt-3 font-weight-light'>Add new interests<strong className='font-weight-bold'> (up to 3)</strong></p>
+                                    <div className={classes.select_container}>
+                                        <Select className={`${classes.search}`} placeholder="Search" styles={SelectStyle} onChange={this.selectHandler} options={this.state.roles}/>
+                                    </div>
+                                    <div className='mt-3'>
+                                        {this.state.interests.map((element, index)=>{
+                                            return (
+                                                <Interest text={element} key={index} color={this.state.colors[index]}/>
+                                            )
+                                        })}
+                                    </div>
+                                </div>
+                                <div className={`col-12 col-sm-12 col-md-7 ${classes.cont}`}>
+                                    <WhiteSqure title="Top 3 careers recommended for you" setClass={false}>
+                                        {content}
+                                    </WhiteSqure>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        Add new interests<strong> (up to 8)</strong>
-                    </div>
-                    <div className={`${classes.input_div}`}>
-                        <select className={`${classes.input}`} >
-                            {defaultArray.map((interest)=>{
-                                return(
-                                    <option value={interest}>{interest}</option>
-                                )
-                            })}
-                        </select>
-                    </div>
-                    <div>
-                        <button onClick={btnClick} className={`${classes.btn}`}>add</button>
-                    </div>
-                    <div>
-                        <ul className={`${classes.ul_style}`}>
-                            {interestArray.map((element)=>{
-                                return (
-                                    <li >
-                                        <div className={`d-flex justify-content-around ${classes.li_style}`}>
-                                            <div><span className={`${classes.dot}`}></span></div>
-                                            <div name={element} style={{marginLeft:'10px'}}>{element}</div>
-                                            <div className={`${classes.close}`}>
-                                                <button onClick={(e)=>closeHandler(e)} type="button" className="close" aria-label="Close">
-                                                <span name={element} aria-hidden="true">&times;</span>
-                                            </button></div>
-                                        </div>
-                                    </li>
-                                )
-                            })}
-                        </ul>
-                    </div>
-                </div>
-                <div className={`d-lg-flex flex-column ${classes.careers_recommended}`}>
-                    <WhiteSqure title="Best 5 careers recommended for you" setClass={false}>
-                        <InterestRow imageOne={imageTest} imageTwo={imageTest} imageThree={imageTest} text="UX/UI designer"/> 
-                        <InterestRow imageOne={imageTest} imageTwo={imageTest} imageThree={imageTest} text="UX/UI developer"/> 
-                        <InterestRow imageOne={imageTest} imageTwo={imageTest} imageThree={imageTest} text="Web designer"/> 
-                        <InterestRow imageOne={imageTest} imageTwo={imageTest} imageThree={imageTest} text="Web developer"/> 
-                        <InterestRow imageOne={imageTest} imageTwo={imageTest} imageThree={imageTest} text="UX consultant"/> 
-                    </WhiteSqure>
-                    <div style={{marginTop:'21px'}}>
-
-                    </div>
-                    <WhiteSqure title="top 10 skills must have !" setClass={false}>
-                        <ul className={`${classes.second_ul}`}>
-                            <li>Html</li>
-                            <li>Jquery</li>
-                            <li>Css</li>
-                            <li>Nodejs</li>
-                            <li>React</li>
-                        </ul>
-                    </WhiteSqure>
                 </div>
             </div>
-        </div>
-    )
+        )
+    }
 }
-export default Interests;

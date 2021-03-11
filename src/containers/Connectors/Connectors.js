@@ -9,7 +9,7 @@ import Spinner from '../../components/Spinner/Spinner'
 export default class AboutUs extends Component {
     state = ({
         data : [],
-        interets: ['All', 'Software Developer', 'Data Scientist', 'UI/UX'],
+        interests: [],
         filter:[true, false, false, false],
         role: 'All',
         spinner: false,
@@ -32,8 +32,19 @@ export default class AboutUs extends Component {
                 spinner: false,
                 numberOfConnectors: response.data.length
             })
+
         }).catch((error)=>{
             
+        })
+        axios.get('students/info', config).then((response)=>{
+            let arr = ['All']
+            arr = arr.concat(response.data.interests)
+            this.setState({
+                ...this.state,
+                interests: [...arr]
+            })
+        }).catch((error)=>{
+
         })
     }
     filterHandler = (id)=>{
@@ -44,7 +55,7 @@ export default class AboutUs extends Component {
             this.setState({
                 ...this.state,
                 filter: [...newArr],
-                role: this.state.interets[id]
+                role: this.state.interests[id]
             })
         }
     }
@@ -52,7 +63,7 @@ export default class AboutUs extends Component {
         let btns = ''
         let content = 'No connectors yet'
         btns= (
-            this.state.interets.map((element, index)=>{
+            this.state.interests.map((element, index)=>{
                 return (
                     <Button handler={this.filterHandler} key={index} id={index} selected={this.state.filter[index]}>{element}</Button>
                 )

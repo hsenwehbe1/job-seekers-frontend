@@ -5,11 +5,24 @@ export default function PathContainer(props) {
     let light1 = ''
     let bullet = ''
     let css = classes.item
-    if(props.bullets!==false){
+    if(props.bullets){
         // fill bullet
         light = classes.light
         light1 = 'font-weight-light'
-        bullet = <span><i className='fas fa-circle' style={{'color':'#F89691', 'fontSize':'12px'}}/>&nbsp;<i className='fas fa-circle' style={{'color':'#F89691', 'fontSize':'12px'}}/></span>
+        let tempo
+        bullet = (
+            props.roles.map((element,index) => {
+                tempo = ''
+                props.bulletData.map((elem, ind) => {
+                    if(elem.role===element){
+                        tempo = ind
+                    }
+                })
+                if(tempo!==''){
+                    return (<i className='fas fa-circle' style={{'color':`${props.bulletData[tempo].color}`, 'fontSize':'12px', 'marginRight': '4px'}} key={`${element} ${index}`}/>)
+                }
+            })
+        )
     }
     if(props.middle){
         css = classes.item1
