@@ -2,7 +2,7 @@
     padding: 2px 10px 2px 10px;
     border-radius: 7px;
     display: inline-block;
-    border: 1px solid #C1CBD3;
+    border: 1px solid #69bdf1;
     background-color: white;
     display: inline-flex;
     margin-right: 15px;
@@ -11,4 +11,16 @@
 .text{
     font-weight: 300;
     color: #133C59;
+}
+.times{
+    transition: 0.25s;
+    font-size: 13px;
+    padding-top: 6px;
+    padding-left: 6px;
+    cursor: pointer;
+    color: #a6aeb4;
+}
+.times:hover{
+    transition: 0.25s;
+    color: #F0716A;
 }

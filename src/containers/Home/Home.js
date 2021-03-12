@@ -161,6 +161,7 @@ class Home extends Component {
         })
     }
     render() {
+        let paginationLength = 0
         let content = ''
         let contentTable = ''
         let headerText = ''
@@ -199,9 +200,12 @@ class Home extends Component {
                             connect = <span style={{'color':'#007FEB'}}>Connected</span>
                         }
                         let title = <span><img className='rounded-circle' src={`data:image/png;base64,${element.image}`} alt='profile' width='35px' height='35px'/>&nbsp;&nbsp;<span className={classes.advisor} onClick={()=>{window.location.pathname = `advisor/${element._id}`}}>{`${element.fname} ${element.lname}`}</span></span>
+                        paginationLength++
                         return (
                             <PathContainer middle={true} title={title} roles={element.roles} connect={connect} bullets={true} bulletData={this.state.interests} key={key}/>
                         )
+                    }else if(isValid){
+                        paginationLength++
                     }
                 })
             )
@@ -254,7 +258,7 @@ class Home extends Component {
                         <div className="mt-2">
                             <PathContainer title='Mentors' roles='Job Title' connect='Status' bullets={false}/>
                             {contentTable}
-                            <div className='pt-3 pb-3 text-center' style={{'minWidth':'1000px'}}><Pagination onChange={this.paginationHandler} className='d-inline-block' count={Math.ceil(this.state.data.length/10)} size="small" /></div>
+                            <div className='pt-3 pb-3 text-center' style={{'minWidth':'1000px'}}><Pagination onChange={this.paginationHandler} className='d-inline-block' count={Math.ceil(paginationLength/10)} size="small" /></div>
                         </div>
                     </div>}
                     </div>
