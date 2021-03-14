@@ -14,7 +14,7 @@ import Pagination from '@material-ui/lab/Pagination'
 import Spinner from '../../components/Spinner/Spinner'
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated'
-import Sort from 'sort-algorithms-js'
+import Sort from 'merge-sort'
 class Home extends Component {
     state = ({
         page: 1,
@@ -48,7 +48,8 @@ class Home extends Component {
             if(didTakeTest){
                 let interests = [...response.data.interests]
                 axios.get('students/retreiveallroles', config).then((response)=>{
-                    let arr = [...Sort.mergeSort(response.data)]
+                    // console.log(response.data)
+                    let arr = [...Sort(response.data)]
                     let objArr = []
                     let searchArr = []
                     let interestColors = []
@@ -80,7 +81,7 @@ class Home extends Component {
                 })
             }else{
                 axios.get('students/retreiveallroles', config).then((response)=>{
-                    let arr = [...Sort.mergeSort(response.data)]
+                    let arr = [...Sort(response.data)]
                     let objArr = []
                     arr.forEach((element, index) => {
                         objArr.push({label: element, value: index})

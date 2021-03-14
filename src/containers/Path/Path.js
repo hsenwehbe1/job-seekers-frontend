@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import classes from './Path.css'
 import axios from '../../axios'
-import sortObjectArray from 'sort-objects-array'
 import Sidebar from '../../components/Sidebar/Sidebar'
 import HeaderBar from '../../components/HeaderBar/HeaderBar'
 import PathContainer from './PathContainer/PathContainer'
@@ -9,7 +8,6 @@ import Pagination from '@material-ui/lab/Pagination'
 import Tooltip from '@material-ui/core/Tooltip'
 import Dialog from './Dialog/Dialog'
 import TextField from '@material-ui/core/TextField'
-import SortObjectArray from 'sort-objects-array'
 export default class Path extends Component {
     state = ({
         page: 1, // for pagination,
@@ -20,7 +18,8 @@ export default class Path extends Component {
         myAdvisors: [],
         dialog: false, // viewing the dialog,
         dialogData: [],
-        searchData: []
+        searchData: [],
+        interests: []
     })
     componentDidMount(){
         let config = {
@@ -29,7 +28,10 @@ export default class Path extends Component {
             }
         }
         axios.get('students/allroles', config).then((response)=>{
-            let arr = [...SortObjectArray(response.data, 'role')]
+            let arr = [...response.data]
+            arr.sort((a, b)=>{
+                return (a.role > b.role) ? 1 : -1
+            })
             this.setState({
                 ...this.state,
                 data: [...arr],
@@ -55,9 +57,22 @@ export default class Path extends Component {
         }).catch((err)=>{
 
         })
+        axios.get('students/info', config).then((response)=>{
+            if(response.data.didTakeTest){
+                this.setState({
+                    ...this.state,
+                    interests: [...response.data.interests]
+                })
+            }
+        }).catch((err)=>{
+
+        })
     }
     rolesSortHandler = ()=>{
-        let arr = [...sortObjectArray(this.state.searchData, 'sortJobs')]
+        let arr = [...this.state.searchData]
+        arr.sort((a, b)=>{
+            return (a.sortJobs > b.sortJobs) ? 1 : -1
+        })
         this.setState({
             ...this.state,
             highlight: 1,
@@ -65,7 +80,10 @@ export default class Path extends Component {
         })
     }
     salarySortHandler = ()=>{
-        let arr = [...sortObjectArray(this.state.searchData, 'sortSalary')]
+        let arr = [...this.state.searchData]
+        arr.sort((a, b)=>{
+            return (a.sortSalary > b.sortSalary) ? 1 : -1
+        })
         this.setState({
             ...this.state,
             highlight: 2,
@@ -142,13 +160,21 @@ export default class Path extends Component {
                         })
                     )
                     return (
-                        <PathContainer handler={this.pathClickHandler} title={element.role} roles={element.jobs} salary={`$${element.salary}`} advisors={images} bullets={true} sort={false} key={key}/>
+                        <PathContainer handler={this.pathClickHandler} title={element.role} roles={element.jobs} salary={`$${element.salary}`} advisors={images} bullets={true} interestData={this.state.interests} sort={false} key={key}/>
                     )
                 }
             })
         )
         if(this.state.dialog){
             dialog = <Dialog handler={this.closeDialog} isShown={true} data={this.state.dialogData}/>
+        }
+        let labelData = []
+        if(this.state.interests.length!==0){
+            let colors = {color1: '#3BC3EB', color2: '#F89691', color3: '#5ef7de'}
+            let arr = [...this.state.interests.sort()]
+            arr.forEach((element, index) => {
+                labelData.push({color: colors[`color${index+1}`], text: element})  
+            })
         }
         return (
             <div className="mt-4">
@@ -177,14 +203,16 @@ export default class Path extends Component {
                             </div>
                         </div>
                         <div className="mt-2">
-                            <div className={`dropdown ${classes.center}`}>
+                            <div className={`dropdown `}>
                                 <button className="btn btn-white dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i className="fas fa-tags" style={{'fontSize':'12px'}}></i> Labels
                                 </button>
                                 <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                    <li><span className='dropdown-item'>Hello</span></li>
-                                    <li><span className='dropdown-item'>Hello</span></li>
-                                    <li><span className='dropdown-item'>Hello</span></li>
+                                    {labelData.map((element, index)=>{
+                                        return (
+                                            <li><span className='dropdown-item'><span key={`oka${index}`}><i className='fas fa-circle' style={{'color':`${element.color}`, 'fontSize':'12px', 'marginRight': '4px'}}/>{element.text}</span></span></li>
+                                        )
+                                    })}
                                 </ul>
                             </div>
                             <TextField style={{"marginTop":"10px"}} onChange={this.search} id="standard-basic" label="Search" autoComplete='off'/>

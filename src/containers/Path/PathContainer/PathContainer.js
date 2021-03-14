@@ -6,6 +6,7 @@ export default function PathContainer(props) {
     let bullet = ''
     let sort = ''
     let sort1 = ''
+    let colors = {color1: '#3BC3EB', color2: '#F89691', color3: '#5ef7de'}
     if(props.sort){
         let color1 = '#4F4F4F'
         let color2 = '#4F4F4F'
@@ -19,8 +20,17 @@ export default function PathContainer(props) {
     }
     if(props.bullets!==false){
         // fill bullet
+        let arr = [...props.interestData.sort()]
+        let tempo = ''
+        arr.forEach((element, index) => {
+            if(element===props.title){
+                tempo = colors[`color${index+1}`]
+                bullet = <i className='fas fa-circle' style={{'color':`${tempo}`, 'fontSize':'12px', 'marginRight': '4px'}} key={`okay${tempo}`}/>
+            }
+        })
         light = classes.light
         light1 = 'font-weight-light'
+        
     }
     return (
         <div onClick={()=>{props.handler(props.title)}} className={`${classes.container} ${light}`}>

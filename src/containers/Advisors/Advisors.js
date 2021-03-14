@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import classes from './Advisors.css'
-import Query from 'query-string'
 import axios from '../../axios'
 import defaultAxios from 'axios'
 import {connect} from 'react-redux'
@@ -41,13 +40,15 @@ class Advisors extends Component {
         }).catch((error)=>{
         })
         document.addEventListener('mousedown', this.state.handleClickOutside)
-        let params = Query.parse(this.props.location.search)
-        if(params.code!==undefined){
+        let search = this.props.location.search
+        search = search.substring(1)
+        let params = new URLSearchParams(search);
+        if(params.get("code")!==null){
             let oldState = {...JSON.parse(localStorage.getItem('state'))}
             this.setState({
                 ...oldState
             })
-            axios.post('/advisors/photo', {code: params.code}).then((response)=>{
+            axios.post('/advisors/photo', {code: params.get("code")}).then((response)=>{
                 this.setState({
                     ...this.state,
                     image: response.data.image

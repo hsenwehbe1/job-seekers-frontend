@@ -5,7 +5,7 @@ export default function Accordion(props) {
         <div className={`accordion ${classes.accordion}`} id="accordionExample">
             <div className="accordion-item">
                 <h2 className={`accordion-header ${classes.pad}`} id="headingOne">
-                    <button className={`accordion-button ${classes.accordion}`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <button className={`accordion-button ${classes.accordion} ${classes.btn}`} type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                         <strong>Change Password</strong>
                     </button>
                 </h2>

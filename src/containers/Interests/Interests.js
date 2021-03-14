@@ -11,7 +11,7 @@ import WhiteSqure from '../../components/WhiteSquare/WhiteSquare'
 import InterestRow from '../../components/InterestRow/InterestRow'
 import Select from 'react-select'
 import Interest from './Interest/Interest'
-import Sort from 'sort-algorithms-js'
+import Sort from 'merge-sort'
 import Modal from './Modal/Modal'
 import Spinner from '../../components/Spinner/Spinner'
 class Interesets extends Component {
@@ -42,7 +42,7 @@ class Interesets extends Component {
 
         })
         axios.get('students/retreiveallroles', config).then((response)=>{
-            let arr = [...Sort.mergeSort(response.data)]
+            let arr = [...Sort(response.data)]
             let objArr = []
             arr.forEach((element, index) => {
                 objArr.push({label: element, value: index})
