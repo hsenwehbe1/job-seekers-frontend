@@ -385,13 +385,13 @@ class Advisors extends Component {
                             </div>
                             {this.state.spinner2?<Spinner/>:<div className="">
                             <div className='row pt-3'>
-                                <div className="col-12 col-md-3">
+                                <div className={`col-12 col-md-3 ${classes.centerit}`}>
                                     <img src={this.state.image} alt="" className={classes.image}/><br></br>
                                     <a className='font-weight-light' onClick={this.redirectHandler} href="https://www.linkedin.com/oauth/v2/authorization?response_type=code&scope=r_liteprofile%20r_emailaddress&client_id=78q6bhbb9echn1&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fadvisors">Upload your LinkedIn photo</a>
                                 </div>
                                 <div className='col-12 col-md-9'>
                                     <div className='row'>
-                                        <div className="col-sm-12">
+                                        <div className={`col-sm-12 ${classes.centerit} ${classes.mrgn}`}>
                                             <button className='btn btn-outline-primary mb-3' onClick={()=>{this.fileInput.click()}}>Upload Resume</button>{spinner}
                                         </div>
                                         <div className="col-sm-12 col-md-6 mb-3">

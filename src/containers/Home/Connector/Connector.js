@@ -40,11 +40,19 @@ export default function PathContainer(props) {
         }))
     }
     return (
-        <div className={`${classes.container} ${light}`}>
-            <div className={`${css} ${light1}`}>{props.title}</div>
-            <div className={`${classes.item} ${light1}`}>{content}</div>
-            <div className={`${classes.item} ${light1}`}>{props.connect}</div>
-            <div className={classes.special}>{bullet}</div>
-        </div>
+        <React.Fragment>
+            <div className={`${classes.container} ${light}`}>
+                <div className={`${css} ${light1}`}>{props.title}</div>
+                <div className={`${classes.item} ${light1}`}>{content}</div>
+                <div className={`${classes.item} ${light1}`}>{props.connect}</div>
+                <div className={classes.special}>{bullet}</div>
+            </div>
+            <div className={`${classes.container1}`}>
+                <div style={{'textAlign':'right'}}>{bullet}</div>
+                <div>{props.title}</div><br></br>
+                <div>{content}</div><br></br>
+                <div>{props.connect}</div>
+            </div>
+        </React.Fragment>
     )
 }

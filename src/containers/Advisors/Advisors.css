@@ -139,3 +139,11 @@
     font-size: 20px;
     padding-left: 20px;
   }
+  @media(max-width: 767px){
+      .centerit{
+        text-align: center;
+      }
+      .mrgn{
+          margin-top: 10px;
+      }
+  }

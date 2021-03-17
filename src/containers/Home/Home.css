@@ -126,7 +126,7 @@ body{
     -webkit-box-shadow: 0px 0px 10px -1px rgba(153,153,190,1);
     -moz-box-shadow: 0px 0px 10px -1px rgba(153,153,190,1);
     box-shadow: 0px 0px 10px -1px rgba(153,153,190,1);
-    height: 54px;
+    height: 60px;
 }
 .outer{
   background:
@@ -143,11 +143,12 @@ body{
     0 4px 1px hsla(0, 0%, 100%, 0.5) inset,
     0 4px 1px hsla(0, 0%, 100%, 0.5) inset,
     0 4px 6px hsla(0, 0%, 100%, 0.25);
-    
+    /* min-width: 500px; */
 }
 .searchIcon{
     color: #007FEB;
     padding-right: 10px;
+    padding-top: 7px
 }
 .search{
     border-top: none;
@@ -159,6 +160,7 @@ body{
 .selectSearch{
     width: 100%;
     transform: translate(0px,-10px);
+    /* height: 500px; */
     /* cursor: text!important; */
 }
 .connectors{
@@ -227,4 +229,15 @@ body{
 }
 .advisor:hover{
     text-decoration: underline;
+}
+.mobile{
+    display: none;
+}
+@media(max-width: 767px){
+    .desktop{
+        display: none;
+    }
+    .mobile{
+        display: block;
+    }
 }

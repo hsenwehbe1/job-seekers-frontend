@@ -29,3 +29,25 @@
     background-color: #e9f3fd;
     cursor: pointer;
 }
+.container1{
+    /* text-align: center; */
+    display: none;
+    background-color: white;
+    border-radius: 7px;
+    padding: 10px;
+    max-width: 300px;
+    display: none;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    -webkit-box-shadow: 0px 0px 8px -4px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 8px -4px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 8px -4px rgba(0,0,0,0.75);
+}
+@media(max-width: 576px){
+    .container{
+        display: none;
+    }
+    .container1{
+        display: block;
+    }
+}

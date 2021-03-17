@@ -217,7 +217,8 @@ class Home extends Component {
                 border: 0,
                 boxShadow: 0,
                 borderRadius:'6px',
-                cursor: 'text'
+                cursor: 'text',
+                height: "50px"
             }),
             multiValue: base => ({
                 ...base,
@@ -229,6 +230,26 @@ class Home extends Component {
                     cursor: 'pointer'
                 }
             }),
+            valueContainer: (provided, state) => ({
+                ...provided,
+                overflow: "scroll",
+                textOverflow: "ellipsis",
+                height: "50px",
+                overflowX: 'hidden',
+                "::-webkit-scrollbar": {
+                    width: "5px"
+                  },
+                  "::-webkit-scrollbar-track": {
+                    background: "#f1f1f1"
+                  },
+                  "::-webkit-scrollbar-thumb": {
+                    background: "#888",
+                    borderRadius: "8px"
+                  },
+                  "::-webkit-scrollbar-thumb:hover": {
+                    background: "#555"
+                  }
+              })
         }
         return (
             <React.Fragment>
@@ -249,7 +270,7 @@ class Home extends Component {
                                         <div className={`w-100 p-3 bg-white d-flex ${classes.inner}`}>
                                             <i className={`fas fa-search ${classes.searchIcon}`}></i>
                                             <div className={`${classes.selectSearch}`}>
-                                                <Select className={`${classes.search}`} defaultValue={[...this.state.searchData]} components={makeAnimated()} isMulti styles={SelectStyle} placeholder="Search" onChange={(e)=>this.searchTrigger(e)} options={this.state.roles}/>
+                                                <Select className={`${classes.search}`} defaultValue={[...this.state.searchData]} isMulti styles={SelectStyle} placeholder="Search" onChange={(e)=>this.searchTrigger(e)} options={this.state.roles} components={{ DropdownIndicator:() => null, IndicatorSeparator:() => null }}/>
                                             </div>
                                         </div>
                                     </div>
@@ -257,9 +278,15 @@ class Home extends Component {
                             </div>
                         </div>
                         <div className="mt-2">
-                            <PathContainer title='Mentors' roles='Job Title' connect='Status' bullets={false}/>
-                            {contentTable}
-                            <div className='pt-3 pb-3 text-center' style={{'minWidth':'1000px'}}><Pagination onChange={this.paginationHandler} className='d-inline-block' count={Math.ceil(paginationLength/10)} size="small" /></div>
+                            <div className={classes.desktop}>
+                                <PathContainer title='Mentors' roles='Job Title' connect='Status' bullets={false}/>
+                                {contentTable}
+                                <div className='pt-3 pb-3 text-center' style={{'minWidth':'1000px'}}><Pagination onChange={this.paginationHandler} className='d-inline-block' count={Math.ceil(paginationLength/10)} size="small" /></div>
+                            </div>
+                            <div className={classes.mobile}>
+                                {contentTable}
+                                <div className='pt-3 pb-3 text-center'><Pagination onChange={this.paginationHandler} className='d-inline-block' count={Math.ceil(paginationLength/10)} size="small" /></div>
+                            </div>
                         </div>
                     </div>}
                     </div>

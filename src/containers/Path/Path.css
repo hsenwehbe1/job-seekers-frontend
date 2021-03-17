@@ -101,3 +101,30 @@
     transition: 0.25s;
     text-decoration: underline;
 }
+.mobile{
+    display: none;
+    margin-top: 30px;
+}
+@media(max-width: 576px){
+    .desktop{
+        display: none;
+    }
+    .mobile{
+        display: block;
+    }
+    .text_lg{
+        margin-bottom: 10px;
+    }
+    .txt{
+        margin-bottom: 20px;
+    }
+    .num{
+        min-width: 400px;
+        min-height: 80px;
+    }
+}
+@media(max-width:510px){
+    .card{
+        margin-bottom: 20px;
+    }
+}

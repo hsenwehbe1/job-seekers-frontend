@@ -120,7 +120,7 @@ class AboutUs extends Component {
                             <div>
                             {this.state.spinner ? <Spinner/> :
                                 <div className='row pt-3'>
-                                <div className="col-12 col-md-3">
+                                <div className={`col-12 col-md-3 ${classes.resp}`}>
                                     <img src={`data:image/png;base64,${this.state.image}`} alt="" className={classes.image}/><p className='font-weight-light'>Joined {this.state.date}</p>
                                     {this.state.isAdvisor ? <p><button className={`btn btn-danger ${classes.red}`} onClick={this.removeAdvisor}>Remove advisor</button></p> : <p><button className={`btn btn-primary ${classes.blue}`} onClick={this.addAdvisor}>Add advisor</button></p>}
                                 </div>

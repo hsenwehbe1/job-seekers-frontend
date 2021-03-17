@@ -85,6 +85,9 @@
     .center{
         text-align: center;
     }
+    .resp{
+        text-align: center;
+    }
 }
 .dropdown{
     position: absolute;

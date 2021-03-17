@@ -33,12 +33,21 @@ export default function PathContainer(props) {
         
     }
     return (
-        <div onClick={()=>{props.handler(props.title)}} className={`${classes.container} ${light}`}>
-            <div className={`${classes.item} ${light1}`}>{props.title}</div>
-            <div className={`${classes.item} ${light1}`}>{props.roles} {sort}</div>
-            <div className={`${classes.item} ${light1}`}>{props.salary} {sort1}</div>
-            <div className={`${classes.item} ${light1}`}>{props.advisors}</div>
-            <div className={classes.special}>{bullet}</div>
-        </div>
+        <React.Fragment>
+            <div onClick={()=>{props.handler(props.title)}} className={`${classes.container} ${light}`}>
+                <div className={`${classes.item} ${light1}`}>{props.title}</div>
+                <div className={`${classes.item} ${light1}`}>{props.roles} {sort}</div>
+                <div className={`${classes.item} ${light1}`}>{props.salary} {sort1}</div>
+                <div className={`${classes.item} ${light1}`}>{props.advisors}</div>
+                <div className={classes.special}>{bullet}</div>
+            </div>
+            <div className={`${classes.container1}`}>
+                <p style={{'textAlign':'right'}}>{bullet}</p>
+                <p><strong>Job Title: </strong><span className='font-weight-light'>{props.title}</span></p>
+                <p><strong>Open Entry Level Roles: </strong><span className='font-weight-light'>{props.roles}</span></p>
+                <p><strong>Average Starting Salary: </strong><span className='font-weight-light'>{props.salary}</span></p>
+                <p className='font-weight-light text-center' style={{'cursor':'pointer'}}>{props.advisors}</p>
+            </div>
+        </React.Fragment>
     )
 }
