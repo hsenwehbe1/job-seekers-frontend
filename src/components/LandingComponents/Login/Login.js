@@ -88,7 +88,7 @@ class Login extends Component {
                         <div className='mt-4'>
                             <button onClick={this.submitHandler} className={`btn btn-danger ${classes.red}`}>Sign In</button>
                             <div className='mt-4'>
-                                <p>Dont have an account? <Link to='/signup' className={classes.signup}><span className={`font-weight-bold`}>Sign up</span></Link> </p>
+                                <p>Don't have an account? <Link to='/signup' className={classes.signup}><span className={`font-weight-bold`}>Sign up</span></Link> </p>
                                 <p>Forgot password? <span onClick={()=>this.props.history.push('/resetpassword')} className={classes.reset}>Reset Now</span> </p>
                             </div>
                             <div className={`${classes.line_through}`}>

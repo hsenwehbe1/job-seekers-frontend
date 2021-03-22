@@ -1,5 +1,6 @@
 .main{
     margin-left: 20px;
+    z-index: 50;
 }
 .sidebar{
     height: 500px;
@@ -9,8 +10,21 @@
 }
 .toggler{
     cursor: pointer;
-    font-size: 18px;
+    width: 18px;
+    height: 18px;
     margin-right: 5px;
+}
+.toggler1{
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    left: 3px;
+}
+.cross{
+    position: absolute;
+    right: 7px;
+    top: 2px;
 }
 @media(max-width: 576px){
     .sidebar{
@@ -20,9 +34,17 @@
         border-radius: 10px;
         font-size: 12px;
     }
+    .toggler1{
+        position: absolute;
+        left: -7px;
+    }
     .toggler{
         position: absolute;
         left: 3px;
+    }
+    .cross{
+        /* left: 1px; */
+        right: 20px;
     }
 }
 .appear{
@@ -43,4 +65,8 @@
     font-weight: 600;
     text-decoration: none;
     display: inline-block;
+}
+.link:hover{
+    transition: 0.3s;
+    color: #007FEB!important;
 }

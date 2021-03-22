@@ -7,6 +7,7 @@
     top: 0;
     background-color: #ffffff;
     box-shadow: 0px 0px 8px 0px #cacaca;
+    z-index: 50;
 }
 .cross{
     float: right;

@@ -147,7 +147,7 @@ class StartTest1 extends Component {
                             <div className={`px-5`}>
                                 <div className={`${classes.text_lg}`}>
                                     Start The Test
-                                    <div className={`pt-4`}>
+                                    <div className={`pt-4`} style={{'minWidth':'500px'}}>
                                         <ul className={`${classes.progressbar} ${classes.rb_square} d-flex justify-content-center`}>
                                             <li className={`${classes.user} ${css[0]}`}>Your personality</li>
                                             <li className={`${classes.mobile} ${css[1]}`}>Your past career</li>

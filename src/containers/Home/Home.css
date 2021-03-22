@@ -67,7 +67,6 @@ body{
     width: 90px;
     border-radius: 10px;
     font-size: 14px;
-    /* position: absolute; */
 }
 .text{
     font-size: 16px;
@@ -129,20 +128,7 @@ body{
     height: 60px;
 }
 .outer{
-  background:
-    radial-gradient(
-      ellipse at 16.7% -10%,
-      hsla(0, 0%, 100%, 0.44) 24%,
-      hsla(0, 0%, 100%, 0.4) 25%,
-      hsla(0, 0%, 100%, 0.2) 45%,
-      hsla(0, 0%, 100%, 0.1)
-    );
-  background-size: 300% 100%;
-  border-radius: 10px;
-  box-shadow:
-    0 4px 1px hsla(0, 0%, 100%, 0.5) inset,
-    0 4px 1px hsla(0, 0%, 100%, 0.5) inset,
-    0 4px 6px hsla(0, 0%, 100%, 0.25);
+  
     /* min-width: 500px; */
 }
 .searchIcon{
@@ -168,15 +154,6 @@ body{
     flex-direction: column;
     justify-content: space-around;
     padding-bottom: 30px;
-}
-@media(max-width: 576px){
-    .sidebar{
-        height: 500px;
-        width: 70px;
-        border-radius: 10px;
-        font-size: 12px;
-        position: absolute;
-    }
 }
 .bell{
     padding-left: 1.5px;

@@ -89,7 +89,7 @@ class ResetEmail extends Component {
                             <small className="text-muted" id="fileHelp" style={{fontSize:'11px'}}>Min. 8 characters</small>
                         </div>
                         <div className='mt-3 mb-4'>
-                            <button onClick={this.submitHandler} className={`btn btn-danger ${classes.red} mt-3`}>Login</button>
+                            <button onClick={this.submitHandler} className={`btn btn-danger ${classes.red} mt-3`}>Confirm</button>
                         </div>
                     </div>
                 </div>

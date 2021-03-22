@@ -74,7 +74,6 @@ class HeaderBar extends Component {
                     <div className={`d-inline-block ${classes.float_right} ${classes.spacing} px-2 py-1 bg-white ${classes.item}`}>
                         <i className={`united states flag ${classes.FlagIcon}`}></i>
                     </div>
-                    <ItemsBell/>
                 </div>
                 <ProfileBar imageSrc={imageSrc} content ={`${content}`} close={this.closeHandler} 
                     logout={this.logoutHandler} pushProfile={this.pushProfile} pushInterest={this.pushInterest} pushConnectors={this.pushConnectors} pushSettings={this.pushSettings}/>

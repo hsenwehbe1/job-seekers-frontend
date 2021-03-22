@@ -6,6 +6,7 @@ import {connect} from 'react-redux'
 import * as alertActions from '../../redux/actions/alert'
 import Alert from '../../components/Alert/Alert'
 import Spinner from '../../components/Spinner/Spinner'
+import Sort from 'merge-sort'
 import { Tooltip } from '@material-ui/core'
 class Advisors extends Component {
     state = ({
@@ -31,10 +32,11 @@ class Advisors extends Component {
             spinner2: true
         })
         axios.get('students/retreiveallroles').then((response)=>{
+            let arr = Sort(response.data)
             this.setState({
                 ...this.state,
-                roles: [...response.data],
-                search: [...response.data],
+                roles: [...arr],
+                search: [...arr],
                 spinner2: false
             })
         }).catch((error)=>{

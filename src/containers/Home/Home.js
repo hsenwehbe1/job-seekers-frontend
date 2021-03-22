@@ -13,7 +13,6 @@ import PathContainer from './Connector/Connector'
 import Pagination from '@material-ui/lab/Pagination'
 import Spinner from '../../components/Spinner/Spinner'
 import Select from 'react-select'
-import makeAnimated from 'react-select/animated'
 import Sort from 'merge-sort'
 class Home extends Component {
     state = ({

@@ -53,7 +53,15 @@
     text-decoration: none;
     color: #133C59!important;
 }
+.signup:hover{
+    transition: 0.3s;
+    color: #007FEB!important;
+}
 .reset{
     font-weight: bold;
     cursor: pointer;
+}
+.reset:hover{
+    transition: 0.3s;
+    color: #007FEB!important;
 }

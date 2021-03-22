@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import classes from './Question1.css'
 import Icon from './education.svg'
 import Major from '../../../components/Hobby/Hobby'
+import axios from '../../../axios'
+import Sort from 'merge-sort'
 import {connect} from 'react-redux'
 import * as authActions from '../../../redux/actions/auth'
 import { withRouter } from 'react-router-dom';
 class Question1 extends Component {
     state = ({
         majors : [],
-        roles: ['role1', 'role2', 'role3', 'role4', 'role5', 'role6', 'role7', 'role8', 'role9', 'role10'],
-        search: ['role1', 'role2', 'role3', 'role4', 'role5', 'role6', 'role7', 'role8', 'role9', 'role10']
+        roles: [],
+        search: []
     })
     componentDidMount = ()=>{
         if(this.props.reduxAnswers[9]){
@@ -18,18 +20,20 @@ class Question1 extends Component {
                 majors: [...this.props.reduxAnswers[9]]
             })
         }
-        // let config = {
-        //     headers: {
-        //         'Authorization' : `Bearer ${localStorage.getItem('token')}`
-        //     }
-        // }
-        // axios.get('students/majors', config).then((response)=>{
-        //     this.setState({
-        //         roles: [...response.data]
-        //     })
-        // }).catch((err)=>{
-        //     console.log(err)
-        // })
+        let config = {
+            headers: {
+                'Authorization' : `Bearer ${localStorage.getItem('token')}`
+            }
+        }
+        axios.get('students/retreiveallroles', config).then((response)=>{
+            let arr = Sort(response.data)
+            this.setState({
+                roles: [...arr],
+                search: [...arr]
+            })
+        }).catch((err)=>{
+            console.log(err)
+        })
     }
     majorHandler = (index)=>{
         let arr = [...this.state.majors]
