@@ -291,7 +291,7 @@ class Home extends Component {
                     </div>
                 </div>
                 <div className={classes.hidden}>
-                    <Dialog isShown={false}/>
+                    {localStorage.getItem('dialog')?<Dialog isShown={true}/>:<Dialog isShown={false}/>}
                 </div>
                 <Alert/>
             </React.Fragment>

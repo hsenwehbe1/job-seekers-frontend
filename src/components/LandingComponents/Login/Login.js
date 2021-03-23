@@ -46,6 +46,7 @@ class Login extends Component {
                     spinner: false
                 })
                 localStorage.setItem('token', response.data.token)
+                localStorage.setItem('dialog', true)
                 this.props.history.push('/home')
             }).catch((err)=>{
                 if (!err.response) { // connection error
