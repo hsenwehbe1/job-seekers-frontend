@@ -17,6 +17,7 @@ import Path from './containers/Path/Path'
 import SpecificPath from './containers/Path/SpecificPath/SpecificPath'
 import QuickTips from './containers/QuickTips/QuickTips'
 import ViewAdvisor from './containers/ViewAdvisor/ViewAdvisor'
+import CareerNews from './containers/CareerNews/CareerNews'
 import Goodbye from './containers/Advisors/Goodbye/Goodbye'
 class App extends Component {
   render() {
@@ -29,6 +30,7 @@ class App extends Component {
             <Route path='/profile' component={Profile}/>
             <Route path='/interests' component={Interests}/>
             <Route path='/connectors' component={Connectors}/>
+            <Route path='/career news' component={CareerNews}/>
             <Route path='/test' exact component={UserTest}/>
             <Route path='/test/start' component={StartTest}/>
             <Route path='/about' component={AboutUs}/>
